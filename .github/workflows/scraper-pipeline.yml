@@ -55,4 +55,4 @@ jobs:
         env:
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
           MONGODB_URI: ${{ secrets.MONGODB_URI }}
-        run: python web/scripts/refinery.py
+        run: python scripts/refinery.py
