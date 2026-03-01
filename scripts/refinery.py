@@ -314,7 +314,7 @@ def _process_batch(collection, jobs_to_process):
             "title": job.get('title', ''),
             "location": job.get('location', ''),
             "company": job.get('company', ''),
-            "created_at": job.get('created_at'),
+            "created_at": job.get('created_at').isoformat() if isinstance(job.get('created_at'), datetime.datetime) else str(job.get('created_at')),
             "tags": job.get('tags', []),
             "description": desc[:3000] # Cap length to save LLM tokens per job
         })
