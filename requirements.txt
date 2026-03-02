@@ -7,6 +7,7 @@ python-dotenv>=1.0.0        # Load .env.local for all scripts
 # --- Database ---
 pymongo>=4.6.0              # MongoDB driver (used by all scrapers + refinery)
 dnspython>=2.4.0            # Required for pymongo SRV URI (MongoDB Atlas)
+tenacity>=8.0.0             # Retries for refinery LLM calls
 
 # --- Scrapers ---
 requests>=2.31.0            # HTTP client (greenhouse.py, serpapi_jobs.py)

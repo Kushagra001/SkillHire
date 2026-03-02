@@ -87,6 +87,8 @@ def save_to_db(items, source):
             url = item.get('url') or item.get('link') or item.get('jobUrl')
             
             raw_desc = item.get('description') or item.get('descriptionHtml') or ''
+            if isinstance(raw_desc, dict):
+                raw_desc = raw_desc.get('text') or raw_desc.get('html') or str(raw_desc)
             clean_desc = BeautifulSoup(raw_desc, "html.parser").get_text(separator="\n").strip() if raw_desc else ""
 
             if not title or not url:

@@ -3,7 +3,6 @@ import { createHmac } from 'crypto';
 import { clerkClient } from '@clerk/nextjs/server';
 
 // Razorpay sends a raw body — we need it as text for signature verification
-export const config = { api: { bodyParser: false } };
 
 export async function POST(req: NextRequest) {
     try {

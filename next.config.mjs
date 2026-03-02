@@ -17,14 +17,6 @@ const nextConfig = {
     config.resolve.alias.encoding = false;
     return config;
   },
-  experimental: {
-    turbo: {
-      resolveAlias: {
-        canvas: false,
-        encoding: false,
-      },
-    },
-  },
 };
 
 export default nextConfig;
