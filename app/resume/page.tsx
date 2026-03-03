@@ -17,6 +17,8 @@ interface AnalysisResult {
 
 export default function ResumePage() {
     const { openSignIn, openSignUp } = useClerk();
+    const { user } = useUser();
+    const isPremiumUser = user?.publicMetadata?.isPremium === true;
     const [file, setFile] = useState<File | null>(null);
     const [jobDescription, setJobDescription] = useState('');
     const [isAnalyzing, setIsAnalyzing] = useState(false);
