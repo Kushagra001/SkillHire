@@ -292,7 +292,18 @@ export default function JobsPage() {
                             </button>
                         </SignedOut>
                         <SignedIn>
-                            <UserButton afterSignOutUrl="/jobs" />
+                            <div className={`p-0.5 rounded-full transition-all duration-300 ${isPremiumUser ? 'bg-gradient-to-r from-amber-200 via-amber-400 to-amber-500 shadow-sm' : ''}`}>
+                                <div className={`flex items-center gap-2 rounded-full ${isPremiumUser ? 'bg-white pl-3 pr-1 py-1' : ''}`}>
+                                    {isPremiumUser && (
+                                        <span className="text-[10px] font-bold tracking-widest text-amber-600 uppercase flex items-center pr-1">
+                                            PRO <Star className="w-3 h-3 fill-amber-500 text-amber-500 ml-1" />
+                                        </span>
+                                    )}
+                                    <div className={isPremiumUser ? "" : "py-1"}>
+                                        <UserButton afterSignOutUrl="/" />
+                                    </div>
+                                </div>
+                            </div>
                         </SignedIn>
                         <div className="md:hidden">
                             <button onClick={() => setIsMobileNavOpen(!isMobileNavOpen)} className="p-2 -mr-2 text-slate-700 bg-transparent border-none cursor-pointer">
