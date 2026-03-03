@@ -1,11 +1,16 @@
 import { NextResponse } from 'next/server';
 import { auth, clerkClient } from '@clerk/nextjs/server';
 
-// Only this Clerk user can call admin routes
-const ADMIN_USER_ID = 'user_39wFqR9oYqfruUqzgt8bqJdJEhJ';
+// Admin User ID is now dynamically loaded from the environment
+const ADMIN_USER_ID = process.env.ADMIN_USER_ID;
 
 export async function GET() {
     const { userId } = await auth();
+
+    if (!ADMIN_USER_ID) {
+        console.error('ADMIN_USER_ID environment variable is not set.');
+        return NextResponse.json({ error: 'Server configuration error' }, { status: 500 });
+    }
 
     if (!userId || userId !== ADMIN_USER_ID) {
         return NextResponse.json({ error: 'Forbidden' }, { status: 403 });

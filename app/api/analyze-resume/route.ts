@@ -81,35 +81,13 @@ export async function POST(request: Request) {
             const arrayBuffer = await file.arrayBuffer();
             const buffer = Buffer.from(arrayBuffer);
 
-            // Write to tmp file
-            const fs = require('fs');
-            const path = require('path');
-            const os = require('os');
-            const { exec } = require('child_process');
-            const { promisify } = require('util');
-            const execAsync = promisify(exec);
-
-            const tmpPath = path.join(os.tmpdir(), `resume-${Date.now()}.pdf`);
-            fs.writeFileSync(tmpPath, buffer);
-
+            const pdfParse = require('pdf-parse');
             try {
-                // Call standalone node script
-                const scriptPath = path.join(process.cwd(), 'scripts', 'parse-pdf.js');
-                const { stdout, stderr } = await execAsync(`node "${scriptPath}" "${tmpPath}"`);
-
-                if (stderr && stderr.includes('error')) {
-                    throw new Error("PDF processing script error: " + stderr);
-                }
-
-                const result = JSON.parse(stdout);
-                if (result.error) {
-                    throw new Error(result.error);
-                }
-
-                resumeText = result.text;
-            } finally {
-                // Clean up
-                try { fs.unlinkSync(tmpPath); } catch (e) { console.error('Cleanup error:', e); }
+                const parsedData = await pdfParse(buffer);
+                resumeText = parsedData.text;
+            } catch (error: any) {
+                console.error("PDF parsing error:", error);
+                throw new Error("Could not extract text from the PDF.");
             }
         } // End of file parse block
 

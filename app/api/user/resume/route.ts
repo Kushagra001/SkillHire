@@ -2,13 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
 import dbConnect from '@/lib/mongodb';
 import User from '@/models/User';
-import fs from 'fs';
-import path from 'path';
-import os from 'os';
-import { exec } from 'child_process';
-import { promisify } from 'util';
-
-const execAsync = promisify(exec);
+import pdfParse from 'pdf-parse';
 
 export const maxDuration = 60; // Prevent Vercel serverless function timeouts
 
@@ -58,26 +52,12 @@ export async function POST(req: NextRequest) {
         const arrayBuffer = await file.arrayBuffer();
         const buffer = Buffer.from(arrayBuffer);
 
-        const tmpPath = path.join(os.tmpdir(), `base-resume-${Date.now()}.pdf`);
-        fs.writeFileSync(tmpPath, buffer);
-
         try {
-            // Call standalone node script
-            const scriptPath = path.join(process.cwd(), 'scripts', 'parse-pdf.js');
-            const { stdout, stderr } = await execAsync(`node "${scriptPath}" "${tmpPath}"`);
-
-            if (stderr && stderr.includes('error')) {
-                throw new Error("PDF processing script error: " + stderr);
-            }
-
-            const result = JSON.parse(stdout);
-            if (result.error) {
-                throw new Error(result.error);
-            }
-
-            resumeText = result.text;
-        } finally {
-            try { fs.unlinkSync(tmpPath); } catch (e) { console.error('Cleanup error:', e); }
+            const parsedData = await pdfParse(buffer);
+            resumeText = parsedData.text;
+        } catch (error: any) {
+            console.error("PDF parsing error:", error);
+            throw new Error("Could not extract text from the PDF.");
         }
 
         if (!resumeText) {

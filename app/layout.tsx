@@ -10,6 +10,14 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 export const metadata: Metadata = {
   title: "SkillHire",
   description: "Find your next role with SkillHire",
+  icons: {
+    icon: [
+      { url: "/assets/favicon.ico?v=3", sizes: "32x32" },
+      { url: "/assets/favicon-16x16.png?v=3", sizes: "16x16" },
+      { url: "/assets/favicon-32x32.png?v=3", sizes: "32x32" },
+    ],
+    apple: "/assets/apple-touch-icon.png?v=3",
+  },
 };
 
 export default function RootLayout({
