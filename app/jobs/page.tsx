@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useUser, useClerk, SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { Search, MapPin, Briefcase, ExternalLink, Loader2, Bookmark, Share2, Lock, ChevronLeft, ChevronRight, CheckCircle2, Wallet, Star, ChevronDown } from 'lucide-react';
+import { Search, MapPin, Briefcase, ExternalLink, Loader2, Bookmark, Share2, Lock, ChevronLeft, ChevronRight, CheckCircle2, Wallet, Star, ChevronDown, Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -139,6 +139,7 @@ export default function JobsPage() {
     const [sortBy, setSortBy] = useState("newest");
     const [showPremiumOnly, setShowPremiumOnly] = useState(false);
     const [isFiltersExpanded, setIsFiltersExpanded] = useState(true);
+    const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
 
     const debouncedSearch = useDebounce(search, 500);
     const debouncedLocation = useDebounce(location, 500);
@@ -180,7 +181,7 @@ export default function JobsPage() {
 
     useEffect(() => {
         if (!selectedJob && processedJobs.length > 0) {
-             
+
             setSelectedJob(processedJobs[0]);
         }
     }, [processedJobs, selectedJob]);
@@ -287,9 +288,36 @@ export default function JobsPage() {
                         <SignedIn>
                             <UserButton afterSignOutUrl="/jobs" />
                         </SignedIn>
+                        <div className="md:hidden">
+                            <button onClick={() => setIsMobileNavOpen(!isMobileNavOpen)} className="p-2 -mr-2 text-slate-700 bg-transparent border-none cursor-pointer">
+                                {isMobileNavOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+                            </button>
+                        </div>
                     </div>
                 </div>
             </header>
+
+            <AnimatePresence>
+                {isMobileNavOpen && (
+                    <motion.div
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        className="md:hidden absolute top-16 left-0 right-0 z-40 bg-white border-b border-gray-200 shadow-lg flex flex-col p-5 gap-5"
+                    >
+                        <Link href="/jobs" onClick={() => setIsMobileNavOpen(false)} className="text-lg font-semibold text-slate-900 border-none bg-transparent m-0 p-0 text-left">Jobs</Link>
+                        <Link href="/resume" onClick={() => setIsMobileNavOpen(false)} className="text-lg font-semibold text-slate-900 border-none bg-transparent m-0 p-0 text-left">AI Resume Matcher</Link>
+                        <div className="h-px bg-gray-200 my-1" />
+                        <SignedOut>
+                            <button onClick={() => { setIsMobileNavOpen(false); openSignIn({ redirectUrl: window.location.href }); }} className="text-left text-lg font-semibold text-slate-900 border-none bg-transparent m-0 p-0 cursor-pointer">Sign in</button>
+                            <button onClick={() => { setIsMobileNavOpen(false); openSignUp({ redirectUrl: window.location.href }); }} className="text-left text-lg font-bold text-[#41b4a5] border-none bg-transparent m-0 p-0 cursor-pointer">Get Premium</button>
+                        </SignedOut>
+                        <SignedIn>
+                            <span className="text-sm font-medium text-slate-500">Account management available via avatar</span>
+                        </SignedIn>
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
             <main className="flex-1 flex flex-col overflow-hidden">
                 <div className="bg-white border-b border-gray-200 py-4 shrink-0">

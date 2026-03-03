@@ -11,7 +11,7 @@ declare global {
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useUser, useClerk, SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
 import {
   Code2,
@@ -22,7 +22,8 @@ import {
   Star,
   Lock,
   ChevronDown,
-  Loader2
+  Loader2,
+  X
 } from 'lucide-react';
 
 import NewHero from '@/components/landing/NewHero';
@@ -40,6 +41,7 @@ import FaqAccordion from '@/components/landing/FaqAccordion';
 export default function LandingPage() {
   const { isSignedIn } = useUser();
   const { openSignIn } = useClerk();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
     <div className="relative flex min-h-screen w-full flex-col overflow-x-hidden bg-sh-background-light dark:bg-sh-background-dark text-slate-900 dark:text-slate-100 font-sans antialiased selection:bg-sh-primary/30 selection:text-sh-primary-dark">
@@ -85,9 +87,73 @@ export default function LandingPage() {
           </div>
         </div>
         <div className="md:hidden text-slate-900 dark:text-white">
-          <Menu />
+          <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="p-2 -mr-2 bg-transparent border-0 cursor-pointer text-inherit">
+            {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </button>
         </div>
       </header>
+
+      {/* Mobile Menu Overlay */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.2 }}
+            className="md:hidden fixed top-[64px] left-0 right-0 z-40 bg-white/95 dark:bg-[#0B1120]/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 shadow-lg"
+          >
+            <div className="flex flex-col px-4 py-6 gap-6">
+              <Link href="/jobs" onClick={() => setIsMobileMenuOpen(false)} className="text-lg font-medium text-slate-900 dark:text-white">
+                Jobs
+              </Link>
+              <Link href="/resume" onClick={() => setIsMobileMenuOpen(false)} className="text-lg font-medium text-slate-900 dark:text-white">
+                Resume
+              </Link>
+              <button
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' });
+                }}
+                className="text-left text-lg font-medium text-slate-900 dark:text-white bg-transparent border-0 p-0 cursor-pointer"
+              >
+                Pricing
+              </button>
+
+              <div className="h-px w-full bg-slate-200 dark:bg-slate-800 my-2" />
+
+              <SignedOut>
+                <div className="flex flex-col gap-3">
+                  <button
+                    onClick={() => {
+                      setIsMobileMenuOpen(false);
+                      openSignIn({ redirectUrl: window.location.href });
+                    }}
+                    className="flex h-12 w-full items-center justify-center rounded-lg bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-base font-semibold"
+                  >
+                    Sign in
+                  </button>
+                  <button
+                    onClick={() => {
+                      setIsMobileMenuOpen(false);
+                      openSignIn({ redirectUrl: window.location.href });
+                    }}
+                    className="flex h-12 w-full items-center justify-center rounded-lg bg-sh-primary hover:bg-sh-primary-dark text-white text-base font-semibold shadow-sm"
+                  >
+                    Get Premium
+                  </button>
+                </div>
+              </SignedOut>
+              <SignedIn>
+                <div className="flex items-center gap-3 py-2">
+                  <UserButton afterSignOutUrl="/" />
+                  <span className="text-slate-900 dark:text-white font-medium text-sm">Account</span>
+                </div>
+              </SignedIn>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <NewHero />
       <LogoCloud />
