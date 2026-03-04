@@ -1,0 +1,490 @@
+{
+  "total": 209,
+  "active": 209,
+  "inactive": 0,
+  "samples": [
+    {
+      "_id": "69a479177f7d69ffaac84250",
+      "source_hash": "unstop_c1d321f845bc689e5ee154fb3ec41437",
+      "apply_link": "https://unstop.com/jobs/associate-business-analyst-dentsu-1649644",
+      "company": "Dentsu",
+      "created_at": "2026-03-01T17:36:21.095Z",
+      "description": "Dentsu is hiring for the role of Associate Business Analyst! Responsibilities of the Candidate : Passionate about analytics, data science, ML, and AI. Curious, detail-oriented, and committed to delivering high-quality work. Comfortable working in fast-paced environments with evolving priorities. A team player with a growth mindset who constantly seeks to learn and improve. Requirements : Bachelor's degree in Engineering (B.Tech) or a similar quantitative/technical field preferred. Experience working with big data platforms (BigQuery, Spark, etc.). Understanding of marketing analytics, attribution, or measurement frameworks. Exposure to cloud environments (GCP/AWS/Azure). Familiarity with machine learning concepts and modeling.",
+      "experience": "0-2 Years",
+      "is_active": true,
+      "is_processed": true,
+      "job_type": "Full-time",
+      "location": "Pune",
+      "logo": "https://d8it4huxumps7.cloudfront.net/uploads/images/150x150/69a18a99eb318_Dentsu_Banner_Innovating_to_Impact_-_150x150_pxl.jpg",
+      "public_release_at": "2026-03-01T17:36:21.095Z",
+      "raw_data": {
+        "id": 1649644,
+        "public_url": "jobs/associate-business-analyst-dentsu-1649644",
+        "title": "Associate Business Analyst",
+        "organization_id": 210129,
+        "type": "jobs",
+        "subtype": "jobs",
+        "regn_open": 0,
+        "updated_at": "2026-03-01T16:56:36+05:30",
+        "region": "online",
+        "visibility": "public",
+        "details": "<p class=\"css-7papts\" data-automation-id=\"jobPostingHeader\"><strong>Dentsu is hiring for the role of Associate Business Analyst!</strong></p>\n<p><strong>Responsibilities of the Candidate :</strong></p>\n<ul>\n<li>Passionate about analytics, data science, ML, and AI.</li>\n<li>Curious, detail-oriented, and committed to delivering high-quality work.</li>\n<li>Comfortable working in fast-paced environments with evolving priorities.</li>\n<li>A team player with a growth mindset who constantly seeks to learn and improve.</li>\n</ul>\n<p><strong>Requirements :</strong></p>\n<ul>\n<li>Bachelor's degree in Engineering (B.Tech) or a similar quantitative/technical field preferred.</li>\n<li>Experience working with big data platforms (BigQuery, Spark, etc.).</li>\n<li>Understanding of marketing analytics, attribution, or measurement frameworks.</li>\n<li>Exposure to cloud environments (GCP/AWS/Azure).</li>\n<li>Familiarity with machine learning concepts and modeling.</li>\n</ul>",
+        "short_id": "WFiPntV",
+        "logoUrl2": "https://d8it4huxumps7.cloudfront.net/uploads/images/150x150/69a18a99eb318_Dentsu_Banner_Innovating_to_Impact_-_150x150_pxl.jpg",
+        "organisation": {
+          "id": 210129,
+          "name": "Dentsu",
+          "public_url": "c/dentsu-recruiter-career-interview-selection-process-job-profile-articles-videos-210129",
+          "logoUrl": "https://d8it4huxumps7.cloudfront.net/images/partners/partners75/692eb4a2b8c89_Dentsu_Banner_Innovating_to_Impact_-_150x150_pxl.jpg",
+          "logoUrl2": "https://d8it4huxumps7.cloudfront.net/images/partners/partners125/692eb4a2b8c89_Dentsu_Banner_Innovating_to_Impact_-_150x150_pxl.jpg",
+          "show_evaluator_login_link": false,
+          "official_email_domains": null,
+          "tier": 2
+        },
+        "seo_url": "https://unstop.com/jobs/associate-business-analyst-dentsu-1649644",
+        "status": "LIVE",
+        "tags": [],
+        "thumb": null,
+        "isPaid": false,
+        "festival": null,
+        "prizes": [],
+        "address_with_country_logo": {
+          "address": "",
+          "city": "",
+          "state": "",
+          "country": ""
+        },
+        "short_url": "https://unstop.com/o/WFiPntV",
+        "workfunction": [
+          {
+            "id": 1865,
+            "name": "Business Analysis",
+            "description": "",
+            "created_at": "2026-02-06T23:31:46+05:30",
+            "updated_at": "2026-02-06T23:31:46+05:30",
+            "work_function_name": null,
+            "batch_id": 11
+          },
+          {
+            "id": 1865,
+            "name": "Business Analysis",
+            "description": "",
+            "created_at": "2026-02-06T23:31:46+05:30",
+            "updated_at": "2026-02-06T23:31:46+05:30",
+            "work_function_name": null,
+            "batch_id": 11
+          }
+        ],
+        "assignedTag": {
+          "tag": null
+        },
+        "opportunity_config": {
+          "id": 1365690,
+          "opportunity_id": 1649644,
+          "banner_config": "{\"color\":\"color-bg3\",\"text\":\"Associate Business Analyst\",\"type\":1,\"banner_data\":[4]}",
+          "show_registrations_count": 1,
+          "show_impressions": 0,
+          "show_team_size": 1,
+          "show_region": 1
+        },
+        "payment_services": [],
+        "filters": [
+          {
+            "id": 679,
+            "name": "Fresher",
+            "type": "eligible",
+            "subtype": null,
+            "file_name": "fresher",
+            "domain_id": 0,
+            "icon_url": "https://d8it4huxumps7.cloudfront.net/images/icons/color_icons/fresher.svg"
+          }
+        ],
+        "required_skills": [
+          {
+            "id": 645635,
+            "skill": "AWS (Amazon Web Services)",
+            "skill_name": "AWS (Amazon Web Services)",
+            "pivot": {
+              "entity_id": 1649644,
+              "subject_id": 645635,
+              "id": 3957583,
+              "ai_generated": true
+            }
+          },
+          {
+            "id": 645939,
+            "skill": "Data Science Tools",
+            "skill_name": "Data Science Tools",
+            "pivot": {
+              "entity_id": 1649644,
+              "subject_id": 645939,
+              "id": 3957584,
+              "ai_generated": true
+            }
+          },
+          {
+            "id": 646619,
+            "skill": "Machine Learning Concepts",
+            "skill_name": "Machine Learning Concepts",
+            "pivot": {
+              "entity_id": 1649644,
+              "subject_id": 646619,
+              "id": 3957585,
+              "ai_generated": true
+            }
+          },
+          {
+            "id": 646650,
+            "skill": "Marketing Analytics",
+            "skill_name": "Marketing Analytics",
+            "pivot": {
+              "entity_id": 1649644,
+              "subject_id": 646650,
+              "id": 3957586,
+              "ai_generated": true
+            }
+          },
+          {
+            "id": 643224,
+            "skill": "Apache Spark",
+            "skill_name": "Apache Spark",
+            "pivot": {
+              "entity_id": 1649644,
+              "subject_id": 643224,
+              "id": 3957587,
+              "ai_generated": true
+            }
+          }
+        ],
+        "locations": [
+          {
+            "id": 1669452,
+            "city": "Pune",
+            "state": "Maharashtra",
+            "country": "India",
+            "addressable_id": 1649644,
+            "addressable_type": "App\\Model\\Opportunity"
+          }
+        ],
+        "jobDetail": {
+          "entity_id": 1649644,
+          "currency": "fa-rupee",
+          "locations": [
+            "Pune"
+          ],
+          "type": "in_office",
+          "show_salary": 0,
+          "min_experience": null,
+          "max_experience": null,
+          "timing": "full_time",
+          "paid_unpaid": "paid",
+          "pay_in": "annually",
+          "not_disclosed": false
+        },
+        "end_date": "2026-03-13T00:00:00+05:30",
+        "approved_date": "2026-02-27 17:44:38+05:30",
+        "viewsCount": 1302,
+        "registerCount": 0,
+        "regnRequirements": {
+          "opportunity_id": 1649644,
+          "start_regn_dt": "2026-02-27T00:00:00+05:30",
+          "end_regn_dt": "2026-03-13T00:00:00+05:30",
+          "show_deadline": 1,
+          "min_team_size": 1,
+          "max_team_size": 1,
+          "work_location_type": "city",
+          "eligibility": "{\"sector\":[\"fresher\"],\"engineering\":[],\"bSchools\":[],\"arts\":[],\"medicine\":[],\"law\":[],\"others\":[\"all\"],\"experience\":[\"all\"],\"studentPassoutYearsSelected\":[\"all\"],\"fresherPassoutYearsSelected\":[2025,2024],\"schoolFilteredClasses\":[\"all\"],\"minMarks\":{\"high_school_perc\":0,\"high_school_cgpa\":0},\"locations\":[],\"location_type\":\"all\",\"professionalEligibility\":{\"engineering\":[],\"bSchools\":[],\"arts\":[],\"medicine\":[],\"law\":[]}}",
+          "reg_status": "STARTED",
+          "remainingDaysArray": {
+            "durations": 11,
+            "text": " days left"
+          },
+          "remain_days": "11 days left",
+          "remaining_time": 953617
+        },
+        "description": "Dentsu is hiring for the role of Associate Business Analyst! Responsibilities of the Candidate : Passionate about analytics, data science, ML, and AI. Curious, detail-oriented, and committed to delivering high-quality work. Comfortable working in fast-paced environments with evolving priorities. A team player with a growth mindset who constantly seeks to learn and improve. Requirements : Bachelor's degree in Engineering (B.Tech) or a similar quantitative/technical field preferred. Experience working with big data platforms (BigQuery, Spark, etc.). Understanding of marketing analytics, attribution, or measurement frameworks. Exposure to cloud environments (GCP/AWS/Azure). Familiarity with machine learning concepts and modeling."
+      },
+      "skills": [
+        "Analytics",
+        "Data Science",
+        "ML",
+        "AI",
+        "Communication"
+      ],
+      "tags": [
+        "Batch:Any"
+      ],
+      "title": "Associate Business Analyst",
+      "batch": [
+        "Any"
+      ],
+      "formatted_about": "**Company Overview**: Dentsu\n\n* **Position**: Associate Business Analyst\n* **Location**: Pune\n* **Experience**: 0-2 Years\n* **Qualification**: Bachelor's degree in Engineering (B.Tech) or a similar quantitative/technical field\n* **Take Home**: Not Mentioned\n\n**Benefits**: Not Mentioned\n\n**Description**: Dentsu is hiring for the role of Associate Business Analyst! Responsibilities of the Candidate : Passionate about analytics, data science, ML, and AI.",
+      "is_premium": false,
+      "normalized_location": "Pune",
+      "processed_at": "2026-03-01T17:49:08.619Z",
+      "salary_status": "Not Mentioned",
+      "tech_stack": [
+        "Analytics",
+        "Data Science",
+        "ML",
+        "AI"
+      ]
+    },
+    {
+      "_id": "69a479177f7d69ffaac84251",
+      "source_hash": "unstop_3944d39ca9ce5f2e376cef32ecf16ac4",
+      "apply_link": "https://unstop.com/jobs/sales-support-operations-associate-genworks-health-1649499",
+      "company": "Genworks Health",
+      "created_at": "2026-03-01T17:36:21.142Z",
+      "description": "Business Importance of the Role: This is a business-critical role that will hone your Sales Leadership style, Team Leadership skills, KOL connect, Product Portfolio Maximization, and P&L mindset, preparing you to grow into larger roles within Genworks. You will have the trust and backing to take complete ownership of revenue and drive circle-level execution of the P&L strategy by working closely with HQ, Field Sales, Service, Product Specialists, Execution, and Support teams. You will be responsible for enhancing the engagement index with your team and customers. The role requires strong attention to detail and operational rigor to manage day-to-day team activities, sales execution, and strategic initiatives aligned with the people plan. You will develop and deploy people strategies in partnership with the GEO CEO, Vertical Heads, and Corporate teams. Key Responsibilities (Daily, Weekly, Monthly, Quarterly, Annual): Achieve quarterly and annual revenue targets in the assigned territory. Build strong relationships with customers, KOLs, and key stakeholders. Identify opportunities, generate leads, and manage a healthy sales funnel. Present product solutions, conduct demonstrations, and drive cross-selling and upselling initiatives. Handle negotiations, pricing discussions, and objection management. Promote the “One Genworks Solutions” approach across the product portfolio. Collaborate with internal teams including Sales, Service, Product, and Support. Ensure compliance with company processes, CRM usage, and documentation standards.",
+      "experience": "0-2 Years",
+      "is_active": true,
+      "is_processed": true,
+      "job_type": "Full-time",
+      "location": "Ballari, Shimoga, Mangaluru, Jammu, Udaipur",
+      "logo": "https://d8it4huxumps7.cloudfront.net/uploads/images/150x150/uploadedManual-69a15b8a584f3_logo1.png",
+      "public_release_at": "2026-03-01T17:36:21.142Z",
+      "raw_data": {
+        "id": 1649499,
+        "public_url": "jobs/sales-support-operations-associate-genworks-health-1649499",
+        "title": "Sales Support & Operations Associate",
+        "organization_id": 333604,
+        "type": "jobs",
+        "subtype": "jobs",
+        "regn_open": 1,
+        "updated_at": "2026-02-28T17:15:16+05:30",
+        "region": "online",
+        "visibility": "public",
+        "details": "<div class=\"flex flex-col text-sm pb-25\">\n<article class=\"text-token-text-primary w-full focus:outline-none [--shadow-height:45px] has-data-writing-block:pointer-events-none has-data-writing-block:-mt-(--shadow-height) has-data-writing-block:pt-(--shadow-height) [&amp;:has([data-writing-block])&gt;*]:pointer-events-auto scroll-mt-[calc(var(--header-height)+min(200px,max(70px,20svh)))]\" dir=\"auto\" tabindex=\"-1\" data-turn-id=\"request-WEB:d76b2d22-aae4-4b1c-bc5d-952ae8c53bb9-39\" data-testid=\"conversation-turn-80\" data-scroll-anchor=\"true\" data-turn=\"assistant\">\n<div class=\"text-base my-auto mx-auto pb-10 [--thread-content-margin:--spacing(4)] @w-sm/main:[--thread-content-margin:--spacing(6)] @w-lg/main:[--thread-content-margin:--spacing(16)] px-(--thread-content-margin)\">\n<div class=\"[--thread-content-max-width:40rem] @w-lg/main:[--thread-content-max-width:48rem] mx-auto max-w-(--thread-content-max-width) flex-1 group/turn-messages focus-visible:outline-hidden relative flex w-full min-w-0 flex-col agent-turn\" tabindex=\"-1\">\n<div class=\"flex max-w-full flex-col grow\">\n<div class=\"min-h-8 text-message relative flex w-full flex-col items-end gap-2 text-start break-words whitespace-normal [.text-message+&amp;]:mt-1\" dir=\"auto\" data-message-author-role=\"assistant\" data-message-id=\"09d0ceea-f9bb-474f-85a3-25029880e27e\" data-message-model-slug=\"gpt-5-2\">\n<div class=\"flex w-full flex-col gap-1 empty:hidden first:pt-[1px]\">\n<p class=\"markdown prose dark:prose-invert w-full wrap-break-word dark markdown-new-styling\"><strong data-start=\"0\" data-end=\"36\">Business Importance of the Role:</strong></p>\n<ul>\n<li><span style=\"color: #000000;\">This is a business-critical role that will hone your Sales Leadership style, Team Leadership skills, KOL connect, Product Portfolio Maximization, and P&amp;L mindset, preparing you to grow into larger roles within Genworks.</span></li>\n<li data-start=\"264\" data-end=\"495\">You will have the trust and backing to take complete ownership of revenue and drive circle-level execution of the P&amp;L strategy by working closely with HQ, Field Sales, Service, Product Specialists, Execution, and Support teams.</li>\n<li data-start=\"496\" data-end=\"588\">You will be responsible for enhancing the engagement index with your team and customers.</li>\n<li data-start=\"589\" data-end=\"770\">The role requires strong attention to detail and operational rigor to manage day-to-day team activities, sales execution, and strategic initiatives aligned with the people plan.</li>\n<li data-start=\"771\" data-end=\"890\">You will develop and deploy people strategies in partnership with the GEO CEO, Vertical Heads, and Corporate teams.</li>\n</ul>\n<p><strong data-start=\"897\" data-end=\"966\">Key Responsibilities (Daily, Weekly, Monthly, Quarterly, Annual):</strong></p>\n<ul>\n<li>Achieve quarterly and annual revenue targets in the assigned territory.</li>\n<li>Build strong relationships with customers, KOLs, and key stakeholders.</li>\n<li>Identify opportunities, generate leads, and manage a healthy sales funnel.</li>\n<li>Present product solutions, conduct demonstrations, and drive cross-selling and upselling initiatives.</li>\n<li>Handle negotiations, pricing discussions, and objection management.</li>\n<li>Promote the &ldquo;One Genworks Solutions&rdquo; approach across the product portfolio.</li>\n<li>Collaborate with internal teams including Sales, Service, Product, and Support.</li>\n<li>Ensure compliance with company processes, CRM usage, and documentation standards.</li>\n</ul>\n</div>\n</div>\n</div>\n</div>\n</div>\n</article>\n</div>",
+        "short_id": "gyWGTA3",
+        "logoUrl2": "https://d8it4huxumps7.cloudfront.net/uploads/images/150x150/uploadedManual-69a15b8a584f3_logo1.png",
+        "organisation": {
+          "id": 333604,
+          "name": "Genworks Health",
+          "public_url": "c/genworks-health-recruiter-career-interview-selection-process-job-profile-articles-videos-333604",
+          "logoUrl": "",
+          "logoUrl2": "",
+          "show_evaluator_login_link": false,
+          "official_email_domains": null,
+          "tier": null
+        },
+        "seo_url": "https://unstop.com/jobs/sales-support-operations-associate-genworks-health-1649499",
+        "status": "LIVE",
+        "tags": [],
+        "thumb": null,
+        "isPaid": false,
+        "festival": null,
+        "prizes": [],
+        "address_with_country_logo": {
+          "address": "",
+          "city": "",
+          "state": "",
+          "country": ""
+        },
+        "short_url": "https://unstop.com/o/gyWGTA3",
+        "workfunction": [
+          {
+            "id": 1995,
+            "name": "General Sales",
+            "description": "",
+            "created_at": "2026-02-06T23:31:46+05:30",
+            "updated_at": "2026-02-06T23:31:46+05:30",
+            "work_function_name": null,
+            "batch_id": 11
+          },
+          {
+            "id": 67,
+            "name": "Sales Support & Operations",
+            "description": "Provides support for sales teams, manages sales operations, and ensures smooth sales processes.",
+            "created_at": null,
+            "updated_at": null,
+            "work_function_name": null,
+            "batch_id": 1
+          }
+        ],
+        "assignedTag": {
+          "tag": null
+        },
+        "opportunity_config": {
+          "id": 1365591,
+          "opportunity_id": 1649499,
+          "banner_config": "{\"color\":\"color-bg1\",\"text\":\"Sales Support & Operations - Other\",\"type\":1,\"banner_data\":[4]}",
+          "show_registrations_count": 1,
+          "show_impressions": 1,
+          "show_team_size": 1,
+          "show_region": 1
+        },
+        "payment_services": [],
+        "filters": [
+          {
+            "id": 679,
+            "name": "Fresher",
+            "type": "eligible",
+            "subtype": null,
+            "file_name": "fresher",
+            "domain_id": 0,
+            "icon_url": "https://d8it4huxumps7.cloudfront.net/images/icons/color_icons/fresher.svg"
+          }
+        ],
+        "required_skills": [
+          {
+            "id": 647207,
+            "skill": "Sales Funnel Management",
+            "skill_name": "Sales Funnel Management",
+            "pivot": {
+              "entity_id": 1649499,
+              "subject_id": 647207,
+              "id": 3956186,
+              "ai_generated": true
+            }
+          },
+          {
+            "id": 645178,
+            "skill": "Team Leadership",
+            "skill_name": "Team Leadership",
+            "pivot": {
+              "entity_id": 1649499,
+              "subject_id": 645178,
+              "id": 3956187,
+              "ai_generated": true
+            }
+          },
+          {
+            "id": 645802,
+            "skill": "Communication Skills",
+            "skill_name": "Communication Skills",
+            "pivot": {
+              "entity_id": 1649499,
+              "subject_id": 645802,
+              "id": 3956167,
+              "ai_generated": false
+            }
+          },
+          {
+            "id": 646690,
+            "skill": "Medical Imaging Technologies",
+            "skill_name": "Medical Imaging Technologies",
+            "pivot": {
+              "entity_id": 1649499,
+              "subject_id": 646690,
+              "id": 3956168,
+              "ai_generated": false
+            }
+          },
+          {
+            "id": 644355,
+            "skill": "Medical Equipment Operation",
+            "skill_name": "Medical Equipment Operation",
+            "pivot": {
+              "entity_id": 1649499,
+              "subject_id": 644355,
+              "id": 3956169,
+              "ai_generated": false
+            }
+          }
+        ],
+        "locations": [
+          {
+            "id": 1669385,
+            "city": "Ballari",
+            "state": "Karnataka",
+            "country": "India",
+            "addressable_id": 1649499,
+            "addressable_type": "App\\Model\\Opportunity"
+          },
+          {
+            "id": 1669386,
+            "city": "Shimoga",
+            "state": "Karnataka",
+            "country": "India",
+            "addressable_id": 1649499,
+            "addressable_type": "App\\Model\\Opportunity"
+          },
+          {
+            "id": 1669387,
+            "city": "Mangaluru",
+            "state": "Karnataka",
+            "country": "India",
+            "addressable_id": 1649499,
+            "addressable_type": "App\\Model\\Opportunity"
+          },
+          {
+            "id": 1669388,
+            "city": "Jammu",
+            "state": "Jammu and Kashmir",
+            "country": "India",
+            "addressable_id": 1649499,
+            "addressable_type": "App\\Model\\Opportunity"
+          },
+          {
+            "id": 1669389,
+            "city": "Udaipur",
+            "state": "Rajasthan",
+            "country": "India",
+            "addressable_id": 1649499,
+            "addressable_type": "App\\Model\\Opportunity"
+          }
+        ],
+        "jobDetail": {
+          "entity_id": 1649499,
+          "max_salary": 600000,
+          "currency": "fa-rupee",
+          "locations": [
+            "Ballari",
+            "Shimoga",
+            "Mangaluru",
+            "Jammu",
+            "Udaipur"
+          ],
+          "type": "on_field",
+          "min_salary": 240000,
+          "show_salary": 1,
+          "min_experience": null,
+          "max_experience": null,
+          "timing": "full_time",
+          "paid_unpaid": "paid",
+          "pay_in": "annually",
+          "not_disclosed": false
+        },
+        "end_date": "2026-03-13T00:00:00+05:30",
+        "approved_date": "2026-02-27 16:21:41+05:30",
+        "viewsCount": 5362,
+        "registerCount": 5,
+        "regnRequirements": {
+          "opportunity_id": 1649499,
+          "start_regn_dt": "2026-02-27T00:00:00+05:30",
+          "end_regn_dt": "2026-03-13T00:00:00+05:30",
+          "show_deadline": 1,
+          "min_team_size": 1,
+          "max_team_size": 1,
+          "work_location_type": "city",
+          "eligibility": "{\"sector\":[\"fresher\"],\"engineering\":[],\"bSchools\":[],\"arts\":[],\"medicine\":[],\"law\":[],\"others\":[\"all\"],\"experience\":[\"all\"],\"studentPassoutYearsSelected\":[\"all\"],\"fresherPassoutYearsSelected\":[2025,2024],\"schoolFilteredClasses\":[\"all\"],\"minMarks\":{\"high_school_perc\":0,\"high_school_cgpa\":0},\"locations\":[],\"location_type\":\"all\",\"professionalEligibility\":{\"engineering\":[],\"bSchools\":[],\"arts\":[],\"medicine\":[],\"law\":[]}}",
+          "reg_status": "STARTED",
+          "remainingDaysArray": {
+            "durations": 11,
+            "text": " days left"
+          },
+          "remain_days": "11 days left",
+          "remaining_time": 953749
+        },
+        "description": "Business Importance of the Role: This is a business-critical role that will hone your Sales Leadership style, Team Leadership skills, KOL connect, Product Portfolio Maximization, and P&L mindset, preparing you to grow into larger roles within Genworks. You will have the trust and backing to take complete ownership of revenue and drive circle-level execution of the P&L strategy by working closely with HQ, Field Sales, Service, Product Specialists, Execution, and Support teams. You will be responsible for enhancing the engagement index with your team and customers. The role requires strong attention to detail and operational rigor to manage day-to-day team activities, sales execution, and strategic initiatives aligned with the people plan. You will develop and deploy people strategies in partnership with the GEO CEO, Vertical Heads, and Corporate teams. Key Responsibilities (Daily, Weekly, Monthly, Quarterly, Annual): Achieve quarterly and annual revenue targets in the assigned territory. Build strong relationships with customers, KOLs, and key stakeholders. Identify opportunities, generate leads, and manage a healthy sales funnel. Present product solutions, conduct demonstrations, and drive cross-selling and upselling initiatives. Handle negotiations, pricing discussions, and objection management. Promote the “One Genworks Solutions” approach across the product portfolio. Collaborate with internal teams including Sales, Service, Product, and Support. Ensure compliance with company processes, CRM usage, and documentation standards."
+      },
+      "skills": [
+        "Communication"
+      ],
+      "tags": [
+        "Batch:Any"
+      ],
+      "title": "Sales Support & Operations Associate",
+      "batch": [
+        "Any"
+      ],
+      "formatted_about": "**Company Overview**: Genworks Health\n\n* **Position**: Sales Support & Operations Associate\n* **Location**: Ballari, Shimoga, Mangaluru, Jammu, Udaipur\n* **Experience**: 0-2 Years\n* **Qualification**: Not Mentioned\n* **Take Home**: Not Mentioned\n\n**Benefits**: Not Mentioned\n\n**Description**: This is a business-critical role that will hone your Sales Leadership style, Team Leadership skills, KOL connect, Product Portfolio Maximization, and P&L mindset, preparing you to grow into larger roles within Genworks.",
+      "is_premium": false,
+      "normalized_location": "Ballari, Shimoga, Mangaluru, Jammu, Udaipur",
+      "processed_at": "2026-03-01T17:49:08.619Z",
+      "salary_status": "Not Mentioned",
+      "tech_stack": []
+    }
+  ]
+}

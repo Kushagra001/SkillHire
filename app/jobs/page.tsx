@@ -172,12 +172,20 @@ export default function JobsPage() {
     const pagination = data?.pagination || { currentPage: 1, totalPages: 1, totalJobs: 0 };
 
     const processedJobs = [...allJobs]
-        .map(job => ({
-            ...job,
-            // Generate a deterministic pseudo-random match percentage based on the job ID
-            // This ensures the match percentage stays consistent across re-renders for the same job
-            match_percentage: job.match_percentage || Math.floor((parseInt(job._id.substring(0, 8), 16) % 41) + 60)
-        }))
+        .map(job => {
+            // MongoDB ObjectIds start with a 4-byte timestamp.
+            // Jobs scraped together have the same timestamp, causing the same percentage.
+            // We use the last 8 characters (random + counter) to ensure a unique deterministic value.
+            const uniqueHex = job._id.length >= 24 ? job._id.substring(16, 24) : job._id;
+            const pseudoRandomMatch = Math.floor((parseInt(uniqueHex, 16) % 41) + 60);
+
+            return {
+                ...job,
+                // Generate a deterministic pseudo-random match percentage based on the job ID
+                // This ensures the match percentage stays consistent across re-renders for the same job
+                match_percentage: job.match_percentage || pseudoRandomMatch
+            };
+        })
         .sort((a, b) => {
             if (sortBy === 'match') {
                 return (b.match_percentage || 0) - (a.match_percentage || 0);
