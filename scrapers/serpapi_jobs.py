@@ -16,7 +16,7 @@ except ImportError:
 dotenv.load_dotenv(os.path.join(os.path.dirname(__file__), '../web/.env.local'))
 
 SERPAPI_KEY = os.getenv('SERPAPI_KEY')
-MONGO_URI = os.getenv('MONGODB_URI') or "mongodb://localhost:27017/skillhire"
+MONGO_URI = (os.getenv('MONGODB_URI') or "mongodb://localhost:27017/skillhire" or "").strip()
 
 def _get_logo(company_name):
     """Generate a custom static avatar for non-extractable companies."""

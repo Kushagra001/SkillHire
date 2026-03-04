@@ -26,7 +26,7 @@ load_dotenv(os.path.join(os.path.dirname(__file__), '../web/.env.local'))
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
-MONGO_URI = os.getenv('MONGODB_URI') or 'mongodb://localhost:27017/skillhire'
+MONGO_URI = (os.getenv('MONGODB_URI') or 'mongodb://localhost:27017/skillhire' or "").strip()
 
 # UNSTOP API Endpoint
 UNSTOP_API_URL = "https://unstop.com/api/public/opportunity/search-result"

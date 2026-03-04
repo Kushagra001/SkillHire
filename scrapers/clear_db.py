@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 
 load_dotenv(os.path.join(os.path.dirname(__file__), '../web/.env.local'))
 
-MONGO_URI = os.getenv("MONGODB_URI") or os.getenv("MONGO_URI")
+MONGO_URI = (os.getenv("MONGODB_URI") or os.getenv("MONGO_URI") or "").strip()
 
 def clear_db():
     if not MONGO_URI:

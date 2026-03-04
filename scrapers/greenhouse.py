@@ -8,7 +8,7 @@ import dotenv
 
 dotenv.load_dotenv(os.path.join(os.path.dirname(__file__), '../web/.env.local'))
 
-MONGO_URI = os.getenv('MONGODB_URI')
+MONGO_URI = (os.getenv('MONGODB_URI') or "").strip()
 if not MONGO_URI:
     MONGO_URI = "mongodb://localhost:27017/skillhire"
 

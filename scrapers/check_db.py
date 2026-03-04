@@ -4,7 +4,7 @@ import dotenv
 
 dotenv.load_dotenv(os.path.join(os.path.dirname(__file__), '../web/.env.local'))
 
-MONGO_URI = os.getenv('MONGODB_URI') or "mongodb://localhost:27017/skillhire"
+MONGO_URI = (os.getenv('MONGODB_URI') or "mongodb://localhost:27017/skillhire" or "").strip()
 client = MongoClient(MONGO_URI)
 db = client.get_database()
 count = db.jobs.count_documents({})

@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 
 load_dotenv(os.path.join(os.path.dirname(__file__), '../web/.env.local'))
 
-MONGO_URI = os.getenv('MONGODB_URI')
+MONGO_URI = (os.getenv('MONGODB_URI') or "").strip()
 
 def main():
     if not MONGO_URI:

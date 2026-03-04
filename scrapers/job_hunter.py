@@ -197,7 +197,7 @@ class AggregatorHunter:
 # --- Database Logic ---
 from pymongo import MongoClient
 
-MONGO_URI = os.getenv('MONGODB_URI') or "mongodb://localhost:27017/skillhire"
+MONGO_URI = (os.getenv('MONGODB_URI') or "mongodb://localhost:27017/skillhire" or "").strip()
 
 def save_to_db(jobs):
     if not jobs:

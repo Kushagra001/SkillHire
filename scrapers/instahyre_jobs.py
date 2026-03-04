@@ -28,7 +28,7 @@ logger = logging.getLogger(__name__)
 
 # Load Env
 load_dotenv(os.path.join(os.path.dirname(__file__), '../web/.env.local'))
-MONGO_URI = os.getenv('MONGODB_URI') or "mongodb://localhost:27017/skillhire"
+MONGO_URI = (os.getenv('MONGODB_URI') or "mongodb://localhost:27017/skillhire" or "").strip()
 
 def fetch_instahyre_api():
     logger.info("Starting Instahyre API Fetcher...")

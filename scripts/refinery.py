@@ -17,7 +17,7 @@ def strip_html(text: str) -> str:
 # Load environment variables
 load_dotenv(os.path.join(os.path.dirname(__file__), '../.env.local'))
 
-MONGO_URI = os.getenv("MONGODB_URI") or os.getenv("MONGO_URI")
+MONGO_URI = (os.getenv("MONGODB_URI") or os.getenv("MONGO_URI") or "").strip()
 DB_NAME = "test"  # Default to 'test' or 'skillire' based on connection string, usually extracted or set
 
 # --- CONFIGURATION & REGEX PATTERNS ---
