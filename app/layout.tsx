@@ -12,7 +12,10 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const BASE_URL = 'https://skillhire.in';
 
 export const metadata: Metadata = {
-  title: "SkillHire — Hired for What You Know",
+  title: {
+    default: "SkillHire — Hired for What You Know",
+    template: "%s | SkillHire",
+  },
   description: "Skill-based hiring for 2023-2026 freshers. Get matched to top companies based on what you can build.",
   metadataBase: new URL(BASE_URL),
   openGraph: {

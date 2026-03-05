@@ -36,14 +36,22 @@ export default function NewHero() {
     }, []);
 
     return (
-        <div className="relative w-full bg-[#FAFAFA] dark:bg-[#0B0F19] pt-32 pb-20 md:pt-40 md:pb-32 px-4 md:px-10 overflow-hidden font-sans tracking-tight">
-            {/* Texture overlay */}
-            <div className="absolute inset-0 z-0 opacity-[0.03] dark:opacity-[0.05]" style={{ backgroundImage: "radial-gradient(#000 1px, transparent 1px)", backgroundSize: "32px 32px" }} />
-            <div className="absolute inset-0 z-0 opacity-[0.05] dark:opacity-[0.02]" style={{ backgroundImage: "radial-gradient(#fff 1px, transparent 1px)", backgroundSize: "32px 32px" }} />
+        <div className="relative w-full bg-gradient-to-br from-slate-50 via-white to-teal-50/40 dark:from-[#060D18] dark:via-[#0B0F19] dark:to-[#0B1520] pt-32 pb-20 md:pt-40 md:pb-32 px-4 md:px-10 overflow-hidden font-sans tracking-tight">
 
-            {/* Ambient Background */}
-            <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-[#41B3A3]/10 dark:bg-teal-500/5 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/3 pointer-events-none z-0" />
-            <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-blue-500/5 dark:bg-indigo-500/5 rounded-full blur-[100px] translate-y-1/3 -translate-x-1/4 pointer-events-none z-0" />
+            {/* Premium noise texture */}
+            <div className="absolute inset-0 z-0 opacity-[0.4] dark:opacity-[0.15]" style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E\")", backgroundSize: "180px 180px" }} />
+
+            {/* Main top-right teal glow */}
+            <div className="absolute top-0 right-0 w-[900px] h-[900px] bg-[#41B3A3]/20 dark:bg-teal-500/10 rounded-full blur-[140px] -translate-y-1/3 translate-x-1/4 pointer-events-none z-0" />
+
+            {/* Left-side green accent glow */}
+            <div className="absolute top-1/3 left-0 w-[500px] h-[500px] bg-emerald-400/10 dark:bg-emerald-500/5 rounded-full blur-[100px] -translate-x-1/3 pointer-events-none z-0" />
+
+            {/* Bottom center warm burst */}
+            <div className="absolute bottom-0 left-1/2 w-[700px] h-[400px] bg-teal-300/10 dark:bg-cyan-500/5 rounded-full blur-[120px] -translate-x-1/2 translate-y-1/2 pointer-events-none z-0" />
+
+            {/* Subtle grid overlay */}
+            <div className="absolute inset-0 z-0 opacity-[0.025] dark:opacity-[0.04]" style={{ backgroundImage: "linear-gradient(#1b2532 1px, transparent 1px), linear-gradient(90deg, #1b2532 1px, transparent 1px)", backgroundSize: "48px 48px" }} />
 
             <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-16 relative z-10 w-full">
 
