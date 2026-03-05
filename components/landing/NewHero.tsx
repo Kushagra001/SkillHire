@@ -72,30 +72,60 @@ export default function NewHero() {
                             </span>
                         </h1>
                         <p className="mt-8 text-lg xl:text-xl text-slate-500 dark:text-slate-400 leading-relaxed max-w-lg">
-                            Empowering 2023-2026 batch freshers to land roles based on what they can build. Scan your resume, analyze your skills, and get matched with top product companies instantly.
+                            Get matched to top companies based on what you can build — not just your degree. Built for 2023–2026 batch freshers ready to prove their skills.
                         </p>
+
+                        {/* Animated stats bar */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.8, ease: "easeOut", delay: 0.4 }}
+                            className="flex items-center gap-4 mt-6 flex-wrap"
+                        >
+                            {[
+                                { value: "2,400+", label: "Jobs" },
+                                { value: "500+", label: "Companies" },
+                                { value: "2023–2026", label: "Batches" },
+                            ].map((stat, i) => (
+                                <div key={i} className="flex items-center gap-2">
+                                    {i > 0 && <span className="text-slate-300 dark:text-slate-700 text-sm">✦</span>}
+                                    <span className="text-sm font-bold text-[#187255] dark:text-[#41B3A3]">{stat.value}</span>
+                                    <span className="text-sm text-slate-500 dark:text-slate-400">{stat.label}</span>
+                                </div>
+                            ))}
+                        </motion.div>
                     </motion.div>
 
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
-                        className="flex flex-col sm:flex-row gap-4 mt-10 w-full sm:w-auto"
+                        className="flex flex-col gap-4 mt-10 w-full sm:w-auto"
                     >
-                        <Link
-                            href="/jobs"
-                            className="group flex h-14 items-center justify-center gap-2 rounded-xl bg-[#1b2532] dark:bg-white px-8 font-semibold text-white dark:text-[#1E293B] transition-all hover:scale-105 active:scale-95 shadow-xl shadow-slate-900/10 dark:shadow-white/10"
-                        >
-                            <Terminal className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-                            Browse Jobs
-                        </Link>
-                        <button
-                            onClick={handleCtaClick}
-                            className="group flex h-14 items-center justify-center gap-2 rounded-xl border border-gray-200 dark:border-slate-800 bg-white dark:bg-[#0F172A] px-8 font-medium text-slate-600 dark:text-slate-300 transition-all hover:bg-gray-50 dark:hover:bg-slate-800 active:scale-95 shadow-sm"
-                        >
-                            Scan Your Resume
-                            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                        </button>
+                        <div className="flex flex-col sm:flex-row gap-4">
+                            <Link
+                                href="/jobs"
+                                className="group relative flex h-14 items-center justify-center gap-2 rounded-xl bg-[#1b2532] dark:bg-white px-8 font-semibold text-white dark:text-[#1E293B] transition-all hover:scale-105 active:scale-95 shadow-xl shadow-slate-900/10 dark:shadow-white/10"
+                            >
+                                <Terminal className="w-4 h-4" />
+                                Browse 2,400+ Jobs
+                                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                            </Link>
+                            <button
+                                onClick={handleCtaClick}
+                                className="group relative flex h-14 items-center justify-center gap-2 rounded-xl border border-gray-200 dark:border-slate-800 bg-white dark:bg-[#0F172A] px-8 font-medium text-slate-600 dark:text-slate-300 transition-all hover:bg-gray-50 dark:hover:bg-slate-800 active:scale-95 shadow-sm"
+                            >
+                                <span className="absolute -top-2.5 -right-2 text-[10px] font-bold bg-[#187255] dark:bg-[#41B3A3] text-white rounded-full px-2 py-0.5 tracking-wide">FREE</span>
+                                Analyze My Resume
+                                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                            </button>
+                        </div>
+                        {/* Trust micro-copy */}
+                        <p className="text-xs text-slate-400 dark:text-slate-500 flex flex-wrap items-center gap-x-3 gap-y-1">
+                            <span>✓ Free to browse jobs</span>
+                            <span>✓ No login required to explore</span>
+                            <span>✓ AI-powered skill matching</span>
+                        </p>
                     </motion.div>
                 </div>
 

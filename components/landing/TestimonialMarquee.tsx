@@ -8,6 +8,7 @@ const testimonials = [
     {
         name: "Rahul Sharma",
         role: "Frontend Engineer at Zepto",
+        batch: "2025 Batch",
         content: "SkillHire bypassed the ATS black hole completely. The match accuracy was insane, got an interview call in 48 hours for a role I definitely would have been auto-rejected from.",
         avatar: "/avatars/rahul.png",
         rating: 5
@@ -15,6 +16,7 @@ const testimonials = [
     {
         name: "Priya Patel",
         role: "SDE I at FamPay",
+        batch: "2024 Batch",
         content: "Stop spraying and praying on LinkedIn. This engineered my resume specifically for Swiggy's JD and it worked flawlessly. Game changer for 2024 grads.",
         avatar: "/avatars/priya.png",
         rating: 5
@@ -22,6 +24,7 @@ const testimonials = [
     {
         name: "Aditya Nair",
         role: "Backend Dev at Appsmith",
+        batch: "2023 Batch",
         content: "The salary band transparency is what sold me initially, but the direct matching engine really delivers. Highly recommend to any junior dev struggling right now.",
         avatar: "/avatars/aditya.png",
         rating: 5
@@ -29,6 +32,7 @@ const testimonials = [
     {
         name: "Sneha Reddy",
         role: "Fullstack at Peerlist",
+        batch: "2026 Batch",
         content: "SkillHire highlighted exactly which Next.js skills I was missing for the mid-level role. I spent a weekend upskilling, re-ran the scan, matched 92%, and got hired.",
         avatar: "/avatars/sneha.png",
         rating: 5
@@ -36,6 +40,7 @@ const testimonials = [
     {
         name: "Vikram Singh",
         role: "SDE II at SuperTokens",
+        batch: "2024 Batch",
         content: "As someone who reviews resumes, the formatting SkillHire outputs is precisely what engineering managers want to see. Clean, data-driven, and highly relevant.",
         avatar: "/avatars/vikram.png",
         rating: 5
@@ -95,12 +100,15 @@ export default function TestimonialMarquee() {
                                     height={48}
                                     className="rounded-full bg-slate-200 dark:bg-slate-800 object-cover"
                                 />
-                                <div className="flex flex-col">
+                                <div className="flex flex-col gap-0.5">
                                     <span className="text-slate-900 dark:text-white font-bold tracking-tight">
                                         {testimonial.name}
                                     </span>
                                     <span className="text-sm text-slate-500 dark:text-slate-500 font-medium">
                                         {testimonial.role}
+                                    </span>
+                                    <span className="inline-flex items-center mt-1 text-[11px] font-semibold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-100 dark:border-emerald-800/40 rounded-full px-2 py-0.5 w-fit">
+                                        {testimonial.batch}
                                     </span>
                                 </div>
                             </div>
