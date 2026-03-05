@@ -345,12 +345,12 @@ export default function JobsPage() {
             </AnimatePresence>
 
             <main className="flex-1 flex flex-col overflow-hidden">
-                <div className="bg-white border-b border-gray-200 py-4 shrink-0">
-                    <div className="w-full pl-4 pr-6 sm:pl-6 sm:pr-8">
-                        <div className="flex flex-col md:flex-row gap-4 items-center">
-                            <h1 className="text-lg font-bold text-slate-900 whitespace-nowrap">Find your dream job</h1>
-                            <div className="flex flex-col md:flex-row gap-2 w-full">
-                                <div className="relative flex-1 group">
+                <div className="bg-white border-b border-gray-200 py-3 sm:py-4 shrink-0">
+                    <div className="w-full px-4 sm:px-6 lg:px-8">
+                        <div className="flex flex-col md:flex-row gap-3 md:gap-4 items-center">
+                            <h1 className="text-base sm:text-lg font-bold text-slate-900 whitespace-nowrap hidden sm:block md:block">Find your dream job</h1>
+                            <div className="grid grid-cols-2 md:flex md:flex-row gap-2 w-full">
+                                <div className="relative col-span-2 md:col-span-1 md:flex-1 group">
                                     <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
                                         <Search className="h-4 w-4" />
                                     </div>
@@ -362,7 +362,7 @@ export default function JobsPage() {
                                         onChange={(e) => setSearch(e.target.value)}
                                     />
                                 </div>
-                                <div className="relative flex-1 group">
+                                <div className="relative col-span-1 md:col-span-1 md:flex-1 group">
                                     <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
                                         <MapPin className="h-4 w-4" />
                                     </div>
@@ -374,7 +374,7 @@ export default function JobsPage() {
                                         onChange={(e) => setLocation(e.target.value)}
                                     />
                                 </div>
-                                <button className="flex h-10 items-center justify-center rounded-lg bg-[#0A3D62] px-6 text-sm font-bold text-white transition-all hover:bg-slate-800 shadow-sm active:scale-95">
+                                <button className="col-span-1 md:col-auto flex h-10 items-center justify-center rounded-lg bg-[#0A3D62] px-6 text-sm font-bold text-white transition-all hover:bg-slate-800 shadow-sm active:scale-95">
                                     Search
                                 </button>
                             </div>
@@ -382,9 +382,9 @@ export default function JobsPage() {
                     </div>
                 </div>
 
-                <div className="flex-1 w-full pl-4 pr-6 sm:pl-6 sm:pr-10 py-4 flex gap-6 overflow-hidden">
+                <div className="flex-1 w-full px-4 sm:px-6 lg:px-8 py-3 sm:py-4 flex gap-4 sm:gap-6 overflow-hidden">
                     {/* Left: Job List & Filters */}
-                    <div className="w-[35%] flex flex-col gap-3 min-w-[340px] max-w-[420px]">
+                    <div className="w-full md:w-[35%] flex flex-col gap-2 sm:gap-3 md:min-w-[340px] md:max-w-[420px]">
 
                         {/* Compact Sidebar Filters */}
                         <div className="bg-white rounded-xl border border-gray-200 shadow-sm flex flex-col transition-all overflow-hidden relative">
@@ -522,7 +522,7 @@ export default function JobsPage() {
                         {isLoading && <div className="flex justify-center p-4"><Loader2 className="animate-spin text-[#41b4a5]" /></div>}
                         {isError && <div className="flex justify-center p-4 text-red-500 text-sm">Error loading jobs.</div>}
 
-                        <div className="flex-1 overflow-y-auto overflow-x-hidden custom-scrollbar pr-3 space-y-2 pb-2">
+                        <div className="flex-1 overflow-y-auto overflow-x-hidden custom-scrollbar pr-1 sm:pr-3 space-y-2 pb-2 mt-1 sm:mt-0">
                             <AnimatePresence>
                                 {processedJobs.map((job: Job, index: number) => (
                                     <motion.div
@@ -540,14 +540,14 @@ export default function JobsPage() {
                                             }
                                         }}
                                         className={`
-                                            relative p-3 rounded-xl transition-all cursor-pointer group overflow-hidden
+                                            relative p-2.5 sm:p-3 rounded-xl transition-all cursor-pointer group overflow-hidden
                                             ${selectedJob?._id === job._id
                                                 ? 'border border-l-4 border-l-[#41B3A3] border-r-0 border-y-transparent bg-[#41B3A3]/5 rounded-r-none shadow-none z-10'
                                                 : `border hover:border-[#41B3A3] hover:shadow-sm ${job.is_locked ? 'bg-amber-50/60 border-amber-100' : 'bg-white border-gray-200'}`
                                             }
                                         `}
                                     >
-                                        <div className="flex gap-3 items-start">
+                                        <div className="flex gap-2.5 sm:gap-3 items-start">
                                             {/* Logo — compact */}
                                             <div className="h-10 w-10 shrink-0 bg-white rounded-lg border border-gray-100 flex items-center justify-center overflow-hidden shadow-sm">
                                                 {/* eslint-disable-next-line @next/next/no-img-element */}
