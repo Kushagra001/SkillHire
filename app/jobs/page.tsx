@@ -138,7 +138,7 @@ export default function JobsPage() {
     const [isMobileOpen, setIsMobileOpen] = useState(false);
     const [sortBy, setSortBy] = useState("newest");
     const [showPremiumOnly, setShowPremiumOnly] = useState(false);
-    const [isFiltersExpanded, setIsFiltersExpanded] = useState(true);
+    const [isFiltersExpanded, setIsFiltersExpanded] = useState(false);
     const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
 
     const debouncedSearch = useDebounce(search, 500);
