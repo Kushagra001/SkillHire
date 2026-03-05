@@ -82,20 +82,20 @@ export default function NewHero() {
                         transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
                         className="flex flex-col sm:flex-row gap-4 mt-10 w-full sm:w-auto"
                     >
+                        <Link
+                            href="/jobs"
+                            className="group flex h-14 items-center justify-center gap-2 rounded-xl bg-[#1b2532] dark:bg-white px-8 font-semibold text-white dark:text-[#1E293B] transition-all hover:scale-105 active:scale-95 shadow-xl shadow-slate-900/10 dark:shadow-white/10"
+                        >
+                            <Terminal className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                            Browse Jobs
+                        </Link>
                         <button
                             onClick={handleCtaClick}
-                            className="group flex h-14 items-center justify-center gap-2 rounded-xl bg-[#1b2532] dark:bg-white px-8 font-semibold text-white dark:text-[#1E293B] transition-all hover:scale-105 active:scale-95 shadow-xl shadow-slate-900/10 dark:shadow-white/10"
+                            className="group flex h-14 items-center justify-center gap-2 rounded-xl border border-gray-200 dark:border-slate-800 bg-white dark:bg-[#0F172A] px-8 font-medium text-slate-600 dark:text-slate-300 transition-all hover:bg-gray-50 dark:hover:bg-slate-800 active:scale-95 shadow-sm"
                         >
                             Scan Your Resume
                             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                         </button>
-                        <Link
-                            href="/jobs"
-                            className="group flex h-14 items-center justify-center gap-2 rounded-xl border border-gray-200 dark:border-slate-800 bg-white dark:bg-[#0F172A] px-8 font-medium text-slate-600 dark:text-slate-300 transition-all hover:bg-gray-50 dark:hover:bg-slate-800 active:scale-95 shadow-sm"
-                        >
-                            <Terminal className="w-4 h-4 text-slate-400 group-hover:text-slate-600 dark:text-slate-500 dark:group-hover:text-slate-300 transition-colors" />
-                            Browse Jobs
-                        </Link>
                     </motion.div>
                 </div>
 
