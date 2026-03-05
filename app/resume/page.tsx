@@ -254,7 +254,7 @@ export default function ResumePage() {
                 {/* Top Layout Grid */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
                     {/* Left Column: Input */}
-                    <motion.div layout className="bg-surface-light dark:bg-surface-dark rounded-xl shadow-[0_4px_20px_-4px_rgba(0,0,0,0.1)] border border-slate-100 dark:border-slate-800 p-6 md:p-8 flex flex-col h-full">
+                    <motion.div layout className="bg-white dark:bg-white/[0.04] dark:backdrop-blur-md rounded-xl shadow-[0_4px_20px_-4px_rgba(0,0,0,0.1)] dark:shadow-[0_4px_24px_-4px_rgba(0,0,0,0.4)] border border-slate-100 dark:border-white/[0.06] p-6 md:p-8 flex flex-col h-full">
                         <div className="mb-6">
                             <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-1 flex items-center gap-2">
                                 <FileUp className="h-5 w-5 text-primary" />
@@ -318,7 +318,7 @@ export default function ResumePage() {
                     </motion.div>
 
                     {/* Right Column: Results */}
-                    <div className="bg-surface-light dark:bg-surface-dark rounded-xl shadow-[0_4px_20px_-4px_rgba(0,0,0,0.1)] border border-slate-100 dark:border-slate-800 p-6 md:p-8 flex flex-col h-full relative overflow-hidden">
+                    <div className="bg-white dark:bg-white/[0.04] dark:backdrop-blur-md rounded-xl shadow-[0_4px_20px_-4px_rgba(0,0,0,0.1)] dark:shadow-[0_4px_24px_-4px_rgba(0,0,0,0.4)] border border-slate-100 dark:border-white/[0.06] p-6 md:p-8 flex flex-col h-full relative overflow-hidden">
                         <AnimatePresence mode="wait">
                             {isAnalyzing ? (
                                 <motion.div
@@ -486,7 +486,7 @@ export default function ResumePage() {
                 </div>
 
                 {/* Recent Scans Section */}
-                <div className="bg-surface-light dark:bg-surface-dark rounded-xl shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] border border-slate-100 dark:border-slate-800 overflow-hidden">
+                <div className="bg-white dark:bg-white/[0.04] dark:backdrop-blur-md rounded-xl shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:shadow-[0_4px_24px_-4px_rgba(0,0,0,0.4)] border border-slate-100 dark:border-white/[0.06] overflow-hidden">
                     <div className="px-6 py-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
                         <h2 className="text-lg font-bold text-slate-900 dark:text-white">Recent Scans</h2>
                         <div className="flex items-center gap-5">

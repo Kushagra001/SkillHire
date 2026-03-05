@@ -219,9 +219,9 @@ export function JobDetailsPane({ job, onUnlock, isUnlocking }: { job: Job | null
     const batchStr = getBatch(job);
 
     return (
-        <div className="flex-1 flex flex-col h-full bg-white relative">
+        <div className="flex-1 flex flex-col h-full bg-white dark:bg-transparent relative">
             <div className={`relative flex-1 overflow-y-auto custom-scrollbar p-6 ${job.is_locked ? 'overflow-hidden' : ''}`}>
-                <div className="sticky top-0 bg-white z-10 pb-4 mb-4 border-b border-gray-100 shadow-sm flex flex-col xl:flex-row gap-6 items-start">
+                <div className="sticky top-0 bg-white dark:bg-[#0B0F19]/95 z-10 pb-4 mb-4 border-b border-gray-100 dark:border-slate-800/60 shadow-sm flex flex-col xl:flex-row gap-6 items-start">
                     <div className="h-20 w-20 flex-shrink-0 overflow-hidden rounded-xl border border-gray-100 bg-white p-3 shadow-sm flex items-center justify-center">
                         <img
                             key={job._id}
@@ -271,37 +271,37 @@ export function JobDetailsPane({ job, onUnlock, isUnlocking }: { job: Job | null
                         {/* Dynamic Metadata Container */}
                         <div className="flex flex-wrap gap-4 mb-8">
                             {job.location && job.location !== "Unknown" && (
-                                <div className="flex-1 min-w-[120px] bg-slate-50 p-4 rounded-xl border border-slate-100">
+                                <div className="flex-1 min-w-[120px] bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-100 dark:border-slate-700/50">
                                     <span className="text-[10px] font-bold text-slate-400 uppercase">Location</span>
-                                    <p className="text-sm font-bold text-[#0A3D62] mt-1">{job.location}</p>
+                                    <p className="text-sm font-bold text-[#0A3D62] dark:text-[#41b4a5] mt-1">{job.location}</p>
                                 </div>
                             )}
 
                             {job.salary_status && job.salary_status !== "Not Disclosed" && job.salary_status !== "Not Mentioned" && (
-                                <div className="flex-1 min-w-[120px] bg-slate-50 p-4 rounded-xl border border-slate-100">
+                                <div className="flex-1 min-w-[120px] bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-100 dark:border-slate-700/50">
                                     <span className="text-[10px] font-bold text-slate-400 uppercase">Stipend / Salary</span>
-                                    <p className="text-sm font-bold text-[#0A3D62] mt-1">{job.salary_status}</p>
+                                    <p className="text-sm font-bold text-[#0A3D62] dark:text-[#41b4a5] mt-1">{job.salary_status}</p>
                                 </div>
                             )}
 
                             {job.experience && job.experience !== "Not Disclosed" && job.experience !== "Unknown" && (
-                                <div className="flex-1 min-w-[120px] bg-slate-50 p-4 rounded-xl border border-slate-100">
+                                <div className="flex-1 min-w-[120px] bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-100 dark:border-slate-700/50">
                                     <span className="text-[10px] font-bold text-slate-400 uppercase">Experience</span>
-                                    <p className="text-sm font-bold text-[#0A3D62] mt-1">{job.experience}</p>
+                                    <p className="text-sm font-bold text-[#0A3D62] dark:text-[#41b4a5] mt-1">{job.experience}</p>
                                 </div>
                             )}
 
                             {batchStr && batchStr !== "Any" && (
-                                <div className="flex-1 min-w-[120px] bg-slate-50 p-4 rounded-xl border border-slate-100">
+                                <div className="flex-1 min-w-[120px] bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-100 dark:border-slate-700/50">
                                     <span className="text-[10px] font-bold text-slate-400 uppercase">Batch</span>
-                                    <p className="text-sm font-bold text-[#0A3D62] mt-1">{batchStr}</p>
+                                    <p className="text-sm font-bold text-[#0A3D62] dark:text-[#41b4a5] mt-1">{batchStr}</p>
                                 </div>
                             )}
 
                             {job.job_type && job.job_type !== "Unknown" && (
-                                <div className="flex-1 min-w-[120px] bg-slate-50 p-4 rounded-xl border border-slate-100">
+                                <div className="flex-1 min-w-[120px] bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-100 dark:border-slate-700/50">
                                     <span className="text-[10px] font-bold text-slate-400 uppercase">Type</span>
-                                    <p className="text-sm font-bold text-[#0A3D62] mt-1">{job.job_type}</p>
+                                    <p className="text-sm font-bold text-[#0A3D62] dark:text-[#41b4a5] mt-1">{job.job_type}</p>
                                 </div>
                             )}
 
@@ -321,7 +321,7 @@ export function JobDetailsPane({ job, onUnlock, isUnlocking }: { job: Job | null
                         )}
 
                         {/* Horizontal Resume Matcher Widget */}
-                        <div className="relative flex flex-col sm:flex-row items-center justify-between p-4 bg-white border border-gray-200 rounded-xl shadow-sm mb-6 gap-4 min-h-[80px] overflow-hidden transition-all duration-300">
+                        <div className="relative flex flex-col sm:flex-row items-center justify-between p-4 bg-white dark:bg-slate-800/40 border border-gray-200 dark:border-slate-700/50 rounded-xl shadow-sm mb-6 gap-4 min-h-[80px] overflow-hidden transition-all duration-300">
                             {quotaExceeded ? (
                                 <div className="flex items-center gap-4 w-full justify-between">
                                     <div className="flex items-center gap-4">
@@ -525,7 +525,7 @@ export function JobDetailsPane({ job, onUnlock, isUnlocking }: { job: Job | null
 
                         <div className="space-y-6 relative">
                             <div>
-                                <h4 className="text-lg font-bold text-slate-900 mb-4 border-b border-gray-100 pb-2">About the Role</h4>
+                                <h4 className="text-lg font-bold text-slate-900 dark:text-white mb-4 border-b border-gray-100 dark:border-slate-800/60 pb-2">About the Role</h4>
                                 <div className={`text-slate-600 leading-[1.6] text-sm whitespace-pre-wrap break-words ${job.is_locked ? 'h-[500px] overflow-hidden relative' : !showFullDesc ? 'max-h-[300px] overflow-hidden relative' : ''}`}>
 
                                     {job.formatted_about ? (
@@ -552,14 +552,13 @@ export function JobDetailsPane({ job, onUnlock, isUnlocking }: { job: Job | null
                                         </div>
                                     )}
 
-                                    {/* Floor Fade Gradient */}
                                     {job.is_locked ? (
-                                        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/60 to-white/95 backdrop-blur-[1px]" />
+                                        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/60 dark:via-[#0B0F19]/60 to-white/95 dark:to-[#0B0F19]/98 backdrop-blur-[1px]" />
                                     ) : !showFullDesc && (
-                                        <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-white via-white/80 to-transparent flex items-end justify-center pb-2">
+                                        <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-white dark:from-[#0B0F19] via-white/80 dark:via-[#0B0F19]/80 to-transparent flex items-end justify-center pb-2">
                                             <button
                                                 onClick={() => setShowFullDesc(true)}
-                                                className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700 bg-white/90 backdrop-blur-sm border border-slate-200 shadow-sm rounded-full px-4 py-1.5 hover:bg-teal-50 hover:text-[#41b4a5] hover:border-[#41b4a5]/40 transition-all"
+                                                className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700 dark:text-slate-300 bg-white/90 dark:bg-slate-800/80 backdrop-blur-sm border border-slate-200 dark:border-slate-700 shadow-sm rounded-full px-4 py-1.5 hover:bg-teal-50 dark:hover:bg-teal-900/30 hover:text-[#41b4a5] hover:border-[#41b4a5]/40 transition-all"
                                             >
                                                 Read Full Description
                                             </button>
@@ -602,7 +601,7 @@ export function JobDetailsPane({ job, onUnlock, isUnlocking }: { job: Job | null
                     </div>
 
                     {/* Detail Footer */}
-                    <div className="bg-gray-50 border-t border-gray-100 p-4 flex items-center justify-end shrink-0">
+                    <div className="bg-gray-50 dark:bg-slate-800/30 border-t border-gray-100 dark:border-slate-800/60 p-4 flex items-center justify-end shrink-0">
                         <div className="flex gap-2">
                             <button
                                 onClick={handleShare}

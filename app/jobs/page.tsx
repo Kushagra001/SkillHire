@@ -269,9 +269,9 @@ export default function JobsPage() {
     };
 
     return (
-        <div className="h-screen overflow-hidden flex flex-col bg-[#f9fbfb] text-slate-900 font-sans selection:bg-[#41b4a5]/30 selection:text-[#369689]">
+        <div className="h-screen overflow-hidden flex flex-col bg-[#f9fbfb] dark:bg-[#060D18] text-slate-900 dark:text-slate-100 font-sans selection:bg-[#41b4a5]/30 selection:text-[#369689]">
             {/* Sticky Navigation */}
-            <header className="shrink-0 z-50 w-full border-b border-gray-200 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/80">
+            <header className="shrink-0 z-50 w-full border-b border-gray-200 dark:border-slate-800/60 bg-white/95 dark:bg-[#060D18]/90 backdrop-blur supports-[backdrop-filter]:bg-white/80 dark:supports-[backdrop-filter]:bg-[#060D18]/80">
                 <div className="flex h-16 w-full items-center px-4 sm:px-6 lg:px-8 gap-4">
                     {/* Logo — hard left */}
                     <Link href="/" className="flex items-center gap-3 decoration-transparent">
@@ -282,8 +282,8 @@ export default function JobsPage() {
                     </Link>
                     <div className="flex-1" />
                     <nav className="hidden md:flex items-center gap-8 mr-4">
-                        <Link className="text-sm font-medium text-slate-700 hover:text-[#41b4a5] transition-colors" href="/jobs">Jobs</Link>
-                        <Link className="text-sm font-medium text-slate-700 hover:text-[#41b4a5] transition-colors" href="/resume">AI Resume Matcher</Link>
+                        <Link className="text-sm font-medium text-slate-700 dark:text-slate-300 hover:text-[#41b4a5] transition-colors" href="/jobs">Jobs</Link>
+                        <Link className="text-sm font-medium text-slate-700 dark:text-slate-300 hover:text-[#41b4a5] transition-colors" href="/resume">AI Resume Matcher</Link>
                     </nav>
                     {/* Auth — hard right */}
                     <div className="flex items-center gap-3 shrink-0">
@@ -348,10 +348,10 @@ export default function JobsPage() {
             </AnimatePresence>
 
             <main className="flex-1 flex flex-col overflow-hidden">
-                <div className="bg-white border-b border-gray-200 py-3 sm:py-4 shrink-0">
+                <div className="bg-white dark:bg-[#0B0F19] border-b border-gray-200 dark:border-slate-800/60 py-3 sm:py-4 shrink-0">
                     <div className="w-full px-4 sm:px-6 lg:px-8">
                         <div className="flex flex-col md:flex-row gap-3 md:gap-4 items-center">
-                            <h1 className="text-base sm:text-lg font-bold text-slate-900 whitespace-nowrap hidden sm:block md:block">Find your dream job</h1>
+                            <h1 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white whitespace-nowrap hidden sm:block md:block">Find your dream job</h1>
                             <div className="flex flex-row gap-2 w-full">
                                 <div
                                     style={{ flex: focusedInput === 'search' ? 3 : focusedInput === 'location' ? 1 : 2 }}
@@ -361,7 +361,7 @@ export default function JobsPage() {
                                         <Search className="h-4 w-4 shrink-0" />
                                     </div>
                                     <input
-                                        className="block w-full min-w-0 truncate rounded-lg border border-gray-200 pl-9 sm:pl-10 pr-3 py-2 text-[13px] sm:text-sm focus:border-[#41b4a5] focus:outline-none shadow-sm h-10 transition-all bg-white"
+                                        className="block w-full min-w-0 truncate rounded-lg border border-gray-200 dark:border-slate-700 dark:bg-slate-900/60 dark:text-slate-100 dark:placeholder-slate-500 pl-9 sm:pl-10 pr-3 py-2 text-[13px] sm:text-sm focus:border-[#41b4a5] focus:outline-none shadow-sm h-10 transition-all bg-white"
                                         placeholder="Role, Skills, or Company"
                                         type="text"
                                         value={search}
@@ -378,7 +378,7 @@ export default function JobsPage() {
                                         <MapPin className="h-4 w-4 shrink-0" />
                                     </div>
                                     <input
-                                        className="block w-full min-w-0 truncate rounded-lg border border-gray-200 pl-9 sm:pl-10 pr-3 py-2 text-[13px] sm:text-sm focus:border-[#41b4a5] focus:outline-none shadow-sm h-10 transition-all bg-white"
+                                        className="block w-full min-w-0 truncate rounded-lg border border-gray-200 dark:border-slate-700 dark:bg-slate-900/60 dark:text-slate-100 dark:placeholder-slate-500 pl-9 sm:pl-10 pr-3 py-2 text-[13px] sm:text-sm focus:border-[#41b4a5] focus:outline-none shadow-sm h-10 transition-all bg-white"
                                         placeholder="Location (e.g. Bangalore)"
                                         type="text"
                                         value={location}
@@ -401,13 +401,13 @@ export default function JobsPage() {
                     <div className="w-full md:w-[35%] flex flex-col gap-2 sm:gap-3 md:min-w-[340px] md:max-w-[420px]">
 
                         {/* Compact Sidebar Filters */}
-                        <div className="bg-white rounded-xl border border-gray-200 shadow-sm flex flex-col transition-all overflow-hidden relative">
+                        <div className="bg-white dark:bg-[#0B0F19]/80 dark:border-slate-800/60 rounded-xl border border-gray-200 shadow-sm flex flex-col transition-all overflow-hidden relative">
                             <div
-                                className="flex items-center justify-between p-2.5 sm:p-3 cursor-pointer hover:bg-slate-50 transition-colors z-10 bg-white"
+                                className="flex items-center justify-between p-2.5 sm:p-3 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors z-10 bg-white dark:bg-transparent"
                                 onClick={() => setIsFiltersExpanded(!isFiltersExpanded)}
                             >
                                 <div className="flex items-center gap-2">
-                                    <h3 className="text-[12px] sm:text-[13px] font-bold text-slate-900 select-none">Refine Results</h3>
+                                    <h3 className="text-[12px] sm:text-[13px] font-bold text-slate-900 dark:text-white select-none">Refine Results</h3>
                                     <ChevronDown className={`h-4 w-4 text-slate-400 transition-transform duration-300 ${isFiltersExpanded ? 'rotate-180' : ''}`} />
                                 </div>
                                 <button
@@ -556,8 +556,8 @@ export default function JobsPage() {
                                         className={`
                                             relative p-2.5 sm:p-3 rounded-xl transition-all cursor-pointer group overflow-hidden
                                             ${selectedJob?._id === job._id
-                                                ? 'border border-l-4 border-l-[#41B3A3] border-r-0 border-y-transparent bg-[#41B3A3]/5 rounded-r-none shadow-none z-10'
-                                                : `border hover:border-[#41B3A3] hover:shadow-sm ${job.is_locked ? 'bg-amber-50/60 border-amber-100' : 'bg-white border-gray-200'}`
+                                                ? 'border border-l-4 border-l-[#41B3A3] border-r-0 border-y-transparent bg-[#41B3A3]/5 dark:bg-[#41B3A3]/10 rounded-r-none shadow-none z-10'
+                                                : `border hover:border-[#41B3A3] hover:shadow-sm ${job.is_locked ? 'bg-amber-50/60 dark:bg-amber-900/10 border-amber-100 dark:border-amber-900/30' : 'bg-white dark:bg-slate-800/50 border-gray-200 dark:border-slate-800/60'}`
                                             }
                                         `}
                                     >
@@ -579,7 +579,7 @@ export default function JobsPage() {
                                             {/* Content */}
                                             <div className="flex-1 min-w-0">
                                                 {/* Title */}
-                                                <h3 className={`text-sm font-bold leading-snug break-words mb-1 ${selectedJob?._id === job._id ? 'text-[#0A3D62]' : 'text-slate-900'}`}>
+                                                <h3 className={`text-sm font-bold leading-snug break-words mb-1 ${selectedJob?._id === job._id ? 'text-[#0A3D62] dark:text-[#41b4a5]' : 'text-slate-900 dark:text-slate-100'}`}>
                                                     {job.title}
                                                 </h3>
 
@@ -721,7 +721,7 @@ export default function JobsPage() {
                     </div >
 
                     {/* Right: Job Details */}
-                    <div className="flex-1 flex flex-col bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden hidden md:flex relative">
+                    <div className="flex-1 flex flex-col bg-white dark:bg-[#0B0F19]/80 rounded-xl border border-gray-200 dark:border-slate-800/60 shadow-sm overflow-hidden hidden md:flex relative">
                         <AnimatePresence mode="wait">
                             <motion.div
                                 key={selectedJob?._id || 'empty'}
