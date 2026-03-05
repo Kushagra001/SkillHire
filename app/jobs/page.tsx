@@ -140,6 +140,7 @@ export default function JobsPage() {
     const [showPremiumOnly, setShowPremiumOnly] = useState(false);
     const [isFiltersExpanded, setIsFiltersExpanded] = useState(false);
     const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
+    const [focusedInput, setFocusedInput] = useState<'search' | 'location' | null>(null);
 
     const debouncedSearch = useDebounce(search, 500);
     const debouncedLocation = useDebounce(location, 500);
@@ -349,32 +350,42 @@ export default function JobsPage() {
                     <div className="w-full px-4 sm:px-6 lg:px-8">
                         <div className="flex flex-col md:flex-row gap-3 md:gap-4 items-center">
                             <h1 className="text-base sm:text-lg font-bold text-slate-900 whitespace-nowrap hidden sm:block md:block">Find your dream job</h1>
-                            <div className="grid grid-cols-2 md:flex md:flex-row gap-2 w-full">
-                                <div className="relative col-span-2 md:col-span-1 md:flex-1 group">
+                            <div className="flex flex-row gap-2 w-full">
+                                <div
+                                    style={{ flex: focusedInput === 'search' ? 3 : focusedInput === 'location' ? 1 : 2 }}
+                                    className="relative min-w-0 transition-all duration-300 ease-in-out group"
+                                >
                                     <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
-                                        <Search className="h-4 w-4" />
+                                        <Search className="h-4 w-4 shrink-0" />
                                     </div>
                                     <input
-                                        className="block w-full rounded-lg border border-gray-200 pl-10 py-2 text-sm focus:border-[#41b4a5] focus:outline-none shadow-sm h-10 transition-all"
+                                        className="block w-full min-w-0 truncate rounded-lg border border-gray-200 pl-9 sm:pl-10 pr-3 py-2 text-[13px] sm:text-sm focus:border-[#41b4a5] focus:outline-none shadow-sm h-10 transition-all bg-white"
                                         placeholder="Role, Skills, or Company"
                                         type="text"
                                         value={search}
                                         onChange={(e) => setSearch(e.target.value)}
+                                        onFocus={() => setFocusedInput('search')}
+                                        onBlur={() => setFocusedInput(null)}
                                     />
                                 </div>
-                                <div className="relative col-span-1 md:col-span-1 md:flex-1 group">
+                                <div
+                                    style={{ flex: focusedInput === 'location' ? 3 : focusedInput === 'search' ? 1 : 2 }}
+                                    className="relative min-w-0 transition-all duration-300 ease-in-out group"
+                                >
                                     <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
-                                        <MapPin className="h-4 w-4" />
+                                        <MapPin className="h-4 w-4 shrink-0" />
                                     </div>
                                     <input
-                                        className="block w-full rounded-lg border border-gray-200 pl-10 py-2 text-sm focus:border-[#41b4a5] focus:outline-none shadow-sm h-10 transition-all"
+                                        className="block w-full min-w-0 truncate rounded-lg border border-gray-200 pl-9 sm:pl-10 pr-3 py-2 text-[13px] sm:text-sm focus:border-[#41b4a5] focus:outline-none shadow-sm h-10 transition-all bg-white"
                                         placeholder="Location (e.g. Bangalore)"
                                         type="text"
                                         value={location}
                                         onChange={(e) => setLocation(e.target.value)}
+                                        onFocus={() => setFocusedInput('location')}
+                                        onBlur={() => setFocusedInput(null)}
                                     />
                                 </div>
-                                <button className="col-span-1 md:col-auto flex h-10 items-center justify-center rounded-lg bg-[#0A3D62] px-6 text-sm font-bold text-white transition-all hover:bg-slate-800 shadow-sm active:scale-95">
+                                <button className="hidden md:flex shrink-0 h-10 items-center justify-center rounded-lg bg-[#0A3D62] px-6 text-sm font-bold text-white transition-all hover:bg-slate-800 shadow-sm active:scale-95">
                                     Search
                                 </button>
                             </div>
