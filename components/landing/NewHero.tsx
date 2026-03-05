@@ -74,9 +74,9 @@ export default function NewHero() {
                         className="flex flex-col"
                     >
                         <h1 className="text-6xl sm:text-7xl lg:text-[5.5rem] font-black tracking-tighter text-[#1b2532] dark:text-white leading-[1.05]">
-                            Hired For <br />
+                            Get Hired for <br />
                             <span className="text-[#187255] dark:text-[#41B3A3]">
-                                What You Build.
+                                What You Ship.
                             </span>
                         </h1>
                         <p className="mt-8 text-lg xl:text-xl text-slate-500 dark:text-slate-400 leading-relaxed max-w-lg">
@@ -115,7 +115,6 @@ export default function NewHero() {
                                 href="/jobs"
                                 className="group relative flex h-14 items-center justify-center gap-2 rounded-xl bg-[#1b2532] dark:bg-white px-8 font-semibold text-white dark:text-[#1E293B] transition-all hover:scale-105 active:scale-95 shadow-xl shadow-slate-900/10 dark:shadow-white/10"
                             >
-                                <Terminal className="w-4 h-4" />
                                 Browse 2,400+ Jobs
                                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                             </Link>
