@@ -6,6 +6,7 @@ import { useClerk, SignedIn, SignedOut, UserButton, useUser } from '@clerk/nextj
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion, AnimatePresence, animate } from 'framer-motion';
+import { ThemeToggle } from '@/components/ThemeToggle';
 
 interface AnalysisResult {
     job_title?: string;
@@ -182,6 +183,7 @@ export default function ResumePage() {
                     </nav>
                     {/* Auth — hard right */}
                     <div className="flex items-center gap-3 shrink-0">
+                        <ThemeToggle />
                         <SignedOut>
                             <button
                                 onClick={() => openSignIn({ redirectUrl: window.location.href })}

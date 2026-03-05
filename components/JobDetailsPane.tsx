@@ -352,54 +352,55 @@ export function JobDetailsPane({ job, onUnlock, isUnlocking }: { job: Job | null
                                     </div>
                                 </div>
                             ) : matchResult ? (
-                                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 w-full justify-between">
-                                    <div className="flex items-center gap-4 flex-1">
-                                        <div className="relative h-12 w-12 shrink-0">
-                                            <svg className="h-full w-full transform -rotate-90">
-                                                <circle cx="24" cy="24" r="20" stroke="currentColor" strokeWidth="4" fill="transparent" className="text-slate-100" />
+                                <div className="flex flex-col gap-3 w-full">
+                                    {/* Score row */}
+                                    <div className="flex items-center gap-4">
+                                        <div className="relative h-14 w-14 shrink-0">
+                                            <svg className="h-full w-full transform -rotate-90" viewBox="0 0 56 56">
+                                                <circle cx="28" cy="28" r="24" stroke="currentColor" strokeWidth="4" fill="transparent" className="text-slate-100" />
                                                 <circle
-                                                    cx="24" cy="24" r="20" stroke="currentColor" strokeWidth="4" fill="transparent"
-                                                    strokeDasharray="125.6"
-                                                    strokeDashoffset={125.6 - (125.6 * matchResult.match_percentage) / 100}
+                                                    cx="28" cy="28" r="24" stroke="currentColor" strokeWidth="4" fill="transparent"
+                                                    strokeDasharray="150.8"
+                                                    strokeDashoffset={150.8 - (150.8 * matchResult.match_percentage) / 100}
                                                     className={
                                                         matchResult.match_percentage >= 80 ? "text-green-500" :
-                                                            matchResult.match_percentage >= 50 ? "text-yellow-500 text-opacity-80" :
-                                                                "text-red-500 text-opacity-80"
+                                                            matchResult.match_percentage >= 50 ? "text-yellow-500" :
+                                                                "text-red-500"
                                                     }
                                                     style={{ transition: 'stroke-dashoffset 1s ease-in-out' }}
+                                                    strokeLinecap="round"
                                                 />
                                             </svg>
                                             <div className="absolute inset-0 flex items-center justify-center flex-col">
-                                                <span className="text-[10px] font-bold text-slate-900">{matchResult.match_percentage}%</span>
+                                                <span className="text-[11px] font-bold text-slate-900">{matchResult.match_percentage}%</span>
                                             </div>
                                         </div>
-                                        <div className="flex flex-col flex-1">
-                                            <h4 className="text-sm font-bold text-slate-900">Analysis Complete</h4>
-                                            <p className="text-xs text-slate-500 pr-2">
+                                        <div className="flex flex-col flex-1 min-w-0">
+                                            <h4 className="text-sm font-bold text-slate-900">
+                                                {matchResult.match_percentage >= 80 ? "Strong Match ✓" : matchResult.match_percentage >= 50 ? "Partial Match" : "Low Match"}
+                                            </h4>
+                                            <p className="text-xs text-slate-500 line-clamp-2 leading-relaxed">
                                                 {matchResult.ai_recommendation}
                                             </p>
                                         </div>
-                                    </div>
-                                    <div className="flex items-center gap-2 w-full sm:w-auto mt-3 sm:mt-0">
-                                        <Button
-                                            variant="outline"
-                                            size="sm"
-                                            onClick={() => setShowFullReport(!showFullReport)}
-                                            className="text-xs shrink-0 border-gray-300 text-slate-700 w-full sm:w-auto"
-                                        >
-                                            {showFullReport ? 'Hide Report' : 'View Full Report'}
-                                        </Button>
-                                        <Button
-                                            variant="ghost"
-                                            size="sm"
-                                            onClick={() => {
-                                                setMatchResult(null);
-                                                setShowFullReport(false);
-                                            }}
-                                            className="text-xs shrink-0 text-slate-500 hover:text-slate-700 w-full sm:w-auto px-2"
-                                        >
-                                            Reset
-                                        </Button>
+                                        <div className="flex items-center gap-2 shrink-0">
+                                            <Button
+                                                variant="outline"
+                                                size="sm"
+                                                onClick={() => setShowFullReport(!showFullReport)}
+                                                className="text-xs border-gray-300 text-slate-700"
+                                            >
+                                                {showFullReport ? 'Hide' : 'Full Report'}
+                                            </Button>
+                                            <Button
+                                                variant="ghost"
+                                                size="sm"
+                                                onClick={() => { setMatchResult(null); setShowFullReport(false); }}
+                                                className="text-xs text-slate-400 hover:text-slate-600 px-2"
+                                            >
+                                                Reset
+                                            </Button>
+                                        </div>
                                     </div>
 
                                     {/* Expandable Report Content */}
@@ -409,9 +410,9 @@ export function JobDetailsPane({ job, onUnlock, isUnlocking }: { job: Job | null
                                                 initial={{ opacity: 0, height: 0 }}
                                                 animate={{ opacity: 1, height: 'auto' }}
                                                 exit={{ opacity: 0, height: 0 }}
-                                                className="w-full mt-4 pt-4 border-t border-gray-100 overflow-hidden"
+                                                className="overflow-hidden"
                                             >
-                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-3 border-t border-gray-100 mt-1">
                                                     <div className="bg-emerald-50/50 rounded-lg p-3 border border-emerald-100/50">
                                                         <h5 className="text-[11px] font-bold text-emerald-800 uppercase tracking-wider mb-2 flex items-center gap-1.5">
                                                             <CheckCircle2 className="h-3 w-3" />
@@ -556,9 +557,12 @@ export function JobDetailsPane({ job, onUnlock, isUnlocking }: { job: Job | null
                                         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/60 to-white/95 backdrop-blur-[1px]" />
                                     ) : !showFullDesc && (
                                         <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-white via-white/80 to-transparent flex items-end justify-center pb-2">
-                                            <Button variant="outline" size="sm" onClick={() => setShowFullDesc(true)} className="bg-white/90 backdrop-blur-sm shadow-sm hover:bg-gray-50 text-slate-700 border-gray-200 font-medium">
+                                            <button
+                                                onClick={() => setShowFullDesc(true)}
+                                                className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700 bg-white/90 backdrop-blur-sm border border-slate-200 shadow-sm rounded-full px-4 py-1.5 hover:bg-teal-50 hover:text-[#41b4a5] hover:border-[#41b4a5]/40 transition-all"
+                                            >
                                                 Read Full Description
-                                            </Button>
+                                            </button>
                                         </div>
                                     )}
                                 </div>

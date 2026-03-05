@@ -184,3 +184,22 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Custom teal scrollbar used across job list and detail pane */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #41B3A3 transparent;
+}
+.custom-scrollbar::-webkit-scrollbar {
+  width: 5px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #41B3A3;
+  border-radius: 999px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: #369689;
+}

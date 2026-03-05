@@ -8,6 +8,7 @@ import { Search, MapPin, Briefcase, ExternalLink, Loader2, Bookmark, Share2, Loc
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
+import { ThemeToggle } from '@/components/ThemeToggle';
 
 // Razorpay global type
 declare global {
@@ -286,6 +287,7 @@ export default function JobsPage() {
                     </nav>
                     {/* Auth — hard right */}
                     <div className="flex items-center gap-3 shrink-0">
+                        <ThemeToggle />
                         <SignedOut>
                             <button
                                 onClick={() => openSignIn({ redirectUrl: window.location.href })}
@@ -596,7 +598,7 @@ export default function JobsPage() {
                                                 <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-slate-500">
                                                     <span className="flex items-center gap-1 font-bold text-slate-700">
                                                         <Star className={`h-3.5 w-3.5 ${job.match_percentage && job.match_percentage >= 85 ? 'text-amber-400 fill-amber-400' : 'text-slate-400'}`} />
-                                                        {job.match_percentage}% Match
+                                                        Est. {job.match_percentage}%
                                                     </span>
                                                     <span className="flex items-center gap-1">
                                                         <MapPin className="h-3.5 w-3.5 text-slate-400 shrink-0" />
