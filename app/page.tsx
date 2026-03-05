@@ -57,7 +57,7 @@ export default function LandingPage() {
         <div className="hidden md:flex flex-1 justify-end gap-8">
           <div className="flex items-center gap-9">
             <Link className="text-slate-600 dark:text-slate-300 hover:text-sh-primary font-medium text-sm transition-colors" href="/jobs">Jobs</Link>
-            <Link className="text-slate-600 dark:text-slate-300 hover:text-sh-primary font-medium text-sm transition-colors" href="/resume">Resume</Link>
+            <Link className="text-slate-600 dark:text-slate-300 hover:text-sh-primary font-medium text-sm transition-colors" href="/resume">AI Resume Matcher</Link>
             <button
               onClick={() => document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' })}
               className="text-slate-600 dark:text-slate-300 hover:text-sh-primary font-medium text-sm transition-colors bg-transparent border-0 p-0 cursor-pointer"
@@ -120,7 +120,7 @@ export default function LandingPage() {
                 Jobs
               </Link>
               <Link href="/resume" onClick={() => setIsMobileMenuOpen(false)} className="text-lg font-medium text-slate-900 dark:text-white">
-                Resume
+                AI Resume Matcher
               </Link>
               <button
                 onClick={() => {
