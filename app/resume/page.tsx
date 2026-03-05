@@ -151,9 +151,22 @@ export default function ResumePage() {
     };
 
     return (
-        <div className="min-h-screen bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-sans flex flex-col selection:bg-primary/30 selection:text-primary-dark">
+        <div className="relative min-h-screen bg-gradient-to-br from-slate-50 via-white to-teal-50/40 dark:from-[#060D18] dark:via-[#0B0F19] dark:to-[#0B1520] text-slate-900 dark:text-slate-100 font-sans flex flex-col selection:bg-primary/30 selection:text-primary-dark overflow-hidden">
+
+            {/* Premium noise texture */}
+            <div className="absolute inset-0 z-0 opacity-[0.4] dark:opacity-[0.15] pointer-events-none" style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E\")", backgroundSize: "180px 180px" }} />
+
+            {/* Top-right teal glow */}
+            <div className="absolute top-0 right-0 w-[700px] h-[700px] bg-[#41B3A3]/15 dark:bg-teal-500/8 rounded-full blur-[130px] -translate-y-1/3 translate-x-1/4 pointer-events-none z-0" />
+
+            {/* Left green accent */}
+            <div className="absolute top-1/4 left-0 w-[400px] h-[400px] bg-emerald-400/8 dark:bg-emerald-500/4 rounded-full blur-[100px] -translate-x-1/3 pointer-events-none z-0" />
+
+            {/* Subtle grid overlay */}
+            <div className="absolute inset-0 z-0 opacity-[0.02] dark:opacity-[0.035] pointer-events-none" style={{ backgroundImage: "linear-gradient(#1b2532 1px, transparent 1px), linear-gradient(90deg, #1b2532 1px, transparent 1px)", backgroundSize: "48px 48px" }} />
+
             {/* Top Navigation */}
-            <header className="shrink-0 z-50 w-full border-b border-gray-200 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/80">
+            <header className="relative z-10 shrink-0 w-full border-b border-gray-200/80 dark:border-slate-800/60 bg-white/80 dark:bg-[#060D18]/80 backdrop-blur supports-[backdrop-filter]:bg-white/70 dark:supports-[backdrop-filter]:bg-[#060D18]/70">
                 <div className="flex h-16 w-full items-center px-4 sm:px-6 lg:px-8 gap-4">
                     {/* Logo — hard left */}
                     <Link href="/" className="flex items-center gap-3 decoration-transparent">
@@ -229,7 +242,7 @@ export default function ResumePage() {
             </AnimatePresence>
 
             {/* Main Content */}
-            <main className="flex-grow w-full max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+            <main className="relative z-10 flex-grow w-full max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
                 {/* Header Section */}
                 <div className="text-center mb-10">
                     <h1 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-3">AI Resume Matcher</h1>
@@ -580,7 +593,7 @@ export default function ResumePage() {
             </main>
 
             {/* Footer */}
-            <footer className="bg-surface-light dark:bg-surface-dark border-t border-slate-200 dark:border-slate-800 py-8 mt-auto">
+            <footer className="relative z-10 border-t border-slate-200/80 dark:border-slate-800/60 bg-white/60 dark:bg-[#060D18]/60 backdrop-blur py-8 mt-auto">
                 <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4">
                     <div className="text-sm text-slate-500 dark:text-slate-400">
                         © 2026 SkillHire Inc. All rights reserved.
