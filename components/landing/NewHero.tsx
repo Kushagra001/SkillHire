@@ -74,13 +74,13 @@ export default function NewHero() {
                         className="flex flex-col"
                     >
                         <h1 className="text-6xl sm:text-7xl lg:text-[5.5rem] font-black tracking-tighter text-[#1b2532] dark:text-white leading-[1.05]">
-                            Skill-Based Hiring for <br />
+                            Hired For <br />
                             <span className="text-[#187255] dark:text-[#41B3A3]">
-                                The Next Generation
+                                What You Build.
                             </span>
                         </h1>
                         <p className="mt-8 text-lg xl:text-xl text-slate-500 dark:text-slate-400 leading-relaxed max-w-lg">
-                            Get matched to top companies based on what you can build — not just your degree. Built for 2023–2026 batch freshers ready to prove their skills.
+                            Get matched to top companies based on what you can build, not just your degree. Built for 2023–2026 batch freshers ready to prove their skills.
                         </p>
 
                         {/* Animated stats bar */}

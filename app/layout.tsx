@@ -13,13 +13,13 @@ const BASE_URL = 'https://skillhire.in';
 
 export const metadata: Metadata = {
   title: {
-    default: "SkillHire — Hired for What You Know",
+    default: "SkillHire | Hired for What You Know",
     template: "%s | SkillHire",
   },
   description: "Skill-based hiring for 2023-2026 freshers. Get matched to top companies based on what you can build.",
   metadataBase: new URL(BASE_URL),
   openGraph: {
-    title: "SkillHire — Hired for What You Know",
+    title: "SkillHire | Hired for What You Know",
     description: "Skill-based hiring for 2023-2026 freshers. Get matched to top companies based on what you can build.",
     url: BASE_URL,
     siteName: "SkillHire",
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "SkillHire — Hired for What You Know",
+    title: "SkillHire | Hired for What You Know",
     description: "Skill-based hiring for 2023-2026 freshers. Get matched to top companies based on what you can build.",
     images: ["/assets/og-image.png"],
   },
