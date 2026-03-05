@@ -66,13 +66,13 @@ export default function NewHero() {
                         className="flex flex-col"
                     >
                         <h1 className="text-6xl sm:text-7xl lg:text-[5.5rem] font-black tracking-tighter text-[#1b2532] dark:text-white leading-[1.05]">
-                            Launch Your <br />
+                            Skill-Based Hiring for <br />
                             <span className="text-[#187255] dark:text-[#41B3A3]">
-                                Tech Career
+                                The Next Generation
                             </span>
                         </h1>
                         <p className="mt-8 text-lg xl:text-xl text-slate-500 dark:text-slate-400 leading-relaxed max-w-lg">
-                            Kickstart your journey with top product companies hiring 2024, 2025, and 2026 batches. No experience? No problem.
+                            Empowering 2023-2026 batch freshers to land roles based on what they can build. Scan your resume, analyze your skills, and get matched with top product companies instantly.
                         </p>
                     </motion.div>
 

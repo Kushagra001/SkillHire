@@ -9,8 +9,8 @@ import { Analytics } from "@vercel/analytics/next"
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 export const metadata: Metadata = {
-  title: "SkillHire",
-  description: "Find your next role with SkillHire",
+  title: "SkillHire | Skill-Based Hiring for 2023-2026 Freshers",
+  description: "The ultimate skill-based hiring platform for 2023-2026 batch freshers. Match your expertise with top companies using our AI Resume Analyzer.",
   icons: {
     icon: [
       { url: "/assets/favicon.ico?v=3", sizes: "32x32" },
