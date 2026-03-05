@@ -385,8 +385,9 @@ export default function JobsPage() {
                                         onBlur={() => setFocusedInput(null)}
                                     />
                                 </div>
-                                <button className="hidden md:flex shrink-0 h-10 items-center justify-center rounded-lg bg-[#0A3D62] px-6 text-sm font-bold text-white transition-all hover:bg-slate-800 shadow-sm active:scale-95">
-                                    Search
+                                <button className="flex shrink-0 h-10 items-center justify-center rounded-lg bg-[#0A3D62] px-3 sm:px-6 text-sm font-bold text-white transition-all hover:bg-slate-800 shadow-sm active:scale-95">
+                                    <Search className="h-4 w-4 md:hidden" />
+                                    <span className="hidden md:inline">Search</span>
                                 </button>
                             </div>
                         </div>
@@ -400,11 +401,11 @@ export default function JobsPage() {
                         {/* Compact Sidebar Filters */}
                         <div className="bg-white rounded-xl border border-gray-200 shadow-sm flex flex-col transition-all overflow-hidden relative">
                             <div
-                                className="flex items-center justify-between p-3 cursor-pointer hover:bg-slate-50 transition-colors z-10 bg-white"
+                                className="flex items-center justify-between p-2.5 sm:p-3 cursor-pointer hover:bg-slate-50 transition-colors z-10 bg-white"
                                 onClick={() => setIsFiltersExpanded(!isFiltersExpanded)}
                             >
                                 <div className="flex items-center gap-2">
-                                    <h3 className="text-[13px] font-bold text-slate-900 select-none">Refine Results</h3>
+                                    <h3 className="text-[12px] sm:text-[13px] font-bold text-slate-900 select-none">Refine Results</h3>
                                     <ChevronDown className={`h-4 w-4 text-slate-400 transition-transform duration-300 ${isFiltersExpanded ? 'rotate-180' : ''}`} />
                                 </div>
                                 <button
