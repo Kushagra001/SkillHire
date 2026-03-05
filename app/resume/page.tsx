@@ -248,7 +248,7 @@ export default function ResumePage() {
                 {/* Header Section */}
                 <div className="text-center mb-10">
                     <h1 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-3">AI Resume Matcher</h1>
-                    <p className="text-slate-500 dark:text-slate-400 text-lg max-w-2xl mx-auto">Optimize your applications with AI-powered insights. Compare your resume against any job description instantly.</p>
+                    <p className="text-slate-500 dark:text-slate-300 text-lg max-w-2xl mx-auto">Optimize your applications with AI-powered insights. Compare your resume against any job description instantly.</p>
                 </div>
 
                 {/* Top Layout Grid */}
@@ -260,7 +260,7 @@ export default function ResumePage() {
                                 <FileUp className="h-5 w-5 text-primary" />
                                 Upload Resume
                             </h3>
-                            <p className="text-sm text-slate-500 dark:text-slate-400">Supported formats: PDF (Max 5MB)</p>
+                            <p className="text-sm text-slate-500 dark:text-slate-300">Supported formats: PDF (Max 5MB)</p>
                         </div>
 
                         {/* Dropzone */}
@@ -478,7 +478,7 @@ export default function ResumePage() {
                                         <Activity className="h-10 w-10 text-slate-400" />
                                     </div>
                                     <h3 className="text-xl font-bold text-slate-900 dark:text-slate-100 mb-2">Ready to analyze</h3>
-                                    <p className="text-slate-500 dark:text-slate-400 max-w-sm">Upload your resume and paste a job description to get instant AI-powered actionable feedback.</p>
+                                    <p className="text-slate-500 dark:text-slate-300 max-w-sm">Upload your resume and paste a job description to get instant AI-powered actionable feedback.</p>
                                 </motion.div>
                             )}
                         </AnimatePresence>

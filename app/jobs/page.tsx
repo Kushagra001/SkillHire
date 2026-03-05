@@ -585,10 +585,10 @@ export default function JobsPage() {
 
                                                 {/* Company + verified + lock + timestamp */}
                                                 <div className="flex items-center gap-1.5 mb-2">
-                                                    <span className="text-sm font-medium text-slate-700 truncate">{job.company}</span>
+                                                    <span className="text-sm font-medium text-slate-700 dark:text-slate-300 truncate">{job.company}</span>
                                                     <CheckCircle2 className="h-3.5 w-3.5 text-[#41b4a5] fill-[#EAFBF9] shrink-0" />
                                                     {job.is_locked && <Lock className="h-3 w-3 text-amber-500 shrink-0" />}
-                                                    <span className="text-[10px] font-medium text-slate-400 whitespace-nowrap ml-auto flex items-center gap-1.5">
+                                                    <span className="text-[10px] font-medium text-slate-400 dark:text-slate-500 whitespace-nowrap ml-auto flex items-center gap-1.5">
                                                         {formatTimeAgo(job.created_at)}
                                                         {job.is_premium && <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-amber-100 text-amber-700">PRO</span>}
                                                     </span>

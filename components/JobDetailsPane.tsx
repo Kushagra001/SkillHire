@@ -68,7 +68,7 @@ const formatMarkdown = (text: string) => {
         .replace(/✅/g, '<span class="text-emerald-500 mr-2">✅</span>')
         .replace(/\n/g, '<br />');
 
-    return <div dangerouslySetInnerHTML={{ __html: html }} className="text-slate-600 space-y-2 leading-relaxed text-sm" />;
+    return <div dangerouslySetInnerHTML={{ __html: html }} className="text-slate-600 dark:text-slate-300 space-y-2 leading-relaxed text-sm" />;
 };
 
 export function JobDetailsPane({ job, onUnlock, isUnlocking }: { job: Job | null, onUnlock: () => void, isUnlocking: boolean }) {
@@ -238,9 +238,9 @@ export function JobDetailsPane({ job, onUnlock, isUnlocking }: { job: Job | null
                     <div className="flex-1 w-full min-w-0">
                         <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-6">
                             <div className="flex-1 min-w-0">
-                                <h2 className="text-xl sm:text-2xl font-bold text-slate-900 mb-2 leading-tight">{job.title}</h2>
+                                <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white mb-2 leading-tight">{job.title}</h2>
                                 <div className="flex items-center gap-2 mb-4">
-                                    <span className="text-lg font-medium text-slate-700">{job.company}</span>
+                                    <span className="text-lg font-medium text-slate-700 dark:text-slate-300">{job.company}</span>
                                     <CheckCircle2 className="h-5 w-5 text-[#41b4a5] fill-[#EAFBF9]" />
                                 </div>
                             </div>
@@ -526,10 +526,10 @@ export function JobDetailsPane({ job, onUnlock, isUnlocking }: { job: Job | null
                         <div className="space-y-6 relative">
                             <div>
                                 <h4 className="text-lg font-bold text-slate-900 dark:text-white mb-4 border-b border-gray-100 dark:border-slate-800/60 pb-2">About the Role</h4>
-                                <div className={`text-slate-600 leading-[1.6] text-sm whitespace-pre-wrap break-words ${job.is_locked ? 'h-[500px] overflow-hidden relative' : !showFullDesc ? 'max-h-[300px] overflow-hidden relative' : ''}`}>
+                                <div className={`text-slate-600 dark:text-slate-300 leading-[1.6] text-sm whitespace-pre-wrap break-words ${job.is_locked ? 'h-[500px] overflow-hidden relative' : !showFullDesc ? 'max-h-[300px] overflow-hidden relative' : ''}`}>
 
                                     {job.formatted_about ? (
-                                        <div className="prose prose-sm max-w-none prose-p:leading-relaxed prose-li:my-1 text-slate-600">
+                                        <div className="prose prose-sm max-w-none prose-p:leading-relaxed prose-li:my-1 text-slate-600 dark:text-slate-300">
                                             {formatMarkdown(job.formatted_about)}
                                         </div>
                                     ) : getJobDescription(job) ? (
