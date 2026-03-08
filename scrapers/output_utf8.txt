@@ -1,0 +1,12 @@
+{
+  "batch": [
+    "Any"
+  ],
+  "experience": "Not Disclosed",
+  "job_type": "Unknown",
+  "location": "Bengaluru, Gurgaon",
+  "salary_status": "Not Disclosed",
+  "tech_stack": [],
+  "skills": [],
+  "formatted_about": "**Company Overview**: Unstop is a platform for competitions, quizzes, hackathons, scholarships, and internships for students and corporates.\n\n* **Position**: Technical Support Engineer\n* **Location**: Bengaluru, Gurgaon\n* **Experience**: Not Disclosed\n* **Qualification**: Not Disclosed\n* **Take Home**: Not Disclosed\n\n**Benefits**:\n\n**Description**:\nThe provided text appears to be an error message from the Unstop website, indicating issues with browser settings rather than a job description. It states: \"Please Wait Error: Cookies Disabled Cookies are disabled in your browser settings. To fully access our website and its features, please enable cookies and Refresh the page . Your browser does not support JavaScript! Privacy Policy Best viewed in latest versions of Mozilla, Chrome, Opera & Safari.\"\n"
+}

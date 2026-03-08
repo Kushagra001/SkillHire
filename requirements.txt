@@ -1,0 +1,21 @@
+# SkillHire Python Pipeline Dependencies
+# Install with: pip install -r requirements.txt
+
+# --- Core ---
+python-dotenv>=1.0.0        # Load .env.local for all scripts
+
+# --- Database ---
+pymongo>=4.6.0              # MongoDB driver (used by all scrapers + refinery)
+dnspython>=2.4.0            # Required for pymongo SRV URI (MongoDB Atlas)
+tenacity>=8.0.0             # Retries for refinery LLM calls
+
+# --- Scrapers ---
+requests>=2.31.0            # HTTP client (greenhouse.py, serpapi_jobs.py)
+curl-cffi>=0.7.0            # Chrome impersonation to bypass Cloudflare (instahyre_jobs.py)
+google-search-results>=2.4.2  # SerpAPI client → job_hunter.py: from serpapi import GoogleSearch
+
+# --- Optional: Apify (comment out if not using Indeed scraper) ---
+apify-client>=1.7.0         # Apify SDK → apify_jobs.py
+
+# --- Web / Scripts (optional: only if running standalone) ---
+# These are already in web/package.json for the Next.js app

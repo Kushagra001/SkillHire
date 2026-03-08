@@ -1,0 +1,355 @@
+{
+    "name": "SkillHire Job Distribution",
+    "nodes": [
+        {
+            "parameters": {
+                "httpMethod": "POST",
+                "path": "job-distribution",
+                "responseMode": "onReceived",
+                "options": {}
+            },
+            "id": "e9e9dbfd-5e58-4034-8c87-889d1b0d2b6b",
+            "name": "Webhook",
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 1,
+            "position": [
+                380,
+                240
+            ],
+            "webhookId": "job-distribution"
+        },
+        {
+            "parameters": {
+                "operation": "find",
+                "collection": "jobs",
+                "query": "={ \"distribution_status\": \"pending\", \"is_active\": true }",
+                "options": {
+                    "limit": 50,
+                    "projection": "={ \"title\": 1, \"company\": 1, \"location\": 1, \"apply_link\": 1, \"is_premium\": 1, \"salary_status\": 1 }"
+                }
+            },
+            "id": "893d7c50-adcd-4e86-a70e-1f81b1c6d3eb",
+            "name": "MongoDB Query Pending Jobs",
+            "type": "n8n-nodes-base.mongoDb",
+            "typeVersion": 1,
+            "position": [
+                600,
+                240
+            ],
+            "credentials": {
+                "mongoDb": {
+                    "id": "YOUR_CREDENTIAL_ID",
+                    "name": "MongoDB Atlas"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "boolean": [
+                        {
+                            "value1": "={{ $json.length > 0 }}",
+                            "value2": true
+                        }
+                    ]
+                }
+            },
+            "id": "fd90306c-8fe8-433c-ab12-dbccf832049e",
+            "name": "Has Pending Jobs?",
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 1,
+            "position": [
+                820,
+                240
+            ]
+        },
+        {
+            "parameters": {},
+            "id": "f516dc06-a83d-4cde-8eeb-4a5ccafdc0ec",
+            "name": "NoOp",
+            "type": "n8n-nodes-base.noOp",
+            "typeVersion": 1,
+            "position": [
+                1040,
+                420
+            ]
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "boolean": [
+                        {
+                            "value1": "={{ $json.is_premium }}",
+                            "value2": true
+                        }
+                    ]
+                }
+            },
+            "id": "af00c6d7-8356-4c4f-aba1-0610363ad547",
+            "name": "Is Premium?",
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 1,
+            "position": [
+                1040,
+                140
+            ]
+        },
+        {
+            "parameters": {
+                "values": {
+                    "string": [
+                        {
+                            "name": "message",
+                            "value": "=🚀 {{ $json.title }} @ {{ $json.company }}\n\n📍 {{ $json.location }}\n💰 {{ $json.salary_status || 'Competitive CTC' }}\n\n⚡ Premium Early Access — Apply before others!\n\n👉 Apply Now\n{{ $json.apply_link }}\n\n#SkillHire #PremiumJobs #TechJobs"
+                        },
+                        {
+                            "name": "channel_name",
+                            "value": "telegram_premium"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "id": "6d3c9dc2-3b2d-4228-a3f7-92694b41bba6",
+            "name": "Format Premium",
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 2,
+            "position": [
+                1260,
+                20
+            ]
+        },
+        {
+            "parameters": {
+                "values": {
+                    "string": [
+                        {
+                            "name": "message",
+                            "value": "=🔥 {{ $json.title }} @ {{ $json.company }}\n\n📍 {{ $json.location }}\n💰 {{ $json.salary_status || 'Competitive CTC' }}\n\n📚 Crack the interview: [DSA + System Design Bundle](AFFILIATE_LINK)\n\n👉 Apply Now\n{{ $json.apply_link }}\n\n💎 Premium members got this job 24h earlier!\n👉 Upgrade at skillhire.in\n\n#SkillHire #FresherJobs #TechJobs"
+                        },
+                        {
+                            "name": "channel_name",
+                            "value": "telegram_free"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "id": "402e1b1d-23f2-41f2-bf6c-6a1bd78aedba",
+            "name": "Format Free",
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 2,
+            "position": [
+                1260,
+                220
+            ]
+        },
+        {
+            "parameters": {
+                "batchSize": 5,
+                "options": {
+                    "reset": false
+                }
+            },
+            "id": "d1358baf-cd77-4b77-80da-331006a8ab9e",
+            "name": "SplitInBatches",
+            "type": "n8n-nodes-base.splitInBatches",
+            "typeVersion": 2,
+            "position": [
+                1480,
+                140
+            ]
+        },
+        {
+            "parameters": {
+                "amount": 1
+            },
+            "id": "90e6e73c-fecd-40c3-bc94-4b53b8bc5b48",
+            "name": "Wait (Rate Limit)",
+            "type": "n8n-nodes-base.wait",
+            "typeVersion": 1,
+            "position": [
+                1700,
+                140
+            ]
+        },
+        {
+            "parameters": {
+                "chatId": "={{ $json[\"channel_name\"] === \"telegram_premium\" ? \"@SkillHirePremium\" : \"@SkillHireFree\" }}",
+                "text": "={{ $json.message }}",
+                "additionalFields": {
+                    "parse_mode": "Markdown",
+                    "disable_web_page_preview": false
+                }
+            },
+            "id": "b328a649-6ee1-4048-bff8-59cddf418d18",
+            "name": "Telegram Send",
+            "type": "n8n-nodes-base.telegram",
+            "typeVersion": 1,
+            "position": [
+                1920,
+                140
+            ],
+            "credentials": {
+                "telegramApi": {
+                    "id": "YOUR_CREDENTIAL_ID",
+                    "name": "Telegram Bot"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "operation": "update",
+                "collection": "jobs",
+                "options": {
+                    "upsert": false
+                },
+                "query": "={ \"_id\": { \"$oid\": \"{{ $json[\"_id\"] }}\" } }",
+                "updateKey": "={ \"$set\": { \"distribution_status\": \"distributed\" }, \"$push\": { \"distributed_channels\": \"{{ $json[\"channel_name\"] }}\" } }"
+            },
+            "id": "18f6f5bb-f2ef-4d04-89d5-45d65f4d1e21",
+            "name": "Update MongoDB",
+            "type": "n8n-nodes-base.mongoDb",
+            "typeVersion": 1,
+            "position": [
+                2140,
+                140
+            ],
+            "credentials": {
+                "mongoDb": {
+                    "id": "YOUR_CREDENTIAL_ID",
+                    "name": "MongoDB Atlas"
+                }
+            }
+        }
+    ],
+    "connections": {
+        "Webhook": {
+            "main": [
+                [
+                    {
+                        "node": "MongoDB Query Pending Jobs",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "MongoDB Query Pending Jobs": {
+            "main": [
+                [
+                    {
+                        "node": "Has Pending Jobs?",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Has Pending Jobs?": {
+            "main": [
+                [
+                    {
+                        "node": "Is Premium?",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "NoOp",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Is Premium?": {
+            "main": [
+                [
+                    {
+                        "node": "Format Premium",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Format Free",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Format Premium": {
+            "main": [
+                [
+                    {
+                        "node": "SplitInBatches",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Format Free": {
+            "main": [
+                [
+                    {
+                        "node": "SplitInBatches",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "SplitInBatches": {
+            "main": [
+                [
+                    {
+                        "node": "Wait (Rate Limit)",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Wait (Rate Limit)": {
+            "main": [
+                [
+                    {
+                        "node": "Telegram Send",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Telegram Send": {
+            "main": [
+                [
+                    {
+                        "node": "Update MongoDB",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Update MongoDB": {
+            "main": [
+                [
+                    {
+                        "node": "SplitInBatches",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    }
+}
