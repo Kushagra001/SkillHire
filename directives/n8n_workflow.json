@@ -1,45 +1,42 @@
 {
-    "name": "SkillHire Job Distribution",
     "nodes": [
         {
             "parameters": {
                 "httpMethod": "POST",
                 "path": "job-distribution",
-                "responseMode": "onReceived",
                 "options": {}
             },
-            "id": "e9e9dbfd-5e58-4034-8c87-889d1b0d2b6b",
+            "id": "5d87c723-0418-4a7e-ae70-07d8cafd49c8",
             "name": "Webhook",
             "type": "n8n-nodes-base.webhook",
             "typeVersion": 1,
             "position": [
-                380,
-                240
+                -896,
+                224
             ],
             "webhookId": "job-distribution"
         },
         {
             "parameters": {
-                "operation": "find",
                 "collection": "jobs",
-                "query": "={ \"distribution_status\": \"pending\", \"is_active\": true }",
                 "options": {
                     "limit": 50,
-                    "projection": "={ \"title\": 1, \"company\": 1, \"location\": 1, \"apply_link\": 1, \"is_premium\": 1, \"salary_status\": 1 }"
-                }
+                    "projection": "={ \"_id\": 1,\"title\": 1, \"company\": 1, \"location\": 1, \"apply_link\": 1, \"is_premium\": 1, \"salary_status\": 1, \"distributed_channels\": 1, \"premium_posted_at\": 1 }"
+                },
+                "query": "={\n  \"is_active\": true,\n  \"$or\": [\n    { \"distributed_channels\": { \"$ne\": \"telegram_premium\" } },\n    {\n      \"distributed_channels\": { \"$in\": [\"telegram_premium\"], \"$nin\": [\"telegram_free\"] },\n      \"premium_posted_at\": { \"$lt\": new Date(Date.now() - 86400000) }\n    }\n  ]\n}"
             },
-            "id": "893d7c50-adcd-4e86-a70e-1f81b1c6d3eb",
+            "id": "1e0b74a0-095b-41ea-9bd4-e55f4d291daa",
             "name": "MongoDB Query Pending Jobs",
             "type": "n8n-nodes-base.mongoDb",
             "typeVersion": 1,
             "position": [
-                600,
-                240
+                -672,
+                224
             ],
             "credentials": {
                 "mongoDb": {
-                    "id": "YOUR_CREDENTIAL_ID",
-                    "name": "MongoDB Atlas"
+                    "id": "oHTx8tK18y4UnaAc",
+                    "name": "MongoDB account"
                 }
             }
         },
@@ -48,30 +45,30 @@
                 "conditions": {
                     "boolean": [
                         {
-                            "value1": "={{ $json.length > 0 }}",
+                            "value1": "={{$json !== undefined}}",
                             "value2": true
                         }
                     ]
                 }
             },
-            "id": "fd90306c-8fe8-433c-ab12-dbccf832049e",
+            "id": "cea7de0d-8f23-4258-bf14-6a450e764eb2",
             "name": "Has Pending Jobs?",
             "type": "n8n-nodes-base.if",
             "typeVersion": 1,
             "position": [
-                820,
-                240
+                -432,
+                224
             ]
         },
         {
             "parameters": {},
-            "id": "f516dc06-a83d-4cde-8eeb-4a5ccafdc0ec",
+            "id": "f7f95a02-5810-40eb-a076-31fa4d6b51e1",
             "name": "NoOp",
             "type": "n8n-nodes-base.noOp",
             "typeVersion": 1,
             "position": [
-                1040,
-                420
+                -224,
+                400
             ]
         },
         {
@@ -79,19 +76,19 @@
                 "conditions": {
                     "boolean": [
                         {
-                            "value1": "={{ $json.is_premium }}",
+                            "value1": "={{ !($json.distributed_channels || []).includes('telegram_premium') }}",
                             "value2": true
                         }
                     ]
                 }
             },
-            "id": "af00c6d7-8356-4c4f-aba1-0610363ad547",
+            "id": "8696e72b-450a-445e-86f4-a2d20e114e01",
             "name": "Is Premium?",
             "type": "n8n-nodes-base.if",
             "typeVersion": 1,
             "position": [
-                1040,
-                140
+                -224,
+                128
             ]
         },
         {
@@ -100,7 +97,7 @@
                     "string": [
                         {
                             "name": "message",
-                            "value": "=🚀 {{ $json.title }} @ {{ $json.company }}\n\n📍 {{ $json.location }}\n💰 {{ $json.salary_status || 'Competitive CTC' }}\n\n⚡ Premium Early Access — Apply before others!\n\n👉 Apply Now\n{{ $json.apply_link }}\n\n#SkillHire #PremiumJobs #TechJobs"
+                            "value": "=💼 <b>{{$json.title}}</b>\n🏢 <b>Company:</b> {{$json.company}}\n\n📍 <b>Location:</b> {{$json.location}}\n💰 <b>Salary:</b> {{$json.salary_status || 'Competitive CTC'}}\n\n⭐ <b>Premium Early Access</b>\nBe among the first applicants.\n\n📝 <b>Apply Now:</b>\n<a href=\"{{$json.apply_link}}\">{{$json.apply_link}}</a>\n\n🌐 <b>More jobs:</b>\n<a href=\"https://skillhire.in\">skillhire.in</a>\n\n━━━━━━━━━━━━━━\n#SkillHire #PremiumJobs #TechJobs"
                         },
                         {
                             "name": "channel_name",
@@ -110,13 +107,13 @@
                 },
                 "options": {}
             },
-            "id": "6d3c9dc2-3b2d-4228-a3f7-92694b41bba6",
+            "id": "9836a460-d658-4711-8c38-a86720eafa21",
             "name": "Format Premium",
             "type": "n8n-nodes-base.set",
             "typeVersion": 2,
             "position": [
-                1260,
-                20
+                0,
+                0
             ]
         },
         {
@@ -125,7 +122,7 @@
                     "string": [
                         {
                             "name": "message",
-                            "value": "=🔥 {{ $json.title }} @ {{ $json.company }}\n\n📍 {{ $json.location }}\n💰 {{ $json.salary_status || 'Competitive CTC' }}\n\n📚 Crack the interview: [DSA + System Design Bundle](AFFILIATE_LINK)\n\n👉 Apply Now\n{{ $json.apply_link }}\n\n💎 Premium members got this job 24h earlier!\n👉 Upgrade at skillhire.in\n\n#SkillHire #FresherJobs #TechJobs"
+                            "value": "=💼 <b>{{$json.title}}</b>\\n🏢 <b>Company:</b> {{$json.company}}\\n\\n📍 <b>Location:</b> {{$json.location}}\\n💰 <b>Salary:</b> {{$json.salary_status || 'Competitive CTC'}}\\n\\n⚠️ <i>Premium members got this 24hrs ago!</i>\\n⚡ Skip the delay. Get instant alerts via our Premium Channel.\\n👉 <b>Upgrade Now:</b> <a href=\"https://rzp.io/l/YOUR_RAZORPAY_LINK\">Click Here to Subscribe (Razorpay)</a>\\n\\n📘 <b>Prep For This Role:</b>\\n<a href=\"{{ $json.title.toLowerCase().includes('data') ? 'YOUR_DATACAMP_AFFILIATE_LINK' : ($json.title.toLowerCase().includes('frontend') || $json.title.toLowerCase().includes('react') ? 'YOUR_FRONTEND_AFFILIATE_LINK' : 'YOUR_ALGOEXPERT_AFFILIATE_LINK') }}\">Crack the Interview (Top Course)</a>\\n\\n📝 <b>Apply Now:</b>\\n<a href=\"{{$json.apply_link}}\">{{$json.apply_link}}</a>\\n\\n━━━━━━━━━━━━━━\\n#SkillHire #FresherJobs #TechJobs"
                         },
                         {
                             "name": "channel_name",
@@ -135,65 +132,68 @@
                 },
                 "options": {}
             },
-            "id": "402e1b1d-23f2-41f2-bf6c-6a1bd78aedba",
+            "id": "9219352c-86a0-4cda-8f43-b0e79e034ab1",
             "name": "Format Free",
             "type": "n8n-nodes-base.set",
             "typeVersion": 2,
             "position": [
-                1260,
-                220
+                0,
+                208
             ]
         },
         {
             "parameters": {
-                "batchSize": 5,
+                "batchSize": 1,
                 "options": {
                     "reset": false
                 }
             },
-            "id": "d1358baf-cd77-4b77-80da-331006a8ab9e",
+            "id": "7e9e7035-2b5b-4102-8c2e-c958d88639de",
             "name": "SplitInBatches",
             "type": "n8n-nodes-base.splitInBatches",
             "typeVersion": 2,
             "position": [
-                1480,
-                140
+                224,
+                128
             ]
         },
         {
             "parameters": {
-                "amount": 1
+                "unit": "seconds"
             },
-            "id": "90e6e73c-fecd-40c3-bc94-4b53b8bc5b48",
+            "id": "efd66323-1fb5-45d4-91ac-3caca7b56372",
             "name": "Wait (Rate Limit)",
             "type": "n8n-nodes-base.wait",
             "typeVersion": 1,
             "position": [
-                1700,
-                140
-            ]
+                448,
+                128
+            ],
+            "webhookId": "d9b812d3-3e26-4417-8a76-071b6b4250c3"
         },
         {
             "parameters": {
-                "chatId": "={{ $json[\"channel_name\"] === \"telegram_premium\" ? \"@SkillHirePremium\" : \"@SkillHireFree\" }}",
+                "chatId": "={{ $json[\"channel_name\"] === \"telegram_premium\" ? \"@SkillHirePremium\" : \"@SkillHireFree1\" }}",
                 "text": "={{ $json.message }}",
                 "additionalFields": {
-                    "parse_mode": "Markdown",
-                    "disable_web_page_preview": false
+                    "disable_web_page_preview": false,
+                    "parse_mode": "HTML"
                 }
             },
-            "id": "b328a649-6ee1-4048-bff8-59cddf418d18",
+            "id": "250b0ab7-0a4e-4399-b004-e167d9670fc7",
             "name": "Telegram Send",
             "type": "n8n-nodes-base.telegram",
             "typeVersion": 1,
             "position": [
-                1920,
-                140
+                880,
+                -80
             ],
+            "webhookId": "bfc5a8ae-62f8-4673-9542-ed1444d53f73",
+            "alwaysOutputData": true,
             "credentials": {
                 "telegramApi": {
-                    "id": "YOUR_CREDENTIAL_ID",
-                    "name": "Telegram Bot"
+                    "id": "kMmP9zJXiGK5AoRJ",
+                    "name": "Telegram account"
                 }
             }
         },
@@ -201,26 +201,76 @@
             "parameters": {
                 "operation": "update",
                 "collection": "jobs",
-                "options": {
-                    "upsert": false
-                },
-                "query": "={ \"_id\": { \"$oid\": \"{{ $json[\"_id\"] }}\" } }",
-                "updateKey": "={ \"$set\": { \"distribution_status\": \"distributed\" }, \"$push\": { \"distributed_channels\": \"{{ $json[\"channel_name\"] }}\" } }"
+                "updateKey": "={\n  \"$set\": {\n    \"distribution_status\": \"distributed\",\n    \"premium_posted_at\": \"={{ $json.channel_name === 'telegram_premium' ? new Date() : $json.premium_posted_at }}\"\n  },\n  \"$addToSet\": {\n    \"distributed_channels\": \"={{ $json.channel_name }}\"\n  }\n}",
+                "fields": "_id",
+                "options": {}
             },
-            "id": "18f6f5bb-f2ef-4d04-89d5-45d65f4d1e21",
+            "id": "a8c219ab-641c-4476-a0a1-70ee0c9a328e",
             "name": "Update MongoDB",
             "type": "n8n-nodes-base.mongoDb",
             "typeVersion": 1,
             "position": [
-                2140,
-                140
+                1264,
+                144
             ],
+            "alwaysOutputData": true,
             "credentials": {
                 "mongoDb": {
-                    "id": "YOUR_CREDENTIAL_ID",
-                    "name": "MongoDB Atlas"
+                    "id": "oHTx8tK18y4UnaAc",
+                    "name": "MongoDB account"
                 }
             }
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "481a79e8-ca52-4ee5-b766-782c8169dbf6",
+                            "name": "channel_name",
+                            "value": "={{ $json.channel_name }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "0f3b83e8-f5f3-4cab-a356-23533ef983c9",
+                            "name": "_id",
+                            "value": "={{ $json._id }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "0531db34-b7be-4601-af46-452abe3aa43d",
+                            "name": "message",
+                            "value": "={{ $json.message }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "includeOtherFields": true,
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                656,
+                128
+            ],
+            "id": "42b29994-c4c5-4596-8cdc-5ccfe2348710",
+            "name": "Restore Job Data"
+        },
+        {
+            "parameters": {
+                "mode": "combine",
+                "combineBy": "combineByPosition",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.merge",
+            "typeVersion": 3.2,
+            "position": [
+                1072,
+                128
+            ],
+            "id": "2ea3c47c-de98-4468-84b3-acc0b2787343",
+            "name": "Merge"
         }
     ],
     "connections": {
@@ -319,7 +369,7 @@
             "main": [
                 [
                     {
-                        "node": "Telegram Send",
+                        "node": "Restore Job Data",
                         "type": "main",
                         "index": 0
                     }
@@ -330,7 +380,7 @@
             "main": [
                 [
                     {
-                        "node": "Update MongoDB",
+                        "node": "Merge",
                         "type": "main",
                         "index": 0
                     }
@@ -347,9 +397,38 @@
                     }
                 ]
             ]
+        },
+        "Restore Job Data": {
+            "main": [
+                [
+                    {
+                        "node": "Telegram Send",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Merge",
+                        "type": "main",
+                        "index": 1
+                    }
+                ]
+            ]
+        },
+        "Merge": {
+            "main": [
+                [
+                    {
+                        "node": "Update MongoDB",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
         }
     },
-    "settings": {
-        "executionOrder": "v1"
+    "pinData": {},
+    "meta": {
+        "templateCredsSetupCompleted": true,
+        "instanceId": "aab99639e0d9ae611517cd641435fd747b89cbd9bf422dd59458452af5a9c019"
     }
 }

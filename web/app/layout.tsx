@@ -47,6 +47,9 @@ export const metadata: Metadata = {
     ],
     apple: "/assets/apple-touch-icon.png?v=3",
   },
+  other: {
+    "impact-site-verification": "412bed01-1702-4363-8fec-ff77b7b46bff",
+  },
 };
 
 export default function RootLayout({
