@@ -4,8 +4,12 @@ import time
 import json
 import hashlib
 import logging
+import random
 from datetime import datetime
 from dotenv import load_dotenv
+
+# Shared utils
+import utils
 
 from serpapi import GoogleSearch
 
@@ -113,36 +117,43 @@ class ATSHunter:
         processed = []
         for r in results:
             company = self._extract_company(r.get("title"), r.get("link"))
+            title = r.get("title")
             processed.append({
-                "title": r.get("title"),
+                "title": title,
                 "link": r.get("link"),
                 "company": company,
                 "location": region,
                 "source": source,
                 "posted_at": "Within 24 Hours",
                 "raw_snippet": r.get("snippet"),
-                "logo": self._get_logo(company)
+                "logo": utils.get_logo(company),
+                "experience": utils.normalize_experience(r.get("snippet"), title),
+                "job_type": utils.normalize_job_type(None, title)
             })
         return processed
 
     def _extract_company(self, title, link):
         try:
+            # Map board tokens to proper names
+            MAP = {
+                "razorpay": "Razorpay", 
+                "browserstack": "BrowserStack", 
+                "paytm": "Paytm",
+                "coinbase": "Coinbase",
+                "postman": "Postman"
+            }
             if "greenhouse.io" in link:
-                return link.split("greenhouse.io/")[1].split("/")[0]
+                slug = link.split("greenhouse.io/")[1].split("/")[0]
+                return MAP.get(slug.lower(), slug.capitalize())
             if "lever.co" in link:
-                return link.split("lever.co/")[1].split("/")[0]
+                slug = link.split("lever.co/")[1].split("/")[0]
+                return MAP.get(slug.lower(), slug.capitalize())
             if "ashbyhq.com" in link:
-                return link.split("ashbyhq.com/")[1].split("/")[0]
+                slug = link.split("ashbyhq.com/")[1].split("/")[0]
+                return MAP.get(slug.lower(), slug.capitalize())
         except:
             pass
         return "Unknown"
-
-    def _get_logo(self, company_name):
-        if not company_name or company_name == "Unknown":
-            return None
-        import urllib.parse
-        encoded = urllib.parse.quote(company_name)
-        return f"https://ui-avatars.com/api/?name={encoded}&background=random&color=fff&size=128"
 
 # --- TM2: Indeed/LinkedIn Filter (Aggregator Hunter) ---
 # NOTE: The actual Apify/Indeed runner is in scrapers/apify_jobs.py.
@@ -211,8 +222,8 @@ def save_to_db(jobs):
     count = 0
     for job in jobs:
         try:
-            link_hash = hashlib.md5(job['link'].encode('utf-8')).hexdigest()
-            source_hash = f"ats_hunter_{link_hash}"
+            source_hash = utils.generate_source_hash("ats_hunter", job['title'], job['company'], job['location'])
+            random_time = utils.get_random_created_at()
             
             job_doc = {
                 "title": job['title'],
@@ -222,10 +233,13 @@ def save_to_db(jobs):
                 "tags": ["ATS Hunter", job['source']],
                 "source_hash": source_hash,
                 "is_active": True,
-                "public_release_at": datetime.utcnow(),
-                "created_at": datetime.utcnow(),
+                "public_release_at": random_time,
+                "created_at": random_time,
                 "logo": job.get('logo'),
                 "raw_data": job,
+                "description": job.get("raw_snippet", ""),
+                "experience": job.get("experience", "0-2 Years"),
+                "job_type": job.get("job_type", "Full-time"),
                 "is_processed": False
             }
             
@@ -244,6 +258,7 @@ def save_to_db(jobs):
         except Exception as e:
             logger.error(f"Error saving job: {e}")
             
+    client.close()
     logger.info(f"Upserted {count} jobs to MongoDB.")
 
 def main():

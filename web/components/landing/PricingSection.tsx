@@ -11,8 +11,8 @@ export default function PricingSection() {
     const { isSignedIn } = useUser();
     const { openSignIn } = useClerk();
     const [isUnlocking, setIsUnlocking] = useState<string | null>(null);
+    const [showSuccessModal, setShowSuccessModal] = useState(false);
 
-    // Reused handler from page.tsx, adapted for Razorpay
     const handleUnlockPro = async (plan: string) => {
         if (!isSignedIn) {
             openSignIn({ redirectUrl: '/jobs' });
@@ -21,7 +21,6 @@ export default function PricingSection() {
 
         setIsUnlocking(plan);
         try {
-            // Step 1: Inject the Razorpay checkout script
             await new Promise<void>((resolve, reject) => {
                 // @ts-ignore
                 if (window.Razorpay) return resolve();
@@ -32,7 +31,6 @@ export default function PricingSection() {
                 document.body.appendChild(script);
             });
 
-            // Step 2: Create a server-side Razorpay order
             const orderRes = await fetch('/api/razorpay/order', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -41,7 +39,6 @@ export default function PricingSection() {
             if (!orderRes.ok) throw new Error('Failed to create order');
             const { orderId, amount } = await orderRes.json();
 
-            // Step 3: Open Razorpay modal
             await new Promise<void>((resolve, reject) => {
                 const options = {
                     key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
@@ -52,8 +49,7 @@ export default function PricingSection() {
                     order_id: orderId,
                     theme: { color: plan === '6month' ? '#047756' : '#41b4a5' },
                     handler: () => {
-                        // Payment captured — redirect to jobs dashboard
-                        router.push('/jobs');
+                        setShowSuccessModal(true);
                         resolve();
                     },
                     modal: {
@@ -88,8 +84,52 @@ export default function PricingSection() {
 
     return (
         <div id="pricing" className="bg-slate-50 dark:bg-black/20 py-24 border-t border-slate-200 dark:border-slate-800 overflow-hidden">
-            <div className="layout-container max-w-7xl mx-auto px-4 md:px-10">
 
+            {/* ── Success Modal (shown after payment) ── */}
+            {showSuccessModal && (
+                <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        className="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700 max-w-md w-full p-8 text-center relative overflow-hidden"
+                    >
+                        <div className="absolute -top-12 -left-12 w-32 h-32 bg-[#41b4a5]/20 rounded-full blur-3xl pointer-events-none" />
+                        <div className="absolute -bottom-12 -right-12 w-32 h-32 bg-amber-400/20 rounded-full blur-3xl pointer-events-none" />
+                        <div className="relative z-10">
+                            <div className="flex items-center justify-center mb-4">
+                                <div className="h-16 w-16 rounded-full bg-[#EAFBF9] flex items-center justify-center shadow-md">
+                                    <CheckCircle className="h-8 w-8 text-[#41b4a5]" />
+                                </div>
+                            </div>
+                            <h3 className="text-2xl font-black text-slate-900 dark:text-white mb-2">You&apos;re now a Pro! 🎉</h3>
+                            <p className="text-slate-500 dark:text-slate-400 text-sm mb-6 leading-relaxed">
+                                Welcome to SkillHire Pro. Join the exclusive Telegram channel to get{' '}
+                                <strong className="text-slate-700 dark:text-white">instant job alerts</strong> before anyone else.
+                            </p>
+                            <a
+                                href="https://t.me/+ud_U0D07RkY3YTk1"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center justify-center gap-2 w-full h-12 rounded-xl bg-[#0088cc] hover:bg-[#0077b5] text-white font-bold text-base shadow-lg transition-all mb-3 active:scale-95"
+                            >
+                                <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+                                </svg>
+                                Join Private Telegram Channel
+                            </a>
+                            <button
+                                onClick={() => { setShowSuccessModal(false); router.push('/jobs'); }}
+                                className="flex items-center justify-center gap-2 w-full h-10 rounded-xl border-2 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-semibold text-sm transition-all hover:border-[#41b4a5] hover:text-[#41b4a5]"
+                            >
+                                Go to Jobs Dashboard →
+                            </button>
+                            <p className="text-[11px] text-slate-400 mt-4">You can also join Telegram anytime from the Jobs page banner.</p>
+                        </div>
+                    </motion.div>
+                </div>
+            )}
+
+            <div className="layout-container max-w-7xl mx-auto px-4 md:px-10">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -137,7 +177,7 @@ export default function PricingSection() {
                             </li>
                             <li className="flex items-start gap-3 text-sm text-slate-400/60 dark:text-slate-500/60">
                                 <XCircle className="h-5 w-5 shrink-0" />
-                                <span className="line-through decoration-slate-300 dark:decoration-slate-600">Deep Analysis & Salary Bands</span>
+                                <span className="line-through decoration-slate-300 dark:decoration-slate-600">Deep Analysis &amp; Salary Bands</span>
                             </li>
                         </ul>
                         <button
@@ -178,7 +218,7 @@ export default function PricingSection() {
                             </li>
                             <li className="flex items-start gap-3 text-sm text-slate-600 dark:text-slate-300">
                                 <CheckCircle className="text-sh-primary h-5 w-5 shrink-0" />
-                                <span>Deep Resume Analysis & Fixes</span>
+                                <span>Deep Resume Analysis &amp; Fixes</span>
                             </li>
                             <li className="flex items-start gap-3 text-sm text-slate-600 dark:text-slate-300">
                                 <CheckCircle className="text-sh-primary h-5 w-5 shrink-0" />

@@ -5,6 +5,9 @@ from pymongo import MongoClient
 from datetime import datetime
 from bs4 import BeautifulSoup
 
+# Import shared utils
+import utils
+
 # Optional retry support — install with: pip install tenacity
 try:
     from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_exception_type
@@ -101,13 +104,12 @@ def save_to_db(jobs):
         try:
             title = job.get("title")
             company = job.get("company_name")
-            location = job.get("location")
+            location = job.get("location") or "India"
             raw_desc = job.get("description", "")
             clean_desc = BeautifulSoup(raw_desc, "html.parser").get_text(separator="\n").strip() if raw_desc else ""
             
             # Apply options
             apply_options = job.get("apply_options", [])
-            # Prefer LinkedIn, company website, or the first valid option
             apply_link = None
             if apply_options:
                 apply_link = apply_options[0].get("link")
@@ -117,60 +119,52 @@ def save_to_db(jobs):
                         apply_link = opt.get("link")
                         break
             
-            # Pure fallback: if there is absolutely no apply link provided, use the embed link
             if not apply_link:
                  apply_link = job.get("share_link")
             
-            if not title:
+            if not title or not apply_link:
                 continue
 
-            # Experience Extraction
-            import re
-            experience_val = "Not Specified"
-            if "intern" in title.lower() or "fresher" in title.lower():
-                experience_val = "Fresher"
-            else:
-                exp_match = re.search(r'(\d+)\+?\s*(?:to|-)?\s*(\d+)?\s*(?:years?|yrs?|yr)[\s\w]{0,15}experience', clean_desc, re.IGNORECASE)
-                if exp_match:
-                    min_y, max_y = exp_match.groups()
-                    experience_val = f'{min_y}-{max_y} Years' if max_y else f'{min_y}+ Years'
-                else:
-                    exp_match2 = re.search(r'experience.*?(?:of|:)?\s*(\d+)\+?\s*(?:to|-)?\s*(\d+)?\s*(?:years?|yrs?|yr)', clean_desc[:2000], re.IGNORECASE)
-                    if exp_match2:
-                        min_y, max_y = exp_match2.groups()
-                        experience_val = f'{min_y}-{max_y} Years' if max_y else f'{min_y}+ Years'
-                        
-            job_type = job.get("detected_extensions", {}).get("schedule_type", "Unknown")
-            # Google sometimes wraps type in plain extensions array
-            if job_type == "Unknown":
-                extensions = [e.lower() for e in job.get("extensions", [])]
-                if any("full" in e for e in extensions): job_type = "Full-time"
-                elif any("part" in e for e in extensions): job_type = "Part-time"
-                elif any("intern" in e for e in extensions): job_type = "Internship"
-                elif "intern" in title.lower(): job_type = "Internship"
-
-            import hashlib
-            dedupe_str = f"{(title or '').lower()} {(company or '').lower()} {(location or '').lower()}"
-            link_hash = hashlib.md5(dedupe_str.encode('utf-8')).hexdigest()
-            source_hash = f"serpapi_google_{link_hash}"
+            # Normalized Fields via Utils
+            experience_val = utils.normalize_experience(None, title) # Use title first
+            # Attempt to extract from description if not obvious in title
+            if experience_val == "Not Specified":
+                experience_val = utils.normalize_experience(clean_desc, title)
             
+            raw_type = job.get("detected_extensions", {}).get("schedule_type", "Unknown")
+            if raw_type == "Unknown":
+                extensions = " ".join(job.get("extensions", []))
+                job_type = utils.normalize_job_type(extensions, title)
+            else:
+                job_type = utils.normalize_job_type(raw_type, title)
+
+            source_hash = utils.generate_source_hash("serpapi", title, company, location)
+            logo = job.get("thumbnail") or utils.get_logo(company)
+            random_time = utils.get_random_created_at()
+
+            # Salary extraction
+            salary_info = job.get("detected_extensions", {}).get("salary")
+
             job_doc = {
                 "title": title,
                 "company": company,
                 "location": location,
                 "apply_link": apply_link,
-                "logo": job.get("thumbnail") or _get_logo(company),
+                "logo": logo,
                 "tags": ["SerpApi", "Google Jobs"],
                 "source_hash": source_hash,
                 "is_active": True,
                 "is_processed": False,
-                "public_release_at": datetime.utcnow(),
-                "created_at": datetime.utcnow(),
+                "public_release_at": random_time,
+                "created_at": random_time,
                 "description": clean_desc,
                 "experience": experience_val,
                 "job_type": job_type,
                 "raw_data": job
             }
+
+            if salary_info:
+                job_doc["salary_status"] = salary_info
             
             jobs_collection.update_one(
                 {"source_hash": source_hash},

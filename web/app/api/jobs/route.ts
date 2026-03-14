@@ -24,7 +24,6 @@ export async function GET(req: NextRequest) {
         const search = searchParams.get('q') || '';
         const location = searchParams.get('location') || '';
         const source = searchParams.get('source') || '';
-        const gradYear = searchParams.get('gradYear') || '';
         const experienceStr = searchParams.get('experience') || '';
         const experience = experienceStr ? experienceStr.split(',') : [];
         const jobTypesStr = searchParams.get('jobTypes') || '';
@@ -45,17 +44,31 @@ export async function GET(req: NextRequest) {
             query.location = { $regex: location, $options: 'i' };
         }
 
-        if (gradYear) {
-            query.tags = { $in: [new RegExp(`Batch:?${gradYear}`, 'i'), new RegExp(`${gradYear}`, 'i')] };
-        }
-
         if (experience.length > 0) {
-            query.experience = { $in: experience.map(exp => new RegExp(exp.replace('+', '\\+'), 'i')) };
+            // Expand each normalized filter label into equivalent raw-data terms
+            // so scraped jobs with non-standard values (e.g. "fresher", "0 years") still match
+            const experiencePatterns: RegExp[] = [];
+            for (const exp of experience) {
+                const lower = exp.toLowerCase();
+                if (lower.includes('0') || lower.includes('fresh') || lower.includes('entry') || lower.includes('junior')) {
+                    // Freshers / 0-2 years
+                    experiencePatterns.push(
+                        /fresher/i, /0[\s-]?(to|–|-)?[\s-]?[12][\s-]?years?/i,
+                        /entry[\s-]?level/i, /no[\s-]?experience/i,
+                        new RegExp(exp.replace(/[+]/g, '\\+'), 'i')
+                    );
+                } else {
+                    experiencePatterns.push(new RegExp(exp.replace(/[+]/g, '\\+'), 'i'));
+                }
+            }
+            query.experience = { $in: experiencePatterns };
         }
 
         if (jobTypes.length > 0) {
-            query.job_type = { $in: jobTypes.map(t => new RegExp(`^${t}$`, 'i')) };
+            // Use case-insensitive substring matching (not ^ anchored) so "Full Time" matches "Full-time", "full time", etc.
+            query.job_type = { $in: jobTypes.map(t => new RegExp(t.replace(/[\s-_]/g, '[\\s\\-_]?'), 'i')) };
         }
+
 
         if (source) {
             const tagMap: Record<string, string> = {

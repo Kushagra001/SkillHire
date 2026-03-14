@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useUser, useClerk, SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { Search, MapPin, Briefcase, ExternalLink, Loader2, Bookmark, Share2, Lock, ChevronLeft, ChevronRight, CheckCircle2, Wallet, Star, ChevronDown, Menu, X } from 'lucide-react';
+import { Search, MapPin, Briefcase, ExternalLink, Loader2, Bookmark, Share2, Lock, ChevronLeft, ChevronRight, CheckCircle2, Wallet, Star, ChevronDown, Menu, X, Send } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -36,13 +36,12 @@ function useDebounce<T>(value: T, delay: number): T {
     return debouncedValue;
 }
 
-const fetchJobs = async ({ page = 1, search = '', location = '', gradYear = '', experience = [] as string[], jobTypes = [] as string[], premiumOnly = false }) => {
+const fetchJobs = async ({ page = 1, search = '', location = '', experience = [] as string[], jobTypes = [] as string[], premiumOnly = false }) => {
     const params = new URLSearchParams({
         page: page.toString(),
         limit: '15',
         q: search,
         location: location,
-        gradYear: gradYear,
     });
     if (premiumOnly) {
         params.append('premiumOnly', 'true');
@@ -138,6 +137,35 @@ export default function JobsPage() {
     const [selectedJob, setSelectedJob] = useState<Job | null>(null);
     const [isMobileOpen, setIsMobileOpen] = useState(false);
     const [sortBy, setSortBy] = useState("newest");
+
+    // Back-gesture fix: push a hash state when opening mobile pane so the browser
+    // back gesture pops the hash (closing the pane) rather than navigating away.
+    const openMobilePane = (job: Job) => {
+        setSelectedJob(job);
+        setIsMobileOpen(true);
+        if (typeof window !== 'undefined') {
+            window.history.pushState({ mobilePane: true }, '', '#job');
+        }
+    };
+
+    const closeMobilePane = () => {
+        setIsMobileOpen(false);
+        if (typeof window !== 'undefined' && window.location.hash === '#job') {
+            window.history.back();
+        }
+    };
+
+    useEffect(() => {
+        const handlePopState = (e: PopStateEvent) => {
+            // If the pane is open and user presses back, close the pane instead of navigating away
+            if (isMobileOpen) {
+                setIsMobileOpen(false);
+                e.preventDefault();
+            }
+        };
+        window.addEventListener('popstate', handlePopState);
+        return () => window.removeEventListener('popstate', handlePopState);
+    }, [isMobileOpen]);
     const [showPremiumOnly, setShowPremiumOnly] = useState(false);
     const [isFiltersExpanded, setIsFiltersExpanded] = useState(false);
     const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
@@ -148,7 +176,7 @@ export default function JobsPage() {
 
     useEffect(() => {
         setPage(1);
-    }, [debouncedSearch, debouncedLocation, gradYear, selectedExperience, selectedTypes, showPremiumOnly]);
+    }, [debouncedSearch, debouncedLocation, selectedExperience, selectedTypes, showPremiumOnly]);
 
     const {
         data,
@@ -157,12 +185,11 @@ export default function JobsPage() {
     } = useQuery({
         // isSignedIn is part of the key: auth state change triggers an automatic re-fetch
         // so the server can return the correct locked/unlocked state for this user
-        queryKey: ['jobs', page, debouncedSearch, debouncedLocation, gradYear, selectedExperience, selectedTypes, showPremiumOnly, isSignedIn],
+        queryKey: ['jobs', page, debouncedSearch, debouncedLocation, selectedExperience, selectedTypes, showPremiumOnly, isSignedIn],
         queryFn: () => fetchJobs({
             page: page,
             search: debouncedSearch,
             location: debouncedLocation,
-            gradYear,
             experience: selectedExperience,
             jobTypes: selectedTypes,
             premiumOnly: showPremiumOnly
@@ -303,11 +330,11 @@ export default function JobsPage() {
                             </button>
                         </SignedOut>
                         <SignedIn>
-                            <div className={`p-0.5 rounded-full transition-all duration-300 ${isPremiumUser ? 'bg-gradient-to-r from-amber-200 via-amber-400 to-amber-500 shadow-sm' : ''}`}>
-                                <div className={`flex items-center gap-2 rounded-full ${isPremiumUser ? 'bg-white pl-3 pr-1 py-1' : ''}`}>
+                            <div className={`p-0.5 rounded-full transition-all duration-300 ${isPremiumUser ? 'bg-gradient-to-br from-[#FFD700] via-[#FDB931] to-[#D4AF37] dark:from-[#FDB931] dark:to-[#8B6508] shadow-[0_0_15px_rgba(253,185,49,0.3)]' : ''}`}>
+                                <div className={`flex items-center gap-2 rounded-full ${isPremiumUser ? 'bg-white dark:bg-[#0B0F19] pl-3 pr-1 py-1' : ''}`}>
                                     {isPremiumUser && (
-                                        <span className="text-[10px] font-bold tracking-widest text-amber-600 uppercase flex items-center pr-1">
-                                            PRO <Star className="w-3 h-3 fill-amber-500 text-amber-500 ml-1" />
+                                        <span className="text-[10px] font-black tracking-widest text-[#B8860B] dark:text-[#FDB931] uppercase flex items-center pr-1">
+                                            PRO <Star className="w-3.5 h-3.5 fill-[#FDB931] text-[#FDB931] ml-1.5 drop-shadow-[0_0_5px_rgba(253,185,49,0.5)]" />
                                         </span>
                                     )}
                                     <div className={isPremiumUser ? "" : "py-1"}>
@@ -331,13 +358,13 @@ export default function JobsPage() {
                         initial={{ opacity: 0, y: -10 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -10 }}
-                        className="md:hidden absolute top-16 left-0 right-0 z-40 bg-white border-b border-gray-200 shadow-lg flex flex-col p-5 gap-5"
+                        className="md:hidden absolute top-16 left-0 right-0 z-40 bg-white dark:bg-[#0B0F19] border-b border-gray-200 dark:border-slate-800 shadow-lg flex flex-col p-5 gap-5"
                     >
-                        <Link href="/jobs" onClick={() => setIsMobileNavOpen(false)} className="text-lg font-semibold text-slate-900 border-none bg-transparent m-0 p-0 text-left">Jobs</Link>
-                        <Link href="/resume" onClick={() => setIsMobileNavOpen(false)} className="text-lg font-semibold text-slate-900 border-none bg-transparent m-0 p-0 text-left">AI Resume Matcher</Link>
-                        <div className="h-px bg-gray-200 my-1" />
+                        <Link href="/jobs" onClick={() => setIsMobileNavOpen(false)} className="text-lg font-semibold text-slate-900 dark:text-white border-none bg-transparent m-0 p-0 text-left">Jobs</Link>
+                        <Link href="/resume" onClick={() => setIsMobileNavOpen(false)} className="text-lg font-semibold text-slate-900 dark:text-white border-none bg-transparent m-0 p-0 text-left">AI Resume Matcher</Link>
+                        <div className="h-px bg-gray-200 dark:bg-slate-800 my-1" />
                         <SignedOut>
-                            <button onClick={() => { setIsMobileNavOpen(false); openSignIn({ redirectUrl: window.location.href }); }} className="text-left text-lg font-semibold text-slate-900 border-none bg-transparent m-0 p-0 cursor-pointer">Sign in</button>
+                            <button onClick={() => { setIsMobileNavOpen(false); openSignIn({ redirectUrl: window.location.href }); }} className="text-left text-lg font-semibold text-slate-900 dark:text-white border-none bg-transparent m-0 p-0 cursor-pointer">Sign in</button>
                             <button onClick={() => { setIsMobileNavOpen(false); openSignUp({ redirectUrl: window.location.href }); }} className="text-left text-lg font-bold text-[#41b4a5] border-none bg-transparent m-0 p-0 cursor-pointer">Get Premium</button>
                         </SignedOut>
                         <SignedIn>
@@ -350,6 +377,47 @@ export default function JobsPage() {
             <main className="flex-1 flex flex-col overflow-hidden">
                 <div className="bg-white dark:bg-[#0B0F19] border-b border-gray-200 dark:border-slate-800/60 py-3 sm:py-4 shrink-0">
                     <div className="w-full px-4 sm:px-6 lg:px-8">
+                        {isPremiumUser && (
+                            <div id="telegram-card" className="mb-4 w-full bg-gradient-to-r from-blue-50/50 to-indigo-50/50 dark:from-blue-900/10 dark:to-indigo-900/10 border border-blue-100 dark:border-blue-900/30 rounded-xl p-2.5 sm:p-3 flex items-center justify-between gap-4 shadow-sm relative overflow-hidden transition-all duration-300">
+                                <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full blur-2xl -mr-16 -mt-16 pointer-events-none" />
+                                <div className="flex items-center gap-3 z-10 flex-1 min-w-0">
+                                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900/30 shrink-0">
+                                        <Send className="h-5 w-5 text-[#0088cc]" />
+                                    </div>
+                                    <div className="flex flex-col min-w-0">
+                                        <h3 className="text-[13px] sm:text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                                            Join our Private Telegram
+                                            <span className="hidden xs:inline-block px-1.5 py-0.5 rounded-[4px] bg-blue-500 text-[9px] font-black text-white uppercase tracking-tighter">Instant Alerts</span>
+                                        </h3>
+                                        <p className="text-[11px] sm:text-xs text-slate-500 dark:text-slate-400 font-medium truncate hidden sm:block">
+                                            Get ultra-fast notifications before jobs are posted anywhere else.
+                                        </p>
+                                    </div>
+                                </div>
+                                <a
+                                    href="https://t.me/+ud_U0D07RkY3YTk1"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    onClick={() => {
+                                        localStorage.setItem('skillhire_telegram_joined', 'true');
+                                        const card = document.getElementById('telegram-card');
+                                        if (card) {
+                                            card.style.opacity = '0';
+                                            setTimeout(() => card.style.display = 'none', 300);
+                                        }
+                                    }}
+                                    className="shrink-0 flex items-center gap-2 bg-[#0088cc] hover:bg-[#0077b5] text-white px-4 py-2 rounded-lg text-xs sm:text-sm font-bold transition-all shadow-sm active:scale-95 z-10"
+                                >
+                                    Join Now
+                                </a>
+                                <script dangerouslySetInnerHTML={{
+                                    __html: `
+                                    if (typeof window !== 'undefined' && localStorage.getItem('skillhire_telegram_joined') === 'true') {
+                                        document.getElementById('telegram-card') && (document.getElementById('telegram-card').style.display = 'none');
+                                    }
+                                `}} />
+                            </div>
+                        )}
                         <div className="flex flex-col md:flex-row gap-3 md:gap-4 items-center">
                             <h1 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white whitespace-nowrap hidden sm:block md:block">Find your dream job</h1>
                             <div className="flex flex-row gap-2 w-full">
@@ -413,7 +481,7 @@ export default function JobsPage() {
                                 <button
                                     onClick={(e) => {
                                         e.stopPropagation();
-                                        setGradYear(''); setSelectedExperience([]); setLocation(''); setSearch(''); setSelectedTypes([]);
+                                        setSelectedExperience([]); setLocation(''); setSearch(''); setSelectedTypes([]);
                                     }}
                                     className="text-[11px] font-semibold text-[#41B3A3] hover:underline px-2 py-0.5 rounded hover:bg-teal-50"
                                 >
@@ -426,24 +494,6 @@ export default function JobsPage() {
                             >
                                 <div className="overflow-hidden">
                                     <div className="p-3 pt-0 flex flex-col gap-2">
-                                        <div className="space-y-1">
-                                            <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Graduation Year</label>
-                                            <div className="flex flex-wrap gap-1.5">
-                                                {['2023', '2024', '2025', '2026'].map((year) => (
-                                                    <button
-                                                        key={year}
-                                                        onClick={() => setGradYear(year === gradYear ? '' : year)}
-                                                        className={`px-2.5 py-1 rounded-full text-[11px] font-semibold border transition-all ${gradYear === year
-                                                            ? 'bg-[#09090b] text-white border-[#09090b]'
-                                                            : 'bg-white text-slate-600 border-slate-200 hover:border-[#41B3A3] hover:text-[#41B3A3]'
-                                                            }`}
-                                                    >
-                                                        {year}
-                                                    </button>
-                                                ))}
-                                            </div>
-                                        </div>
-
                                         <div className="space-y-1 border-t border-gray-100 pt-2">
                                             <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Experience</label>
                                             <div className="flex flex-wrap gap-1.5">
@@ -550,7 +600,7 @@ export default function JobsPage() {
                                             setSelectedJob(job);
                                             // Only open the mobile sheet on small screens
                                             if (window.innerWidth < 768) {
-                                                setIsMobileOpen(true);
+                                                openMobilePane(job);
                                             }
                                         }}
                                         className={`
@@ -742,7 +792,7 @@ export default function JobsPage() {
             < div className="md:hidden" >
                 <MobileJobDetails
                     job={isMobileOpen ? selectedJob : null}
-                    onClose={() => setIsMobileOpen(false)}
+                    onClose={closeMobilePane}
                     onUnlock={handleUnlock}
                     isUnlocking={isUnlocking}
                 />

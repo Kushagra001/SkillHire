@@ -8,6 +8,9 @@ import dotenv
 from datetime import datetime
 from bs4 import BeautifulSoup
 
+# Import shared utils
+import utils
+
 # Load env variables
 dotenv.load_dotenv(os.path.join(os.path.dirname(__file__), '../web/.env.local'))
 
@@ -104,28 +107,19 @@ def save_to_db(items, source):
             experience_val = "Not Specified"
             if "intern" in (title or "").lower() or "fresher" in (title or "").lower():
                 experience_val = "Fresher"
-            else:
-                exp_match = re.search(r'(\d+)\+?\s*(?:to|-)?\s*(\d+)?\s*(?:years?|yrs?|yr)[\s\w]{0,15}experience', clean_desc, re.IGNORECASE)
-                if exp_match:
-                    min_y, max_y = exp_match.groups()
-                    experience_val = f'{min_y}-{max_y} Years' if max_y else f'{min_y}+ Years'
-                else:
-                    exp_match2 = re.search(r'experience.*?(?:of|:)?\s*(\d+)\+?\s*(?:to|-)?\s*(\d+)?\s*(?:years?|yrs?|yr)', clean_desc[:2000], re.IGNORECASE)
-                    if exp_match2:
-                        min_y, max_y = exp_match2.groups()
-                        experience_val = f'{min_y}-{max_y} Years' if max_y else f'{min_y}+ Years'
+            # Experience Extraction via Utils
+            experience_val = utils.normalize_experience(clean_desc, title)
             
-            # Job Type
-            raw_type = item.get("jobType") or item.get("employmentType") or []
+            # Job Type via Utils
+            raw_type = item.get("jobType") or item.get("employmentType") or ""
             if isinstance(raw_type, list) and raw_type:
-                job_type = raw_type[0]
-            elif isinstance(raw_type, str):
-                job_type = raw_type
-            else:
-                job_type = "Internship" if "intern" in (title or "").lower() else "Full-time"
+                raw_type = raw_type[0]
+            job_type = utils.normalize_job_type(raw_type, title)
             
-            # Logo
-            logo = item.get('companyLogo') or item.get('logo') or _get_logo(company)
+            # Logo via Utils
+            logo = item.get('companyLogo') or item.get('logo') or utils.get_logo(company)
+            source_hash = utils.generate_source_hash("apify", title, company, location)
+            random_time = utils.get_random_created_at()
 
             job_doc = {
                 "title": title,
@@ -137,11 +131,11 @@ def save_to_db(items, source):
                 "source_hash": source_hash,
                 "is_active": True,
                 "is_processed": False,
-                "public_release_at": datetime.utcnow(),
-                "created_at": datetime.utcnow(),
+                "public_release_at": random_time,
+                "created_at": random_time,
                 "description": clean_desc,
                 "experience": experience_val,
-                "job_type": job_type.title(),
+                "job_type": job_type,
                 "raw_data": item
             }
             

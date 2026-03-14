@@ -21,9 +21,10 @@
                 "collection": "jobs",
                 "options": {
                     "limit": 50,
-                    "projection": "={ \"_id\": 1,\"title\": 1, \"company\": 1, \"location\": 1, \"apply_link\": 1, \"is_premium\": 1, \"salary_status\": 1, \"distributed_channels\": 1, \"premium_posted_at\": 1 }"
+                    "projection": "={{ JSON.stringify({ \"_id\": 1, \"title\": 1, \"company\": 1, \"location\": 1, \"apply_link\": 1, \"is_premium\": 1, \"salary_status\": 1, \"distributed_channels\": 1, \"premium_posted_at\": 1 }) }}",
+                    "sort": "={{ JSON.stringify({ created_at: -1 }) }}"
                 },
-                "query": "={\n  \"is_active\": true,\n  \"$or\": [\n    { \"distributed_channels\": { \"$ne\": \"telegram_premium\" } },\n    {\n      \"distributed_channels\": { \"$in\": [\"telegram_premium\"], \"$nin\": [\"telegram_free\"] },\n      \"premium_posted_at\": { \"$lt\": new Date(Date.now() - 86400000) }\n    }\n  ]\n}"
+                "query": "={{ JSON.stringify({ is_active: true, $or: [ { distributed_channels: { $ne: 'telegram_premium' } }, { distributed_channels: { $ne: 'telegram_free' }, is_premium: { $ne: true } }, { distributed_channels: { $in: ['telegram_premium'], $nin: ['telegram_free'] }, is_premium: true, premium_posted_at: { $lt: { $date: new Date(Date.now() - 86400000).toISOString() } } } ] }) }}"
             },
             "id": "1e0b74a0-095b-41ea-9bd4-e55f4d291daa",
             "name": "MongoDB Query Pending Jobs",
@@ -97,7 +98,7 @@
                     "string": [
                         {
                             "name": "message",
-                            "value": "=💼 <b>{{$json.title}}</b>\n🏢 <b>Company:</b> {{$json.company}}\n\n📍 <b>Location:</b> {{$json.location}}\n💰 <b>Salary:</b> {{$json.salary_status || 'Competitive CTC'}}\n\n⭐ <b>Premium Early Access</b>\nBe among the first applicants.\n\n📝 <b>Apply Now:</b>\n<a href=\"{{$json.apply_link}}\">{{$json.apply_link}}</a>\n\n🌐 <b>More jobs:</b>\n<a href=\"https://skillhire.in\">skillhire.in</a>\n\n━━━━━━━━━━━━━━\n#SkillHire #PremiumJobs #TechJobs"
+                            "value": "=💻 <b>{{$json.title}}</b> at <b>{{$json.company}}</b>\n\n📍 <b>Location:</b> {{$json.location}}\n💰 <b>Salary:</b> {{$json.salary_status || 'Competitive CTC'}}\n🎓 <b>Experience:</b> {{$json.experience || 'Fresher'}}\n\n⭐ <b>Premium Early Access</b>\nBe among the first applicants.\n\n🚀 <b>Apply Now:</b>\n<a href=\"{{$json.apply_link}}\">{{$json.apply_link}}</a>\n\n━━━━━━━━━━━━━━\n#SkillHire #PremiumJobs #TechJobs"
                         },
                         {
                             "name": "channel_name",
@@ -122,7 +123,7 @@
                     "string": [
                         {
                             "name": "message",
-                            "value": "=💼 <b>{{$json.title}}</b>\\n🏢 <b>Company:</b> {{$json.company}}\\n\\n📍 <b>Location:</b> {{$json.location}}\\n💰 <b>Salary:</b> {{$json.salary_status || 'Competitive CTC'}}\\n\\n⚠️ <i>Premium members got this 24hrs ago!</i>\\n⚡ Skip the delay. Get instant alerts via our Premium Channel.\\n👉 <b>Upgrade Now:</b> <a href=\"https://rzp.io/l/YOUR_RAZORPAY_LINK\">Click Here to Subscribe (Razorpay)</a>\\n\\n📘 <b>Prep For This Role:</b>\\n<a href=\"{{ $json.title.toLowerCase().includes('data') ? 'YOUR_DATACAMP_AFFILIATE_LINK' : ($json.title.toLowerCase().includes('frontend') || $json.title.toLowerCase().includes('react') ? 'YOUR_FRONTEND_AFFILIATE_LINK' : 'YOUR_ALGOEXPERT_AFFILIATE_LINK') }}\">Crack the Interview (Top Course)</a>\\n\\n📝 <b>Apply Now:</b>\\n<a href=\"{{$json.apply_link}}\">{{$json.apply_link}}</a>\\n\\n━━━━━━━━━━━━━━\\n#SkillHire #FresherJobs #TechJobs"
+                            "value": "=💻 <b>{{$json.title}}</b> at <b>{{$json.company}}</b>\n\n📍 <b>Location:</b> {{$json.location}}\n💰 <b>Salary:</b> {{$json.salary_status || 'Competitive CTC'}}\n🎓 <b>Experience:</b> {{$json.experience || 'Fresher'}}\n\n🚀 <b>Apply Now:</b>\n<a href=\"{{$json.apply_link}}\">{{$json.apply_link}}</a>\n\n━━━━━━━━━━━━━━\n[ <i>Premium members received this job alert 24 hours ago</i> ]\n\n⚡ <b>Want instant, early access before positions close?</b>\nUpgrade to Premium → <a href=\"https://skillhire.in/#pricing\">SkillHire Premium Checkout</a>\n\n#SkillHire #FresherJobs #TechJobs"
                         },
                         {
                             "name": "channel_name",
@@ -173,7 +174,7 @@
         },
         {
             "parameters": {
-                "chatId": "={{ $json[\"channel_name\"] === \"telegram_premium\" ? \"@SkillHirePremium\" : \"@SkillHireFree1\" }}",
+                "chatId": "={{ $json[\"channel_name\"] === \"telegram_premium\" ? \"-1003613550186\" : \"-1003783389662\" }}",
                 "text": "={{ $json.message }}",
                 "additionalFields": {
                     "disable_web_page_preview": false,
@@ -201,7 +202,7 @@
             "parameters": {
                 "operation": "update",
                 "collection": "jobs",
-                "updateKey": "={\n  \"$set\": {\n    \"distribution_status\": \"distributed\",\n    \"premium_posted_at\": \"={{ $json.channel_name === 'telegram_premium' ? new Date() : $json.premium_posted_at }}\"\n  },\n  \"$addToSet\": {\n    \"distributed_channels\": \"={{ $json.channel_name }}\"\n  }\n}",
+                "updateKey": "={{ JSON.stringify({ $set: Object.assign({ distribution_status: 'distributed' }, $json.channel_name === 'telegram_premium' ? { premium_posted_at: { $date: new Date().toISOString() } } : {}), $addToSet: { distributed_channels: $json.channel_name } }) }}",
                 "fields": "_id",
                 "options": {}
             },

@@ -42,9 +42,6 @@ export default function FeaturesSection() {
                         </p>
                         <ul className="space-y-3 pt-4">
                             <li className="flex items-center gap-3 text-slate-700 dark:text-slate-300 font-medium">
-                                <CheckCircle className="w-5 h-5 text-sh-primary" /> Focus on 2024-2026 batches.
-                            </li>
-                            <li className="flex items-center gap-3 text-slate-700 dark:text-slate-300 font-medium">
                                 <CheckCircle className="w-5 h-5 text-sh-primary" /> Direct-to-founder startup roles.
                             </li>
                             <li className="flex items-center gap-3 text-slate-700 dark:text-slate-300 font-medium">

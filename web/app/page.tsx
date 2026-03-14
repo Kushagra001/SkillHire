@@ -37,6 +37,7 @@ import { ThemeToggle } from '@/components/theme-toggle';
 import HowItWorksTerminal from '@/components/landing/HowItWorksTerminal';
 import TestimonialMarquee from '@/components/landing/TestimonialMarquee';
 import FaqAccordion from '@/components/landing/FaqAccordion';
+import SocialSection from '@/components/landing/SocialSection';
 
 export default function LandingPage() {
   const { user, isSignedIn } = useUser();
@@ -83,11 +84,11 @@ export default function LandingPage() {
               </button>
             </SignedOut>
             <SignedIn>
-              <div className={`p-0.5 rounded-full transition-all duration-300 ${isPremiumUser ? 'bg-gradient-to-r from-amber-200 via-amber-400 to-amber-500 shadow-sm' : ''}`}>
-                <div className={`flex items-center gap-2 rounded-full ${isPremiumUser ? 'bg-white pl-3 pr-1 py-1 dark:bg-slate-900' : ''}`}>
+              <div className={`p-0.5 rounded-full transition-all duration-300 ${isPremiumUser ? 'bg-gradient-to-br from-[#FFD700] via-[#FDB931] to-[#D4AF37] dark:from-[#FDB931] dark:to-[#8B6508] shadow-[0_0_15px_rgba(253,185,49,0.3)]' : ''}`}>
+                <div className={`flex items-center gap-2 rounded-full ${isPremiumUser ? 'bg-white pl-3 pr-1 py-1 dark:bg-[#0B0F19]' : ''}`}>
                   {isPremiumUser && (
-                    <span className="text-[10px] font-bold tracking-widest text-amber-600 uppercase flex items-center pr-1">
-                      PRO <Star className="w-3 h-3 fill-amber-500 text-amber-500 ml-1" />
+                    <span className="text-[10px] font-black tracking-widest text-[#B8860B] dark:text-[#FDB931] uppercase flex items-center pr-1">
+                      PRO <Star className="w-3.5 h-3.5 fill-[#FDB931] text-[#FDB931] ml-1.5 drop-shadow-[0_0_5px_rgba(253,185,49,0.5)]" />
                     </span>
                   )}
                   <div className={isPremiumUser ? "" : "py-1"}>
@@ -179,6 +180,9 @@ export default function LandingPage() {
       <PricingSection />
 
       <FaqAccordion />
+
+      {/* Social Community Section */}
+      <SocialSection />
 
       {/* Footer */}
       <Footer />

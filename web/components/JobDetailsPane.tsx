@@ -473,30 +473,30 @@ export function JobDetailsPane({ job, onUnlock, isUnlocking }: { job: Job | null
                                         {hasSavedResume === null ? (
                                             <div className="h-8 w-24 bg-slate-100 animate-pulse rounded-md"></div>
                                         ) : hasSavedResume ? (
-                                            <div className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
-                                                <button
-                                                    onClick={() => fileInputRef.current?.click()}
-                                                    className="text-[10px] text-slate-400 font-medium hover:text-[#41b4a5] hover:underline underline-offset-2 transition-colors order-2 sm:order-1"
-                                                >
-                                                    Update Resume
-                                                </button>
-                                                <input
-                                                    type="file"
-                                                    accept=".pdf"
-                                                    className="hidden"
-                                                    ref={fileInputRef}
-                                                    onChange={handleBaseUpload}
-                                                />
-                                                <Button
-                                                    onClick={handleQuickMatch}
-                                                    size="sm"
-                                                    disabled={isUploadingBase}
-                                                    className="bg-[#41b4a5] hover:bg-[#369689] text-white w-full sm:w-auto text-xs font-semibold shadow-sm order-1 sm:order-2"
-                                                >
-                                                    {isUploadingBase ? <Loader2 className="h-4 w-4 animate-spin mr-1" /> : <Sparkles className="h-4 w-4 mr-1" />}
-                                                    {isUploadingBase ? 'Uploading...' : 'Quick Match'}
-                                                </Button>
-                                            </div>
+                                    <div className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
+                                        <button
+                                            onClick={() => fileInputRef.current?.click()}
+                                            className="text-[10px] text-slate-400 font-medium hover:text-[#41b4a5] hover:underline underline-offset-2 transition-colors order-2 sm:order-1"
+                                        >
+                                            Update
+                                        </button>
+                                        <input
+                                            type="file"
+                                            accept=".pdf"
+                                            className="hidden"
+                                            ref={fileInputRef}
+                                            onChange={handleBaseUpload}
+                                        />
+                                        <Button
+                                            onClick={handleQuickMatch}
+                                            size="sm"
+                                            disabled={isUploadingBase}
+                                            className="bg-[#41b4a5] hover:bg-[#369689] text-white w-full sm:w-auto text-xs font-semibold shadow-sm order-1 sm:order-2 h-8"
+                                        >
+                                            {isUploadingBase ? <Loader2 className="h-4 w-4 animate-spin mr-1" /> : <Sparkles className="h-4 w-4 mr-1" />}
+                                            {isUploadingBase ? 'Uploading...' : 'Quick Match'}
+                                        </Button>
+                                    </div>
                                         ) : (
                                             <>
                                                 <input

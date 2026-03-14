@@ -80,7 +80,7 @@ export default function NewHero() {
                             </span>
                         </h1>
                         <p className="mt-8 text-lg xl:text-xl text-slate-500 dark:text-slate-400 leading-relaxed max-w-lg">
-                            Get matched to top companies based on what you can build, not just your degree. Built for 2023–2026 batch freshers ready to prove their skills.
+                            Get matched to top companies based on what you can build, not just your degree. Built for freshers ready to prove their skills.
                         </p>
 
                         {/* Animated stats bar */}
@@ -93,7 +93,6 @@ export default function NewHero() {
                             {[
                                 { value: "2,400+", label: "Jobs" },
                                 { value: "500+", label: "Companies" },
-                                { value: "2023–2026", label: "Batches" },
                             ].map((stat, i) => (
                                 <div key={i} className="flex items-center gap-2">
                                     {i > 0 && <span className="text-slate-300 dark:text-slate-700 text-sm">✦</span>}
