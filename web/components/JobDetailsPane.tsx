@@ -62,7 +62,7 @@ const getJobDescription = (job: Job): string | undefined => {
 const formatMarkdown = (text: string) => {
     if (!text) return null;
     const html = text
-        .replace(/\*\*(.*?)\*\*/g, '<strong class="font-bold text-slate-900">$1</strong>')
+        .replace(/\*\*(.*?)\*\*/g, '<strong class="font-bold text-slate-900 dark:text-white">$1</strong>')
         .replace(/\*(.*?)\*/g, '<em class="italic">$1</em>')
         // checkmarks
         .replace(/✅/g, '<span class="text-emerald-500 mr-2">✅</span>')
@@ -372,14 +372,14 @@ export function JobDetailsPane({ job, onUnlock, isUnlocking }: { job: Job | null
                                                 />
                                             </svg>
                                             <div className="absolute inset-0 flex items-center justify-center flex-col">
-                                                <span className="text-[11px] font-bold text-slate-900">{matchResult.match_percentage}%</span>
+                                                <span className="text-[11px] font-bold text-slate-900 dark:text-slate-100">{matchResult.match_percentage}%</span>
                                             </div>
                                         </div>
                                         <div className="flex flex-col flex-1 min-w-0">
-                                            <h4 className="text-sm font-bold text-slate-900">
+                                            <h4 className="text-sm font-bold text-slate-900 dark:text-white">
                                                 {matchResult.match_percentage >= 80 ? "Strong Match ✓" : matchResult.match_percentage >= 50 ? "Partial Match" : "Low Match"}
                                             </h4>
-                                            <p className="text-xs text-slate-500 line-clamp-2 leading-relaxed">
+                                            <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed">
                                                 {matchResult.ai_recommendation}
                                             </p>
                                         </div>
@@ -605,7 +605,7 @@ export function JobDetailsPane({ job, onUnlock, isUnlocking }: { job: Job | null
                         <div className="flex gap-2">
                             <button
                                 onClick={handleShare}
-                                className="p-2 px-3 rounded-lg border border-gray-300 text-slate-600 hover:bg-gray-100 transition-colors flex items-center justify-center min-w-[40px] gap-1.5"
+                                className="p-2 px-3 rounded-lg border border-gray-300 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors flex items-center justify-center min-w-[40px] gap-1.5"
                             >
                                 {isCopied ? (
                                     <>

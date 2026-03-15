@@ -602,7 +602,7 @@ export default function ResumePage() {
                     </div>
                     <div className="flex gap-6">
                         <Link className="text-sm text-slate-500 hover:text-primary transition-colors" href="#">Privacy Policy</Link>
-                        <Link className="text-sm text-slate-500 hover:text-primary transition-colors" href="#">Terms of Service</Link>
+                        <Link className="text-sm text-slate-500 hover:text-primary transition-colors" href="/terms">Terms of Service</Link>
                         <Link className="text-sm text-slate-500 hover:text-primary transition-colors" href="#">Help Center</Link>
                     </div>
                 </div>

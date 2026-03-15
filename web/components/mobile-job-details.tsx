@@ -298,14 +298,14 @@ export function MobileJobDetails({ job, onClose, onUnlock, isUnlocking }: Mobile
                                                         />
                                                     </svg>
                                                     <div className="absolute inset-0 flex items-center justify-center">
-                                                        <span className="text-[10px] font-bold text-slate-900 dark:text-white">{matchResult.match_percentage}%</span>
+                                                        <span className="text-[10px] font-bold text-slate-900 dark:text-slate-100">{matchResult.match_percentage}%</span>
                                                     </div>
                                                 </div>
                                                 <div className="flex-1 min-w-0">
                                                     <h4 className="text-sm font-bold text-slate-900 dark:text-white">
                                                         {matchResult.match_percentage >= 80 ? "Strong Match ✓" : matchResult.match_percentage >= 50 ? "Partial Match" : "Low Match"}
                                                     </h4>
-                                                    <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-2">{matchResult.ai_recommendation}</p>
+                                                    <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed">{matchResult.ai_recommendation}</p>
                                                 </div>
                                                 <div className="flex items-center gap-1 shrink-0">
                                                     <Button variant="outline" size="sm" onClick={() => setShowFullReport(!showFullReport)} className="text-xs border-gray-300 dark:border-slate-600 text-slate-700 dark:text-slate-200">{showFullReport ? 'Hide' : 'View'}</Button>
@@ -441,7 +441,7 @@ export function MobileJobDetails({ job, onClose, onUnlock, isUnlocking }: Mobile
                         variant="outline"
                         size="icon"
                         onClick={handleShare}
-                        className="text-slate-400 hover:text-[#41b4a5] dark:border-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 shrink-0"
+                        className="text-slate-500 dark:text-slate-400 border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors shrink-0"
                     >
                         {isCopied ? <CheckCircle2 className="h-5 w-5 text-[#41b4a5]" /> : <Share2 className="h-5 w-5" />}
                     </Button>

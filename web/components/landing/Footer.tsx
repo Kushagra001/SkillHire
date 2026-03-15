@@ -61,7 +61,7 @@ export default function Footer() {
                             <li><a href="#" className="text-sm text-slate-500 hover:text-sh-primary transition-colors">About Us</a></li>
                             <li><a href="#" className="text-sm text-slate-500 hover:text-sh-primary transition-colors">Contact Support</a></li>
                             <li><Link href="/privacy" className="text-sm text-slate-500 hover:text-sh-primary transition-colors">Privacy Policy</Link></li>
-                            <li><a href="#" className="text-sm text-slate-500 hover:text-sh-primary transition-colors">Terms of Service</a></li>
+                            <li><Link href="/terms" className="text-sm text-slate-500 hover:text-sh-primary transition-colors">Terms of Service</Link></li>
                         </ul>
                     </div>
                 </div>
