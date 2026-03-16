@@ -51,6 +51,20 @@ jobs:
         run: python scrapers/serpapi_jobs.py
         continue-on-error: true
 
+      - name: Run Foundit Scraper
+        env:
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+        run: python scrapers/foundit.py
+        continue-on-error: true
+
+      - name: Run Wellfound Scraper (Organic SerpApi)
+        env:
+          SERPAPI_KEY: ${{ secrets.SERPAPI_KEY }}
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+        run: python scrapers/wellfound_jobs.py
+        continue-on-error: true
+
+
       - name: Run AI Refinery Pipeline (Groq)
         env:
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
