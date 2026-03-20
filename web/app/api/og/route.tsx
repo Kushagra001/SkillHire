@@ -6,8 +6,20 @@ export const runtime = "edge";
 export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const title = searchParams.get("title") || "Tech Insights by SkillHire";
-    const subtitle =
-        searchParams.get("subtitle") || "Career advice for modern developers";
+    const subtitle = searchParams.get("subtitle") || "Career advice for modern developers";
+    const type = searchParams.get("type") || "job"; // "job" or "organic"
+
+    const isOrganic = type === "organic";
+    const preTitle = isOrganic ? "💡 Career Advice" : "🚀 New Job Alert";
+    const badgeText = isOrganic ? "Insights" : "Hiring";
+    const ctaText = isOrganic ? "Follow for daily insights →" : "Apply now →";
+    const orbTopColor = isOrganic ? "rgba(139, 92, 246, 0.35)" : "rgba(16, 185, 129, 0.35)"; // Purple vs Emerald
+    const orbBottomColor = isOrganic ? "rgba(59, 130, 246, 0.3)" : "rgba(59, 130, 246, 0.3)"; // Blue
+    const badgeBg = isOrganic ? "rgba(139, 92, 246, 0.2)" : "rgba(16, 185, 129, 0.2)";
+    const badgeBorder = isOrganic ? "rgba(139, 92, 246, 0.5)" : "rgba(16, 185, 129, 0.5)";
+    const badgeColor = isOrganic ? "#a78bfa" : "#34d399";
+    const preTitleColor = isOrganic ? "#a78bfa" : "#34d399";
+    const ctaGradient = isOrganic ? "linear-gradient(90deg, #8b5cf6, #3b82f6)" : "linear-gradient(90deg, #10b981, #3b82f6)";
 
     return new ImageResponse(
         (
@@ -34,7 +46,7 @@ export async function GET(req: NextRequest) {
                         height: "400px",
                         borderRadius: "50%",
                         background:
-                            "radial-gradient(circle, rgba(139, 92, 246, 0.35) 0%, transparent 70%)",
+                            `radial-gradient(circle, ${orbTopColor} 0%, transparent 70%)`,
                     }}
                 />
                 {/* Decorative bottom-left orb */}
@@ -47,7 +59,7 @@ export async function GET(req: NextRequest) {
                         height: "300px",
                         borderRadius: "50%",
                         background:
-                            "radial-gradient(circle, rgba(59, 130, 246, 0.3) 0%, transparent 70%)",
+                            `radial-gradient(circle, ${orbBottomColor} 0%, transparent 70%)`,
                     }}
                 />
 
@@ -91,14 +103,14 @@ export async function GET(req: NextRequest) {
                             marginLeft: "12px",
                             padding: "4px 14px",
                             borderRadius: "999px",
-                            background: "rgba(139, 92, 246, 0.2)",
-                            border: "1px solid rgba(139, 92, 246, 0.5)",
+                            background: badgeBg,
+                            border: `1px solid ${badgeBorder}`,
                             fontSize: "14px",
-                            color: "#a78bfa",
+                            color: badgeColor,
                             fontWeight: 500,
                         }}
                     >
-                        Insights
+                        {badgeText}
                     </div>
                 </div>
 
@@ -116,13 +128,13 @@ export async function GET(req: NextRequest) {
                         style={{
                             display: "flex",
                             fontSize: "16px",
-                            color: "#a78bfa",
+                            color: preTitleColor,
                             fontWeight: 600,
                             letterSpacing: "2px",
                             textTransform: "uppercase",
                         }}
                     >
-                        💡 Career Advice
+                        {preTitle}
                     </div>
                     <div
                         style={{
@@ -174,13 +186,13 @@ export async function GET(req: NextRequest) {
                             gap: "8px",
                             padding: "10px 24px",
                             borderRadius: "10px",
-                            background: "linear-gradient(90deg, #8b5cf6, #3b82f6)",
+                            background: ctaGradient,
                             color: "white",
                             fontSize: "17px",
                             fontWeight: 600,
                         }}
                     >
-                        Follow for daily insights →
+                        {ctaText}
                     </div>
                 </div>
             </div>

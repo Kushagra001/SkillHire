@@ -184,8 +184,8 @@ def _process_batch(collection, jobs_to_process):
         if not current_chunk:
             return
             
-        print(f"Sending batch of {len(current_chunk)} jobs to Groq... (sleeping 4s to prevent 429 rate limit)")
-        time.sleep(4.0)
+        print(f"Sending batch of {len(current_chunk)} jobs to Groq... (sleeping 6s to prevent 429 rate limit)")
+        time.sleep(6.0)
         extracted_results = process_job_batch_with_groq(current_chunk)
         
         # Map the results back by ID
@@ -196,13 +196,11 @@ def _process_batch(collection, jobs_to_process):
             job_id_obj = job_payload['_original_id']
             
             gemini_data = result_map.get(job_id_str)
+            refinery_error = False
             if not gemini_data:
-                # API failed or dropped this job
-                updates.append(UpdateOne(
-                    {"_id": job_id_obj},
-                    {"$set": {"is_processed": True, "refinery_error": True, "processed_at": datetime.datetime.utcnow()}}
-                ))
-                continue
+                # API failed or dropped this job, but we'll apply fallbacks so it doesn't get corrupted.
+                gemini_data = {}
+                refinery_error = True
                 
             # Parse logic constraint for international
             is_active = True
@@ -213,7 +211,7 @@ def _process_batch(collection, jobs_to_process):
             is_premium = False
             
             # 1. Salary Check
-            salary_str = str(gemini_data.get('salary_status', '')).lower()
+            salary_str = str(gemini_data.get('salary_status', job_payload.get('salary_status', ''))).lower()
             if "lpa" in salary_str:
                 nums = re.findall(r'\d+', salary_str)
                 if nums and any(int(n) >= 12 for n in nums):
@@ -231,35 +229,45 @@ def _process_batch(collection, jobs_to_process):
 
             # 3. Freshness (< 48h)
             created_at = job_payload.get('created_at')
+            if created_at and isinstance(created_at, str):
+                try:
+                    created_at = datetime.datetime.fromisoformat(created_at.replace('Z', '+00:00'))
+                except ValueError:
+                    pass
+
             if created_at and isinstance(created_at, datetime.datetime):
-                age = datetime.datetime.utcnow() - created_at
+                # Ensure both are timezone aware or naive before subtracting
+                now = datetime.datetime.now(datetime.timezone.utc)
+                if created_at.tzinfo is None:
+                    created_at = created_at.replace(tzinfo=datetime.timezone.utc)
+                    
+                age = now - created_at
                 if age.total_seconds() < 48 * 3600:
                     is_premium = True
                     
             # 4. Hidden Gems
             tags = job_payload.get('tags', [])
-            if any(hq in str(t).lower() for t in tags for hq in ['greenhouse', 'instahyre', 'lever', 'ashby']):
+            if any(hq in str(t).lower() for t in tags for hq in ['greenhouse', 'instahyre', 'lever', 'ashby', 'wellfound']):
                 is_premium = True
                 
             processed_data = {
                 "batch": gemini_data.get('batch', ["Any"]),
                 "tech_stack": gemini_data.get('tech_stack', []),
                 "skills": gemini_data.get('skills', []),
-                "normalized_location": gemini_data.get('location', 'Unknown'),
-                "experience": gemini_data.get('experience', 'Not Disclosed'),
-                "job_type": gemini_data.get('job_type', 'Full-time'),
-                "salary_status": gemini_data.get('salary_status', 'Not Disclosed'),
+                "normalized_location": gemini_data.get('location', job_payload.get('location', 'Unknown')),
+                "experience": gemini_data.get('experience', job_payload.get('experience') or 'Not Disclosed'),
+                "job_type": gemini_data.get('job_type', job_payload.get('job_type') or 'Full-time'),
+                "salary_status": gemini_data.get('salary_status', job_payload.get('salary_status') or 'Not Disclosed'),
                 "formatted_about": gemini_data.get('formatted_about', ''),
                 "is_active": is_active,
                 "is_premium": is_premium,
                 "is_processed": True,
+                "refinery_error": refinery_error,
                 "processed_at": datetime.datetime.utcnow()
             }
             
             # Merge new Batch:YYYY tags into existing tags array
-            # We must retrieve existing tags from the DB, but since we don't have the full original job object here,
-            # we rely on the caller or just instantiate. For simplicity, we create a fresh tags list.
-            new_tags = set()
+            new_tags = set(job_payload.get('tags', []))
             for b in processed_data['batch']:
                 new_tags.add(f"Batch:{b}")
             processed_data['tags'] = list(new_tags)
@@ -294,14 +302,20 @@ def _process_batch(collection, jobs_to_process):
 
         if not text_to_analyze.strip():
             # Apply defaults using $set so we don't overwrite title/company/apply_link/job_type
+            # Create a dynamic set query so we preserve existing salary_status if present.
+            update_data = {
+                "is_processed": True,
+                "batch": ["Any"],
+                "processed_at": datetime.datetime.utcnow()
+            }
+            if not job.get("salary_status") or job.get("salary_status") in ["Unknown", "Not Disclosed"]:
+                update_data["salary_status"] = "Not Disclosed"
+            else:
+                update_data["salary_status"] = job.get("salary_status")
+
             updates.append(UpdateOne(
                 {"_id": job["_id"]},
-                {"$set": {
-                    "is_processed": True,
-                    "batch": ["Any"],
-                    "salary_status": "Not Disclosed",
-                    "processed_at": datetime.datetime.utcnow()
-                }}
+                {"$set": update_data}
             ))
             continue
 
