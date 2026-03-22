@@ -4,6 +4,7 @@ import { MapPin, Briefcase, Wallet, CheckCircle2, Lock, ExternalLink, Share2, Fi
 import { Button } from '@/components/ui/button';
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { CompanyLogo } from '@/components/CompanyLogo';
 
 export interface Job {
     _id: string;
@@ -222,19 +223,11 @@ export function JobDetailsPane({ job, onUnlock, isUnlocking }: { job: Job | null
         <div className="flex-1 flex flex-col h-full bg-white dark:bg-transparent relative">
             <div className={`relative flex-1 overflow-y-auto custom-scrollbar p-6 ${job.is_locked ? 'overflow-hidden' : ''}`}>
                 <div className="sticky top-0 bg-white dark:bg-[#0B0F19]/95 z-10 pb-4 mb-4 border-b border-gray-100 dark:border-slate-800/60 shadow-sm flex flex-col xl:flex-row gap-6 items-start">
-                    <div className="h-20 w-20 flex-shrink-0 overflow-hidden rounded-xl border border-gray-100 bg-white p-3 shadow-sm flex items-center justify-center">
-                        <img
-                            key={job._id}
-                            src={job.logo || job.raw_data?.logo || `https://ui-avatars.com/api/?name=${encodeURIComponent(job.company)}&background=random&color=fff&size=128`}
-                            alt={job.company}
-                            className="h-full w-full object-contain"
-                            onError={(e) => {
-                                const target = e.currentTarget as HTMLImageElement;
-                                target.onerror = null;
-                                target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(job.company)}&background=random&color=fff&size=128`;
-                            }}
-                        />
-                    </div>
+                    <CompanyLogo
+                        logo={job.logo || job.raw_data?.logo}
+                        company={job.company}
+                        size="lg"
+                    />
                     <div className="flex-1 w-full min-w-0">
                         <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-6">
                             <div className="flex-1 min-w-0">

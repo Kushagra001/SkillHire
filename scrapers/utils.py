@@ -64,12 +64,12 @@ def normalize_job_type(type_text, job_title=""):
 
 def get_logo(company_name):
     """
-    Unified avatar generator for SkillHire.
+    Returns None — logo resolution is handled at the API/display layer.
+    Previously this returned a ui-avatars.com URL, but storing placeholder logos
+    in the DB made it impossible to distinguish 'real logo' from 'no logo'.
+    The frontend chains: stored logo → logo.dev (by domain) → ui-avatars fallback.
     """
-    if not company_name or company_name.lower() in ["unknown", "n/a"]:
-        return None
-    encoded = urllib.parse.quote(company_name)
-    return f"https://ui-avatars.com/api/?name={encoded}&background=random&color=fff&size=128"
+    return None
 
 def generate_source_hash(prefix, title, company, location):
     """

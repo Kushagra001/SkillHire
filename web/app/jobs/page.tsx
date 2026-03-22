@@ -81,6 +81,7 @@ interface Job {
 
 import { MobileJobDetails } from '@/components/mobile-job-details';
 import { JobDetailsPane } from '@/components/JobDetailsPane';
+import { CompanyLogo } from '@/components/CompanyLogo';
 
 /** Apify/Indeed jobs store description as { text, html }; SerpAPI jobs store it as a plain string. */
 const getJobDescription = (raw_data?: { description?: string | { text?: string; html?: string }; snippet?: string; raw_snippet?: string }): string | undefined => {
@@ -613,18 +614,11 @@ export default function JobsPage() {
                                     >
                                         <div className="flex gap-2.5 sm:gap-3 items-start">
                                             {/* Logo — compact */}
-                                            <div className="h-10 w-10 shrink-0 bg-white rounded-lg border border-gray-100 flex items-center justify-center overflow-hidden shadow-sm">
-                                                {/* eslint-disable-next-line @next/next/no-img-element */}
-                                                <img
-                                                    key={job._id + "-list"}
-                                                    src={job.logo || `https://ui-avatars.com/api/?name=${encodeURIComponent(job.company)}&background=random&color=fff&size=48`}
-                                                    alt={`${job.company} logo`}
-                                                    className="h-8 w-8 object-contain"
-                                                    onError={(e) => {
-                                                        e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(job.company)}&background=f3f4f6&color=6b7280&size=48`;
-                                                    }}
-                                                />
-                                            </div>
+                                            <CompanyLogo
+                                                logo={job.logo}
+                                                company={job.company}
+                                                size="sm"
+                                            />
 
                                             {/* Content */}
                                             <div className="flex-1 min-w-0">
