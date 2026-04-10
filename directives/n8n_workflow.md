@@ -1,25 +1,39 @@
-# n8n Workflow: Automated Job Distribution
+# n8n Workflow: Consolidated Automation Suite
 
-**Purpose:** This document defines the complete n8n workflow for distributing newly scraped jobs from MongoDB to Telegram channels after each scraper pipeline run.
+**Purpose:** This document defines the fully integrated n8n master workflow for SkillHire, encompassing:
+1. **Automated Job Distribution**: Pumping jobs from MongoDB to Telegram and Discord.
+2. **Automated LinkedIn Workarounds**: Generating and forwarding LinkedIn content to Make.com listeners.
 
-**Trigger:** GitHub Actions POSTs to `https://skillhire-n8n.onrender.com/webhook/job-distribution` after every scraper run.
-
----
-
-## Workflow Architecture
+## Master Architecture
 
 ```
+                                               (Cron 10:30 AM / 2 Days)
+                                                          ↓
+                                        [LinkedIn Organic Pipeline (OpenAI -> Make.com)]
+                                                          ↓
+                                                  (Make.com handles LinkedIn API Post)
+```
+```
+(Daily 9:00 AM Cron)
+         ↓
+[MongoDB 24h Summary]  →  [Discord Internal Summary Webhook]
+         ↓
+[AI Content Gen]  →  [Generate OG Image]  →  [Make.com Job Pipeline]
+```
+```
 Webhook Trigger (POST)
-        ↓
-MongoDB Query — fetch pending jobs
-        ↓
-IF statement — is_premium check
+         ↓
+MongoDB Query (Pending Jobs)
+         ↓
+IF is_premium check
     ↓                    ↓
 Premium Branch       Free Branch
     ↓                    ↓
-Format Premium Msg   Format Free Msg
+Format Msg           Format Msg + Affiliate
     ↓                    ↓
-SplitInBatches (5)   SplitInBatches (5)
+SplitInBatches (1)   SplitInBatches (1)
+    ↓                    ↓
+Wait 1s              Wait 1s
     ↓                    ↓
 Telegram Send        Telegram Send
     ↓                    ↓
@@ -29,167 +43,34 @@ MongoDB Update       MongoDB Update
 
 ---
 
-## Node-by-Node Setup
+## 1. Automated Job Distribution
 
-### Node 1 — Webhook
+**Trigger:** `https://n8n.skillhire.in/webhook/job-distribution`
 
-| Field | Value |
-|---|---|
-| HTTP Method | `POST` |
-| Path | `job-distribution` |
-| Authentication | None |
-| Respond | Immediately |
+### The Delay Logic (MongoDB Node)
+The MongoDB Query uses a complex `$or` statement to fetch pending jobs. 
+*   **Premium Jobs**: Fetched immediately for `telegram_premium`.
+*   **Premium Delay**: Fetched for `telegram_free` ONLY if 24 hours have passed since they were posted to the premium channel (`premium_posted_at < NOW - 24h`).
+*   **Regular Jobs**: Fetched for `telegram_free`.
 
-**Full URL:** `https://skillhire-n8n.onrender.com/webhook/job-distribution`
-
----
-
-### Node 2 — MongoDB Query (Fetch Pending Jobs)
-
-**Node type:** `MongoDB`  
-**Operation:** `Find`
-
-| Field | Value |
-|---|---|
-| Collection | `jobs` |
-| Query | `{ "distribution_status": "pending", "is_active": true }` |
-| Limit | `50` |
-| Projection | `{ "title": 1, "company": 1, "location": 1, "apply_link": 1, "is_premium": 1, "salary_status": 1 }` |
-
-> **Credentials:** Use your MongoDB Atlas connection string (add as n8n credential of type `MongoDB`).
-
-**Handle empty results:** Add an `IF` node after this to check `{{ $json.length > 0 }}`. If false, stop the workflow with a `NoOp` node.
+### Discord Replacement (Summary)
+The previous "Send WhatsApp Email" node has been replaced by a direct `discord webhook` integration pointing to your community channel. 
+-   **URL**: `https://discord.com/api/webhooks/...`
+-   **Method**: `POST` -> JSON payload with `{ "content": "..." }`
 
 ---
 
-### Node 3 — Split by Premium Status
+## 2. Make.com LinkedIn Integration
 
-**Node type:** `IF`  
-**Condition:** `{{ $json.is_premium === true }}`
+Instead of dealing with native LinkedIn node constraints on n8n (API blocks/First-party restrictions), the workflow delegates the final API submission to Make.com Webhooks.
 
-- **True branch** → Premium Telegram channel
-- **False branch** → Free Telegram channel
+**Job Posting Pipeline (Daily)**
+-   Builds Context -> Groq Llama Generates caption -> OG Image generation is cached.
+-   HTTP POST to: `https://hook.eu1.make.com/m0h201rlug3e6t54asf4jkm5ncfmiwpb`
 
----
-
-### Node 4a — Format Premium Message
-
-**Node type:** `Set`
-
-Set a field `message` with the value:
-
-```
-🚀 {{ $json.title }} @ {{ $json.company }}
-
-📍 {{ $json.location }}
-💰 {{ $json.salary_status || 'Competitive CTC' }}
-
-⚡ Premium Early Access — Apply before others!
-
-👉 Apply Now
-{{ $json.apply_link }}
-
-#SkillHire #PremiumJobs #TechJobs
-```
-
-Also set `channel_name` = `telegram_premium`
-
----
-
-### Node 4b — Format Free Message
-
-**Node type:** `Set`
-
-Set a field `message` with the value:
-
-```
-🔥 {{ $json.title }} @ {{ $json.company }}
-
-📍 {{ $json.location }}
-💰 {{ $json.salary_status || 'Competitive CTC' }}
-
-📚 Crack the interview: [DSA + System Design Bundle](AFFILIATE_LINK)
-
-👉 Apply Now
-{{ $json.apply_link }}
-
-💎 Premium members got this job 24h earlier!
-👉 Upgrade at skillhire.in
-
-#SkillHire #FresherJobs #TechJobs
-```
-
-Also set `channel_name` = `telegram_free`
-
----
-
-### Node 5 — Batch Jobs (Rate Limit Protection)
-
-**Node type:** `SplitInBatches`
-
-| Field | Value |
-|---|---|
-| Batch Size | `5` |
-| Options → Reset | `false` |
-
-After sending each batch, add a **Wait** node:  
-- **Duration:** `1` second
-
-This prevents Telegram API rate-limit errors (30 messages/second limit).
-
----
-
-### Node 6 — Send to Telegram
-
-**Node type:** `Telegram`  
-**Operation:** `Send Message`
-
-| Field | Value |
-|---|---|
-| Chat ID | `{{ $json.channel_name === 'telegram_premium' ? '@SkillHirePremium' : '@SkillHireFree' }}` |
-| Text | `{{ $json.message }}` |
-| Parse Mode | `Markdown` |
-| Disable Link Preview | `false` |
-
-> **Credentials:** Add a Telegram Bot token as an n8n credential. Create a bot via [@BotFather](https://t.me/BotFather) and add the bot to both channels as Admin.
-
----
-
-### Node 7 — Update MongoDB (Mark as Distributed)
-
-**Node type:** `MongoDB`  
-**Operation:** `Update`
-
-| Field | Value |
-|---|---|
-| Collection | `jobs` |
-| Filter | `{ "_id": { "$oid": "{{ $json._id }}" } }` |
-| Update | See below |
-| Upsert | `false` |
-
-**Update payload:**
-```json
-{
-  "$set": {
-    "distribution_status": "distributed"
-  },
-  "$push": {
-    "distributed_channels": "{{ $json.channel_name }}"
-  }
-}
-```
-
----
-
-## Error Handling
-
-| Scenario | Handling |
-|---|---|
-| No pending jobs | `IF` node stops workflow silently (NoOp) |
-| Telegram API rate limit | `SplitInBatches` + 1s `Wait` node prevents this |
-| Telegram send failure | n8n auto-retry (set retry on error = 3 attempts) |
-| MongoDB update failure | Log error via n8n `Error Trigger` workflow |
-| Webhook called with no secret | Workflow runs safely — query returns 0 if nothing pending |
+**Organic Audience Pipeline (Every 2 Days)**
+-   Groq Llama Generates technical post -> Groq Generates Short Title -> OG Image created based on title.
+-   HTTP POST to: `https://hook.eu1.make.com/vjf19g0id7rj09i2fklwqr5hj7mk75yu`
 
 ---
 
@@ -197,30 +78,9 @@ This prevents Telegram API rate-limit errors (30 messages/second limit).
 
 | Credential | Type | Value |
 |---|---|---|
-| MongoDB Atlas | `MongoDB` | Your Atlas connection string from `MONGODB_URI` |
+| MongoDB Atlas | `MongoDB` | Connection URI. **Must whitelist Droplet IP: 165.22.214.124** |
 | Telegram Bot | `Telegram API` | Bot token from @BotFather |
+| Groq | `OpenAI` | Groq API Key (Override base URL to `https://api.groq.com/openai/v1`) |
+| Instagram | `Meta Publisher`| Re-auth your professional account |
 
----
-
-## Future Channels (Expansion)
-
-When adding WhatsApp / LinkedIn / Reddit:
-
-1. After the `IF (is_premium)` split, add additional `IF` branches or a `Switch` node
-2. Each new channel gets its own Format + Send + MongoDB Update chain
-3. Update the `channel_name` values pushed to `distributed_channels` accordingly
-4. The `distribution_status` field logic remains the same — marking as `"distributed"` after all channels are done
-
----
-
-## Activation Checklist
-
-- [ ] Deploy n8n on Render at `skillhire-n8n.onrender.com`
-- [ ] Set up UptimeRobot to ping `https://skillhire-n8n.onrender.com` every 5 minutes
-- [ ] Create Telegram bot via @BotFather
-- [ ] Add bot as Admin to both `@SkillHirePremium` and `@SkillHireFree` channels
-- [ ] Add MongoDB Atlas credential in n8n
-- [ ] Add Telegram Bot credential in n8n
-- [ ] Build the workflow as described above and **Activate** it
-- [ ] Add GitHub secret `N8N_WEBHOOK_URL` = `https://skillhire-n8n.onrender.com/webhook/job-distribution`
-- [ ] Test by manually running the GitHub Actions workflow (`workflow_dispatch`)
+*(Discord and Make.com are HTTP nodes and do not require formal n8n credentials since the URLs contain the access keys).*

@@ -73,5 +73,5 @@ jobs:
 
       - name: Trigger SkillHire distribution
         run: |
-          curl -X POST https://primary-production-fc90.up.railway.app/webhook/job-distribution
+          curl -X POST https://n8n.skillhire.in/webhook/job-distribution
 
