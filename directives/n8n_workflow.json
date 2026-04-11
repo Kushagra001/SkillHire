@@ -1,17 +1,24 @@
-
 {
   "nodes": [
     {
       "parameters": {
         "rule": {
-          "interval": [ { "triggerAtHour": 10, "triggerAtMinute": 30 } ]
+          "interval": [
+            {
+              "triggerAtHour": 10,
+              "triggerAtMinute": 30
+            }
+          ]
         }
       },
       "id": "0f0b6e03-f925-4261-b536-c6e90c6dc8a5",
       "name": "Schedule (Every 2 Days)",
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.2,
-      "position": [ -848, 768 ]
+      "position": [
+        -848,
+        768
+      ]
     },
     {
       "parameters": {
@@ -21,18 +28,23 @@
           "messages": [
             {
               "role": "system",
-              "content": "You are a Staff Software Engineer at a top tech company sharing highly engaging career advice on LinkedIn to grow the 'SkillHire' job board audience.\n\nWrite a deeply technical and actionable organic post about ONE of the following topics (pick randomly):\n- A deep-dive technical interview tip (Data Structures, System Design, or Behavioral)\n- A specific mistake freshers make when applying to jobs or building their resume\n- A quick tutorial on a modern tech concept (e.g., How JWTs work, React Hooks vs side effects)\n- A mindset shift for junior developers struggling to get hired\n\nCRITICAL OUTPUT INSTRUCTIONS:\n1. Hook: Start with a strong, counter-intuitive opening statement to grab attention immediately. Keep the opening paragraph crisp (1-2 sentences).\n2. Format & Readability: DO NOT write paragraphs longer than 2-3 sentences. Use plenty of white space. DO NOT use markdown bolding/asterisks (**) as LinkedIn does not support them natively. Use emojis like 🔹 or 👉 instead of standard bullet points to keep it visually appealing.\n3. Extreme Value: Go deep. Instead of generic advice, provide specific architectural tradeoffs, edge cases, or real-world scenarios. Make the reader think 'Wow, I actually learned something new today'. Provide actionable numbers if relevant.\n4. Length: The post must be substantial (250-400 words) but highly scannable.\n5. Closing: End with a single thought-provoking question for the audience.\n6. Hashtags: Add exactly 3 targeted hashtags at the very bottom.\n\nOutput ONLY the final LinkedIn post text. Do not include markdown fences or any other text."
+              "content": "You are a Staff Software Engineer at a top tech company sharing highly engaging career advice on LinkedIn to grow the 'SkillHire' job board audience.\\n\\nWrite a deeply technical and actionable organic post about ONE of the following topics (pick randomly):\\n- A deep-dive technical interview tip (Data Structures, System Design, or Behavioral)\\n- A specific mistake freshers make when applying to jobs or building their resume\\n- A quick tutorial on a modern tech concept (e.g., How JWTs work, React Hooks vs side effects)\\n- A mindset shift for junior developers struggling to get hired\\n\\nCRITICAL OUTPUT INSTRUCTIONS:\\n1. Hook: Start with a strong, counter-intuitive opening statement to grab attention immediately. Keep the opening paragraph crisp (1-2 sentences).\\n2. Format & Readability: DO NOT write paragraphs longer than 2-3 sentences. Use plenty of white space. DO NOT use markdown bolding/asterisks (**) as LinkedIn does not support them natively. Use emojis like \ud83d\udd39 or \ud83d\udc49 instead of standard bullet points to keep it visually appealing.\\n3. Extreme Value: Go deep. Instead of generic advice, provide specific architectural tradeoffs, edge cases, or real-world scenarios. Make the reader think 'Wow, I actually learned something new today'. Provide actionable numbers if relevant.\\n4. Length: The post must be substantial (250-400 words) but highly scannable.\\n5. Closing: End with a single thought-provoking question for the audience.\\n6. Hashtags: Add exactly 3 targeted hashtags at the very bottom.\\n\\nOutput ONLY the final LinkedIn post text. Do not include markdown fences or any other text."
             }
           ]
         },
-        "options": { "temperature": 0.8 },
+        "options": {
+          "temperature": 0.8
+        },
         "requestOptions": {}
       },
       "id": "e2dd1c81-efda-465c-a4ba-2cfaae98d64a",
       "name": "Generate Post Text",
       "type": "n8n-nodes-base.openAi",
       "typeVersion": 1.1,
-      "position": [ -576, 768 ]
+      "position": [
+        -576,
+        768
+      ]
     },
     {
       "parameters": {
@@ -41,29 +53,80 @@
         "prompt": {
           "messages": [
             {
-              "content": "={{ 'Based on the following LinkedIn post, generate a very short, punchy 3-to-4 word title for an image graphic (e.g., "Mastering System Design"). \n\nOutput ONLY the 3-to-4 word title as plain text without any quotes or punctuation.\n\nLinkedIn Post:\n' + $json.message.content }}"
+              "content": "={{ 'Based on the following LinkedIn post, generate a very short, punchy 3-to-4 word title for an image graphic (e.g., \"Mastering System Design\"). \\n\\nOutput ONLY the 3-to-4 word title as plain text without any quotes or punctuation.\\n\\nLinkedIn Post:\\n' + $json.message.content }}"
             }
           ]
         },
-        "options": { "temperature": 0.4 },
+        "options": {
+          "temperature": 0.4
+        },
         "requestOptions": {}
       },
       "id": "8c15392b-926c-46d5-a924-6f8f7ec80e6d",
       "name": "Generate Short Title",
       "type": "n8n-nodes-base.openAi",
       "typeVersion": 1.1,
-      "position": [ -288, 768 ]
+      "position": [
+        -288,
+        768
+      ]
     },
     {
       "parameters": {
-        "url": "=https://skillhire.in/api/og?title={{ encodeURIComponent($json.message.content) }}&subtitle=Career%20Advice%20for%20Modern%20Developers",
-        "options": { "response": { "response": { "responseFormat": "file" } } }
+        "url": "=https://skillhire.in/api/og?title={{ encodeURIComponent($json.message.content) }}&subtitle=Career%20Advice%20for%20Modern%20Developers&type=organic",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
       },
       "id": "b04b1b69-328c-47ca-962f-d97099928f4e",
       "name": "Generate Branded Image",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.1,
-      "position": [ -16, 768 ]
+      "position": [
+        -16,
+        768
+      ],
+      "notesInFlow": true,
+      "notes": "Downloads binary image from your own Next.js OG API"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.imgbb.com/1/upload",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "key",
+              "value": "97c9412e6fa6e49e104ce5d135dec4e9"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "parameterType": "formBinaryData",
+              "name": "image",
+              "inputDataFieldName": "data"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "imgbb-organic-123",
+      "name": "Upload to ImgBB (Organic)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        112,
+        768
+      ]
     },
     {
       "parameters": {
@@ -71,43 +134,72 @@
         "url": "https://hook.eu1.make.com/vjf19g0id7rj09i2fklwqr5hj7mk75yu",
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={ "text": "{{ $('Generate Post Text').item.json.message.content }}\\n\\n━━━━━━━━━━━━━━\\n🔔 Join 5,000+ devs getting Zero-Day job alerts in our Private Telegram: https://t.me/skillhire_jobs\\n\\n(Follow SkillHire for more daily tech deep-dives and career insights!)", "image_url": "https://skillhire.in/api/og?title={{ encodeURIComponent($('Generate Short Title').item.json.message.content) }}&subtitle=Career%20Advice%20for%20Modern%20Developers&type=organic" }"
+        "jsonBody": "={ \"text\": \"{{ $('Generate Post Text').item.json.message.content }}\\\\n\\\\n\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\\\\n\ud83d\udd14 Join 5,000+ devs getting Zero-Day job alerts in our Private Telegram: https://t.me/skillhire_jobs\\\\n\\\\n(Follow SkillHire for more daily tech deep-dives and career insights!)\", \"image_url\": \"https://skillhire.in/api/og?title={{ encodeURIComponent($('Generate Short Title').item.json.message.content) }}&subtitle=Career%20Advice%20for%20Modern%20Developers&type=organic\" }"
       },
       "id": "3b7b380b-8cf6-4168-b0a8-d569452de492",
-      "name": "LinkedIn Organic Post",
+      "name": "Make - LinkedIn Organic Post",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.1,
-      "position": [ 240, 768 ]
+      "position": [
+        368,
+        768
+      ]
     },
     {
       "parameters": {
-        "conditions": { "number": [ { "value1": "={{ $json.total_jobs }}", "operation": "larger" } ] }
+        "conditions": {
+          "number": [
+            {
+              "value1": "={{ $json.total_jobs }}",
+              "operation": "larger"
+            }
+          ]
+        }
       },
       "id": "313006f3-abd4-49fd-afbd-ded27045245b",
       "name": "IF Jobs Found",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
-      "position": [ -240, 192 ]
+      "position": [
+        -240,
+        192
+      ]
     },
     {
-      "parameters": { "errorMessage": "No new jobs found in the last 24 hours. Workflow stopped." },
+      "parameters": {
+        "errorMessage": "No new jobs found in the last 24 hours. Workflow stopped."
+      },
       "id": "6116f069-46c4-46f0-81e5-2d9ece4a7010",
       "name": "Stop (No Jobs)",
       "type": "n8n-nodes-base.stopAndError",
       "typeVersion": 1,
-      "position": [ -240, 400 ]
+      "position": [
+        -240,
+        400
+      ]
     },
     {
       "parameters": {
         "url": "=https://skillhire.in/api/og?company={{ encodeURIComponent($json.best_job_company) }}&role={{ encodeURIComponent($json.best_job_title) }}",
-        "options": { "response": { "response": { "responseFormat": "file" } } }
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
       },
       "id": "7307995f-5f28-4861-ba71-4a742a3d41fd",
       "name": "Fetch OG Image",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.1,
-      "position": [ 16, 400 ],
-      "onError": "continueRegularOutput"
+      "position": [
+        16,
+        400
+      ],
+      "notesInFlow": true,
+      "onError": "continueRegularOutput",
+      "notes": "Retry enabled: 3 attempts, 5s wait. Downloads binary PNG from Next.js OG endpoint."
     },
     {
       "parameters": {},
@@ -115,16 +207,26 @@
       "name": "Merge (Caption + Image)",
       "type": "n8n-nodes-base.merge",
       "typeVersion": 2.1,
-      "position": [ 272, 304 ],
+      "position": [
+        272,
+        304
+      ],
       "alwaysOutputData": true
     },
     {
       "parameters": {
         "assignments": {
           "assignments": [
-            { "id": "caption-var-001", "name": "caption", "value": "={{ $json.message.content }}", "type": "string" },
-            { "id": "cta-var-001", "name": "linkedin_caption", "value": "={{ $json.message.content + '\\n\\n🔗 Apply: https://skillhire.in/jobs\\n\\nJoin our Telegram for Zero-Day job alerts: https://t.me/skillhire_jobs\\n\\n#SkillHire #TechJobs #SoftwareEngineering #Hiring #FreshersJobs' }}", "type": "string" },
-            { "id": "ig-caption-var-001", "name": "instagram_caption", "value": "={{ $json.message.content + '\\n\\n🔗 Link in bio to apply!\\n\\n#SkillHire #TechJobs #Hiring #FreshersJobs #SoftwareDeveloper #JobAlert' }}", "type": "string" }
+            {
+              "id": "cta-var-001",
+              "value": "={{ $json.message.content + '\\\\n\\\\n\ud83d\udd17 Apply: https://skillhire.in/jobs\\\\n\\\\nJoin our Telegram for Zero-Day job alerts: https://t.me/skillhire_jobs\\\\n\\\\n#SkillHire #TechJobs #SoftwareEngineering #Hiring #FreshersJobs' }}"
+            },
+            {
+              "id": "ig-caption-var-001",
+              "name": "instagram_caption",
+              "value": "={{ JSON.parse($json.message.content).instagram_caption }}",
+              "type": "string"
+            }
           ]
         },
         "options": {}
@@ -133,38 +235,61 @@
       "name": "Set Caption Variables",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
-      "position": [ 496, 304 ]
+      "position": [
+        496,
+        304
+      ]
     },
     {
-      "parameters": { "rule": { "interval": [ { "triggerAtHour": 9 } ] } },
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 9
+            }
+          ]
+        }
+      },
       "id": "1e17c5ed-1fb6-411d-88ae-cb28d1c1c7a7",
       "name": "Schedule (9:00 AM)1",
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.2,
-      "position": [ -912, 192 ]
+      "position": [
+        -912,
+        192
+      ]
     },
     {
       "parameters": {
         "collection": "jobs",
-        "options": { "limit": 50, "sort": "={{ JSON.stringify({ created_at: -1 }) }}" },
-        "query": "={{ JSON.stringify({ is_active: true, created_at: { $gt: { $date: new Date(Date.now() - 86400000).toISOString() } } }) }}"
+        "options": {
+          "limit": 50,
+          "sort": "={{ JSON.stringify({ created_at: -1 }) }}"
+        },
+        "query": "={{ JSON.stringify({ is_active: true, created_at: { $gt: new Date(Date.now() - 86400000).toISOString() } }) }}"
       },
       "id": "6f4470e5-df89-47ce-8de2-be3a04c2b4a8",
       "name": "MongoDB (Last 24h Jobs)1",
       "type": "n8n-nodes-base.mongoDb",
       "typeVersion": 1,
-      "position": [ -688, 192 ],
+      "position": [
+        -688,
+        192
+      ],
       "alwaysOutputData": true
     },
     {
       "parameters": {
-        "jsCode": "const jobs = $input.all().map(item => item.json);\n\nif (jobs.length === 0) return [{ json: { total_jobs: 0 } }];\n\nconst entryLevel = jobs.filter(j => (j.experience && j.experience.toLowerCase().includes('fresher')) || !j.experience).slice(0, 5);\n\nlet waText = "*🚀 Today's Top 5 Handpicked Tech Jobs!* \\n\\n";\nentryLevel.forEach(job => {\n  waText += `💼 *${job.title}* at *${job.company}*\\n📍 ${job.location || 'Remote'}\\n💰 ${job.salary_status || 'Competitive CTC'}\\n👉 Apply: ${job.apply_link}\\n\\n`;\n});\nwaText += "🔥 *Join Premium for instant alerts:* skillhire.in/#pricing";\n\nconst topJobsSummary = jobs.slice(0, 5).map(j => `- ${j.title} at ${j.company} (${j.location})`).join('\\n');\nconst bestJob = jobs[0];\n\nreturn [{\n  json: {\n    discord_text: waText,\n    ai_context: topJobsSummary,\n    total_jobs: jobs.length,\n    best_job_company: bestJob.company,\n    best_job_title: bestJob.title\n  }\n}];"
+        "jsCode": "const jobs = $input.all().map(item => item.json);\n\nif (jobs.length === 0) return [{ json: { total_jobs: 0 } }];\n\n// Top 5 Entry Level Jobs for WhatsApp\nconst entryLevel = jobs\n  .filter(j => (j.experience && j.experience.toLowerCase().includes('fresher')) || !j.experience)\n  .slice(0, 5);\n\nlet waText = \"*\ud83d\ude80 Today's Top 5 Handpicked Tech Jobs!* \\n\\n\";\nentryLevel.forEach(job => {\n  waText += `\ud83d\udcbc *${job.title}* at *${job.company}*\\n\ud83d\udccd ${job.location || 'Remote'}\\n\ud83d\udcb0 ${job.salary_status || 'Competitive CTC'}\\n\ud83d\udc49 Apply: ${job.apply_link}\\n\\n`;\n});\nwaText += \"\ud83d\udd25 *Join Premium for instant alerts:* skillhire.in/#pricing\";\n\n// Top 5 summary for AI caption\nconst topJobsSummary = jobs.slice(0, 5).map(j => `- ${j.title} at ${j.company} (${j.location})`).join('\\n');\n\n// Best single job for OG image\nconst bestJob = jobs[0];\n\nreturn [{\n  json: {\n    discord_text: waText,\n    ai_context: topJobsSummary,\n    total_jobs: jobs.length,\n    best_job_company: bestJob.company,\n    best_job_title: bestJob.title\n  }\n}];"
       },
       "id": "101603a3-3b0c-4065-b48f-00c8d7bd04b3",
       "name": "Aggregate & Format Data1",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [ -464, 192 ]
+      "position": [
+        -464,
+        192
+      ]
     },
     {
       "parameters": {
@@ -172,33 +297,41 @@
         "url": "https://discord.com/api/webhooks/1484456988476702821/r-lEqsd7vIfqwIU6cWTYORpNJnLuxdw84xdpmi0sX82Lbu39bTbQopQcullVBZ8GcFpW",
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={ "content": "{{ $json.discord_text }}" }"
+        "jsonBody": "={{ JSON.stringify({content: $json.discord_text}) }}"
       },
       "id": "5416118e-d463-4733-90bf-10354d97c749",
-      "name": "Discord Webhook (Summary)",
+      "name": "Discord Webhook",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.1,
-      "position": [ 16, -16 ]
+      "position": [
+        16,
+        -16
+      ]
     },
     {
       "parameters": {
         "resource": "chat",
-        "model": "=llama-3.3-70b-versatile",
+        "chatModel": "=llama-3.3-70b-versatile",
         "prompt": {
           "messages": [
             {
-              "content": "={{ 'You are doing dual-channel social curation for the tech job board SkillHire. We just added ' + $json.total_jobs + ' new tech jobs today. Highlights:\\n\\n' + $json.ai_context + '\\n\\nTask: Write two DISTINCT captions for these jobs.\\n1. "linkedin_caption": Professional but engaging tone, authoritative, emphasize career growth. End with "Apply: https://skillhire.in/jobs\\n\\nJoin our Telegram for Zero-Day job alerts: https://t.me/skillhire_jobs". Include 5 targeted hashtags.\\n2. "instagram_caption": High-energy, gen-z/millennial friendly, urgent. Use many emojis. Shorter and punchier. End with "Link in Bio to apply & join our Telegram! 🔗". Include 4 trending hashtags.\\n\\nOutput ONLY a valid JSON object with exactly two string properties: "linkedin_caption" and "instagram_caption". Do NOT wrap in markdown or fences.' }}"
+              "content": "={{ 'You are doing dual-channel social curation for the tech job board SkillHire. We just added ' + $json.total_jobs + ' new tech jobs today. Highlights:\\\\n\\\\n' + $json.ai_context + '\\\\n\\\\nTask: Write two DISTINCT captions for these jobs.\\\\n1. \"linkedin_caption\": Professional but engaging tone, authoritative, emphasize career growth. End with \"Apply: https://skillhire.in/jobs\\\\n\\\\nJoin our Telegram for Zero-Day job alerts: https://t.me/skillhire_jobs\". Include 5 targeted hashtags.\\\\n2. \"instagram_caption\": High-energy, gen-z/millennial friendly, urgent. Use many emojis. Shorter and punchier. End with \"Link in Bio to apply & join our Telegram! \ud83d\udd17\". Include 4 trending hashtags.\\\\n\\\\nOutput ONLY a valid JSON object with exactly two string properties: \"linkedin_caption\" and \"instagram_caption\". Do NOT wrap in markdown or backticks.' }}"
             }
           ]
         },
-        "options": {},
+        "options": {
+          "responseFormat": "json_object"
+        },
         "requestOptions": {}
       },
       "id": "4bb2a4f8-53a6-4e9f-8289-9bbb4af9f041",
       "name": "Groq - Write Caption1",
       "type": "n8n-nodes-base.openAi",
       "typeVersion": 1,
-      "position": [ 16, 208 ]
+      "position": [
+        16,
+        208
+      ]
     },
     {
       "parameters": {
@@ -206,25 +339,71 @@
         "url": "https://hook.eu1.make.com/m0h201rlug3e6t54asf4jkm5ncfmiwpb",
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={ "text": "{{ $json.linkedin_caption }}", "image_url": "https://skillhire.in/api/og?company={{ encodeURIComponent($(\'Aggregate & Format Data1\').item.json.best_job_company) }}&role={{ encodeURIComponent($(\'Aggregate & Format Data1\').item.json.best_job_title) }}" }"
+        "jsonBody": "={{ JSON.stringify({text: $json.linkedin_caption, image_url: $json.data.url}) }}"
       },
       "id": "96fbd5ec-2af9-49f1-b6d4-abbf7a29b737",
-      "name": "LinkedIn Image Post1",
+      "name": "Make - LinkedIn Image Post",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.1,
-      "position": [ 720, 160 ]
+      "position": [
+        720,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.imgbb.com/1/upload",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "key",
+              "value": "YOUR_IMGBB_API_KEY_HERE"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "image",
+              "parameterType": "form-data-binary",
+              "inputDataFieldName": "data"
+            }
+          ]
+        }
+      },
+      "id": "imgbb-12345",
+      "name": "Upload to ImgBB",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        720,
+        300
+      ]
     },
     {
       "parameters": {
         "igUserId": "17841443320246110",
-        "mediaUrl": "=https://skillhire.in/api/og?company={{ encodeURIComponent($('Aggregate & Format Data1').item.json.best_job_company) }}&role={{ encodeURIComponent($('Aggregate & Format Data1').item.json.best_job_title) }}",
-        "caption": "={{ $json.instagram_caption }}"
+        "mediaUrl": "={{ $('Upload to ImgBB').item.json.data.url }}",
+        "caption": "={{ $('Set Caption Variables').item.json.instagram_caption }}"
       },
       "type": "n8n-nodes-meta-publisher.metaPublisher",
       "typeVersion": 1,
-      "position": [ 720, 448 ],
+      "position": [
+        960,
+        448
+      ],
       "id": "f5b860dc-7ecd-40dd-bfe4-05fd26e3c396",
-      "name": "Publish image on instagram"
+      "name": "Publish image on instagram",
+      "credentials": {
+        "metaApi": {
+          "id": "meta-api-id",
+          "name": "Meta API"
+        }
+      }
     },
     {
       "parameters": {
@@ -236,7 +415,11 @@
       "name": "Webhook",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 1,
-      "position": [ -1136, -512 ]
+      "position": [
+        -1136,
+        -512
+      ],
+      "webhookId": "job-distribution"
     },
     {
       "parameters": {
@@ -244,38 +427,82 @@
         "options": {
           "limit": 100,
           "sort": "={{ JSON.stringify({ created_at: 1 }) }}",
-          "projection": "={{ JSON.stringify({ \"_id\": 1, \"title\": 1, \"company\": 1, \"location\": 1, \"apply_link\": 1, \"is_premium\": 1, \"salary_status\": 1, \"experience\": 1, \"distributed_channels\": 1, \"premium_posted_at\": 1 }) }}"
+          "projection": "={{ JSON.stringify({\n  \"_id\": 1,\n  \"title\": 1,\n  \"company\": 1,\n  \"location\": 1,\n  \"apply_link\": 1,\n  \"is_premium\": 1,\n  \"salary_status\": 1,\n  \"experience\": 1,\n  \"distributed_channels\": 1,\n  \"premium_posted_at\": 1\n}\n) }}"
         },
-        "query": "={{ JSON.stringify({ is_active: true, $or: [ { is_premium: false, distributed_channels: { $nin: ['telegram_free'] } }, { is_premium: true, distributed_channels: { $nin: ['telegram_premium'] } }, { is_premium: true, distributed_channels: { $in: ['telegram_premium'], $nin: ['telegram_free'] }, premium_posted_at: { $lt: { $date: new Date(Date.now() - 86400000).toISOString() } } } ] }) }}"
+        "query": "={{ JSON.stringify({ is_active: true, $or: [ { is_premium: false, distributed_channels: { $nin: ['telegram_free'] } }, { is_premium: true, distributed_channels: { $nin: ['telegram_premium'] } }, { is_premium: true, distributed_channels: { $in: ['telegram_premium'], $nin: ['telegram_free'] }, premium_posted_at: { $lt: new Date(Date.now() - 86400000).toISOString() } } ] }) }}"
       },
       "id": "40f83cf4-a6bc-4610-855e-068e7138444b",
       "name": "MongoDB Query Pending Jobs",
       "type": "n8n-nodes-base.mongoDb",
       "typeVersion": 1,
-      "position": [ -912, -512 ]
+      "position": [
+        -912,
+        -512
+      ]
     },
     {
-      "parameters": { "conditions": { "boolean": [ { "value1": "={{$json !== undefined}}", "value2": true } ] } },
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{$json !== undefined}}",
+              "value2": true
+            }
+          ]
+        }
+      },
       "id": "d8ebcaed-5b07-416e-8147-7dccb3161835",
       "name": "Has Pending Jobs?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
-      "position": [ -672, -512 ]
+      "position": [
+        -672,
+        -512
+      ]
     },
     {
-      "parameters": { "conditions": { "boolean": [ { "value1": "={{ $json.is_premium === true && !($json.distributed_channels || []).includes('telegram_premium') }}", "value2": true } ] } },
+      "parameters": {},
+      "id": "4576b851-a3fa-4699-a586-6ed99e1fd4e7",
+      "name": "NoOp",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        -464,
+        -336
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $json.is_premium === true && !($json.distributed_channels || []).includes('telegram_premium') }}",
+              "value2": true
+            }
+          ]
+        }
+      },
       "id": "55dd4924-7e37-414f-9748-f847b5a02ebb",
       "name": "Is Premium?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
-      "position": [ -464, -608 ]
+      "position": [
+        -464,
+        -608
+      ]
     },
     {
       "parameters": {
         "values": {
           "string": [
-            { "name": "message", "value": "=🚨 <b>Top Tier Role Alert!</b>\n\n💻 <b>{{$json.title}}</b> at <b>{{$json.company}}</b>\n\n📍 <b>Location:</b> {{$json.location}}\n💰 <b>Estimated Salary:</b> {{$json.salary_status || 'Competitive CTC'}}\n🎓 <b>Experience:</b> {{$json.experience || 'Fresher'}}\n\n⭐ <b>Premium Early Access</b>\nBe among the first applicants.\n\n🚀 <b>Apply Now (Direct Link):</b>\n<a href=\"{{$json.apply_link}}\">{{$json.apply_link}}</a>\n\n━━━━━━━━━━━━━━\n#SkillHire #PremiumJobs #TechJobs" },
-            { "name": "channel_name", "value": "telegram_premium" }
+            {
+              "name": "message",
+              "value": "=\ud83d\udea8 <b>Top Tier Role Alert!</b>\\n\\n\ud83d\udcbb <b>{{$json.title}}</b> at <b>{{$json.company}}</b>\\n\\n\ud83d\udccd <b>Location:</b> {{$json.location}}\\n\ud83d\udcb0 <b>Estimated Salary:</b> {{$json.salary_status || 'Competitive CTC'}}\\n\ud83c\udf93 <b>Experience:</b> {{$json.experience || 'Fresher'}}\\n\\n\u2b50 <b>Premium Early Access</b>\\nBe among the first applicants.\\n\\n\ud83d\ude80 <b>Apply Now (Direct Link):</b>\\n<a href=\\\"{{$json.apply_link}}\\\">{{$json.apply_link}}</a>\\n\\n\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\\n#SkillHire #PremiumJobs #TechJobs"
+            },
+            {
+              "name": "channel_name",
+              "value": "telegram_premium"
+            }
           ]
         },
         "options": {}
@@ -284,14 +511,23 @@
       "name": "Format Premium",
       "type": "n8n-nodes-base.set",
       "typeVersion": 2,
-      "position": [ -240, -736 ]
+      "position": [
+        -240,
+        -736
+      ]
     },
     {
       "parameters": {
         "values": {
           "string": [
-            { "name": "message", "value": "=🚨 <b>Top Tier Role Alert!</b>\n\n💻 <b>{{$json.title}}</b> (100% Verified)\n\n📍 <b>Location:</b> {{$json.location}}\n💰 <b>Estimated Salary:</b> {{$json.salary_status || 'Competitive CTC'}}\n🏢 <b>Company:</b> <i>Hidden</i> 🔒\n\n━━━━━━━━━━━━━━\n[ <i>We just dropped the direct link to this in the Premium channel 24 hours before anyone else.</i> ]\n\n⚡ <b>Want instant, early access before positions close?</b>\nUpgrade to Premium to apply instantly → <a href=\"https://skillhire.in/#pricing\">SkillHire Premium Checkout</a>\n\n#SkillHire #FresherJobs #TechJobs" },
-            { "name": "channel_name", "value": "telegram_free" }
+            {
+              "name": "message",
+              "value": "=\ud83d\udea8 <b>Top Tier Role Alert!</b>\\n\\n\ud83d\udcbb <b>{{$json.title}}</b> (100% Verified)\\n\\n\ud83d\udccd <b>Location:</b> {{$json.location}}\\n\ud83d\udcb0 <b>Estimated Salary:</b> {{$json.salary_status || 'Competitive CTC'}}\\n\ud83c\udfe2 <b>Company:</b> <i>Hidden</i> \ud83d\udd12\\n\\n\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\\n[ <i>We just dropped the direct link to this in the Premium channel 24 hours before anyone else.</i> ]\\n\\n\u26a1 <b>Want instant, early access before positions close?</b>\\nUpgrade to Premium to apply instantly \u2192 <a href=\\\"https://skillhire.in/#pricing\\\">SkillHire Premium Checkout</a>\\n\\n#SkillHire #FresherJobs #TechJobs"
+            },
+            {
+              "name": "channel_name",
+              "value": "telegram_free"
+            }
           ]
         },
         "options": {}
@@ -300,57 +536,101 @@
       "name": "Format Free",
       "type": "n8n-nodes-base.set",
       "typeVersion": 2,
-      "position": [ -240, -528 ]
+      "position": [
+        -240,
+        -528
+      ]
     },
     {
-      "parameters": { "batchSize": 1, "options": { "reset": false } },
+      "parameters": {
+        "batchSize": 1,
+        "options": {
+          "reset": false
+        }
+      },
       "id": "4a260542-9939-4a12-9092-c98f02192547",
       "name": "SplitInBatches",
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 2,
-      "position": [ 304, -592 ]
+      "position": [
+        304,
+        -592
+      ]
     },
     {
-      "parameters": { "unit": "seconds" },
+      "parameters": {
+        "unit": "seconds"
+      },
       "id": "c184dc42-0bf5-4984-8995-0c6c1c7f3f15",
       "name": "Wait (Rate Limit)",
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1,
-      "position": [ 528, -592 ]
+      "position": [
+        528,
+        -592
+      ],
+      "webhookId": "d9b812d3-3e26-4417-8a76-071b6b4250c3"
     },
     {
       "parameters": {
         "chatId": "={{ $json[\"channel_name\"] === \"telegram_premium\" ? \"-1003613550186\" : \"-1003783389662\" }}",
         "text": "={{ $json.message }}",
-        "additionalFields": { "disable_web_page_preview": false, "parse_mode": "HTML" }
+        "additionalFields": {
+          "disable_web_page_preview": false,
+          "parse_mode": "HTML"
+        }
       },
       "id": "bee4a865-41f2-42b7-b436-d117e7ccd2c1",
       "name": "Telegram Send",
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1,
-      "position": [ 960, -800 ]
+      "position": [
+        960,
+        -800
+      ],
+      "webhookId": "bfc5a8ae-62f8-4673-9542-ed1444d53f73",
+      "alwaysOutputData": true
     },
     {
       "parameters": {
         "operation": "update",
         "collection": "jobs",
-        "updateKey": "={{ JSON.stringify({ $set: Object.assign({ distribution_status: 'distributed' }, $json.channel_name === 'telegram_premium' ? { premium_posted_at: { $date: new Date().toISOString() } } : {}), $addToSet: { distributed_channels: $json.channel_name } }) }}",
-        "fields": "_id",
+        "updateKey": "_id",
+        "fields": "distribution_status, distributed_channels, premium_posted_at",
         "options": {}
       },
       "id": "24808a5f-f5ba-4735-892e-293090ebd50f",
       "name": "Update MongoDB",
       "type": "n8n-nodes-base.mongoDb",
       "typeVersion": 1,
-      "position": [ 1568, -592 ]
+      "position": [
+        1568,
+        -592
+      ],
+      "alwaysOutputData": true
     },
     {
       "parameters": {
         "assignments": {
           "assignments": [
-            { "id": "481a79e8-ca52-4ee5-b766-782c8169dbf6", "name": "channel_name", "value": "={{ $json.channel_name }}", "type": "string" },
-            { "id": "0f3b83e8-f5f3-4cab-a356-23533ef983c9", "name": "_id", "value": "={{ $json._id }}", "type": "string" },
-            { "id": "0531db34-b7be-4601-af46-452abe3aa43d", "name": "message", "value": "={{ $json.message }}", "type": "string" }
+            {
+              "id": "481a79e8-ca52-4ee5-b766-782c8169dbf6",
+              "name": "channel_name",
+              "value": "={{ $json.channel_name }}",
+              "type": "string"
+            },
+            {
+              "id": "0f3b83e8-f5f3-4cab-a356-23533ef983c9",
+              "name": "_id",
+              "value": "={{ $json._id }}",
+              "type": "string"
+            },
+            {
+              "id": "0531db34-b7be-4601-af46-452abe3aa43d",
+              "name": "message",
+              "value": "={{ $json.message }}",
+              "type": "string"
+            }
           ]
         },
         "includeOtherFields": true,
@@ -358,15 +638,25 @@
       },
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
-      "position": [ 736, -592 ],
+      "position": [
+        736,
+        -592
+      ],
       "id": "80a6dbc7-7441-4964-a530-83d75570fb83",
       "name": "Restore Job Data"
     },
     {
-      "parameters": { "mode": "combine", "combineBy": "combineByPosition", "options": {} },
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3.2,
-      "position": [ 1152, -592 ],
+      "position": [
+        1152,
+        -592
+      ],
       "id": "1311a5c7-c859-4a7b-b55f-00448a69ce94",
       "name": "Merge"
     },
@@ -374,8 +664,24 @@
       "parameters": {
         "assignments": {
           "assignments": [
-            { "id": "dd5a4989-ae7d-42f7-8402-e550f596e926", "name": "distribution_status", "value": "distributed", "type": "string" },
-            { "id": "d3df52f5-2291-47e3-94a8-bdbf3e02b67e", "name": "distributed_channels", "value": "={{ ($json.distributed_channels || []).concat([$json.channel_name]) }}", "type": "array" }
+            {
+              "id": "dd5a4989-ae7d-42f7-8402-e550f596e926",
+              "name": "distribution_status",
+              "value": "distributed",
+              "type": "string"
+            },
+            {
+              "id": "d3df52f5-2291-47e3-94a8-bdbf3e02b67e",
+              "name": "distributed_channels",
+              "value": "={{ ($json.distributed_channels || []).concat([$json.channel_name]) }}",
+              "type": "array"
+            },
+            {
+              "id": "1c36c186-a4b5-469f-8a6a-2685c422b064",
+              "name": "premium_posted_at",
+              "value": "={{ $json.channel_name === 'telegram_premium' ? new Date().toISOString() : ($json.premium_posted_at || null) }}\n",
+              "type": "string"
+            }
           ]
         },
         "includeOtherFields": true,
@@ -383,7 +689,10 @@
       },
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
-      "position": [ 1360, -592 ],
+      "position": [
+        1360,
+        -592
+      ],
       "id": "b1003d31-8c97-4d24-898c-745a30adff87",
       "name": "Edit Fields"
     },
@@ -391,50 +700,363 @@
       "parameters": {},
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3.2,
-      "position": [ 16, -592 ],
+      "position": [
+        16,
+        -592
+      ],
       "id": "d999844c-9468-4360-b273-ed908a73a64b",
       "name": "Merge1"
-    },
-    {
-      "parameters": {},
-      "id": "no-op-node-id",
-      "name": "NoOp",
-      "type": "n8n-nodes-base.noOp",
-      "typeVersion": 1,
-      "position": [ -464, -336 ]
     }
   ],
   "connections": {
-    "Schedule (Every 2 Days)": { "main": [ [ { "node": "Generate Post Text", "type": "main", "index": 0 } ] ] },
-    "Generate Post Text": { "main": [ [ { "node": "Generate Short Title", "type": "main", "index": 0 } ] ] },
-    "Generate Short Title": { "main": [ [ { "node": "Generate Branded Image", "type": "main", "index": 0 } ] ] },
-    "Generate Branded Image": { "main": [ [ { "node": "LinkedIn Organic Post", "type": "main", "index": 0 } ] ] },
-    "IF Jobs Found": {
+    "Schedule (Every 2 Days)": {
       "main": [
-        [ { "node": "Discord Webhook (Summary)", "type": "main", "index": 0 }, { "node": "Groq - Write Caption1", "type": "main", "index": 0 }, { "node": "Fetch OG Image", "type": "main", "index": 0 } ],
-        [ { "node": "Stop (No Jobs)", "type": "main", "index": 0 } ]
+        [
+          {
+            "node": "Generate Post Text",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
-    "Fetch OG Image": { "main": [ [ { "node": "Merge (Caption + Image)", "type": "main", "index": 1 } ] ] },
-    "Merge (Caption + Image)": { "main": [ [ { "node": "Set Caption Variables", "type": "main", "index": 0 } ] ] },
-    "Set Caption Variables": { "main": [ [ { "node": "LinkedIn Image Post1", "type": "main", "index": 0 }, { "node": "Publish image on instagram", "type": "main", "index": 0 } ] ] },
-    "Schedule (9:00 AM)1": { "main": [ [ { "node": "MongoDB (Last 24h Jobs)1", "type": "main", "index": 0 } ] ] },
-    "MongoDB (Last 24h Jobs)1": { "main": [ [ { "node": "Aggregate & Format Data1", "type": "main", "index": 0 } ] ] },
-    "Aggregate & Format Data1": { "main": [ [ { "node": "IF Jobs Found", "type": "main", "index": 0 } ] ] },
-    "Groq - Write Caption1": { "main": [ [ { "node": "Merge (Caption + Image)", "type": "main", "index": 0 } ] ] },
-    "Webhook": { "main": [ [ { "node": "MongoDB Query Pending Jobs", "type": "main", "index": 0 } ] ] },
-    "MongoDB Query Pending Jobs": { "main": [ [ { "node": "Has Pending Jobs?", "type": "main", "index": 0 } ] ] },
-    "Has Pending Jobs?": { "main": [ [ { "node": "Is Premium?", "type": "main", "index": 0 } ], [ { "node": "NoOp", "type": "main", "index": 0 } ] ] },
-    "Is Premium?": { "main": [ [ { "node": "Format Premium", "type": "main", "index": 0 } ], [ { "node": "Format Free", "type": "main", "index": 0 } ] ] },
-    "Format Premium": { "main": [ [ { "node": "Merge1", "type": "main", "index": 0 } ] ] },
-    "Format Free": { "main": [ [ { "node": "Merge1", "type": "main", "index": 1 } ] ] },
-    "SplitInBatches": { "main": [ [ { "node": "Wait (Rate Limit)", "type": "main", "index": 0 } ] ] },
-    "Wait (Rate Limit)": { "main": [ [ { "node": "Restore Job Data", "type": "main", "index": 0 } ] ] },
-    "Telegram Send": { "main": [ [ { "node": "Merge", "type": "main", "index": 0 } ] ] },
-    "Restore Job Data": { "main": [ [ { "node": "Telegram Send", "type": "main", "index": 0 }, { "node": "Merge", "type": "main", "index": 1 } ] ] },
-    "Merge": { "main": [ [ { "node": "Edit Fields", "type": "main", "index": 0 } ] ] },
-    "Edit Fields": { "main": [ [ { "node": "Update MongoDB", "type": "main", "index": 0 } ] ] },
-    "Merge1": { "main": [ [ { "node": "SplitInBatches", "type": "main", "index": 0 } ] ] },
-    "Update MongoDB": { "main": [ [ { "node": "SplitInBatches", "type": "main", "index": 0 } ] ] }
+    "Generate Post Text": {
+      "main": [
+        [
+          {
+            "node": "Generate Short Title",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Short Title": {
+      "main": [
+        [
+          {
+            "node": "Generate Branded Image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Branded Image": {
+      "main": [
+        [
+          {
+            "node": "Upload to ImgBB (Organic)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload to ImgBB (Organic)": {
+      "main": [
+        [
+          {
+            "node": "Make - LinkedIn Organic Post",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF Jobs Found": {
+      "main": [
+        [
+          {
+            "node": "Discord Webhook",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Groq - Write Caption1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Fetch OG Image",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Stop (No Jobs)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch OG Image": {
+      "main": [
+        [
+          {
+            "node": "Merge (Caption + Image)",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge (Caption + Image)": {
+      "main": [
+        [
+          {
+            "node": "Set Caption Variables",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Caption Variables": {
+      "main": [
+        [
+          {
+            "node": "Make - LinkedIn Image Post",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Upload to ImgBB",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload to ImgBB": {
+      "main": [
+        [
+          {
+            "node": "Publish image on instagram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule (9:00 AM)1": {
+      "main": [
+        [
+          {
+            "node": "MongoDB (Last 24h Jobs)1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MongoDB (Last 24h Jobs)1": {
+      "main": [
+        [
+          {
+            "node": "Aggregate & Format Data1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate & Format Data1": {
+      "main": [
+        [
+          {
+            "node": "IF Jobs Found",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq - Write Caption1": {
+      "main": [
+        [
+          {
+            "node": "Merge (Caption + Image)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "MongoDB Query Pending Jobs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MongoDB Query Pending Jobs": {
+      "main": [
+        [
+          {
+            "node": "Has Pending Jobs?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Has Pending Jobs?": {
+      "main": [
+        [
+          {
+            "node": "Is Premium?",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "NoOp",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is Premium?": {
+      "main": [
+        [
+          {
+            "node": "Format Premium",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Format Free",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Premium": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Free": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "SplitInBatches": {
+      "main": [
+        [
+          {
+            "node": "Wait (Rate Limit)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait (Rate Limit)": {
+      "main": [
+        [
+          {
+            "node": "Restore Job Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram Send": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update MongoDB": {
+      "main": [
+        [
+          {
+            "node": "SplitInBatches",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Restore Job Data": {
+      "main": [
+        [
+          {
+            "node": "Telegram Send",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Update MongoDB",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge1": {
+      "main": [
+        [
+          {
+            "node": "SplitInBatches",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
   }
 }
