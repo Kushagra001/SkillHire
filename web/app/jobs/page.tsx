@@ -378,47 +378,46 @@ export default function JobsPage() {
             <main className="flex-1 flex flex-col overflow-hidden">
                 <div className="bg-white dark:bg-[#0B0F19] border-b border-gray-200 dark:border-slate-800/60 py-3 sm:py-4 shrink-0">
                     <div className="w-full px-4 sm:px-6 lg:px-8">
-                        {isPremiumUser && (
-                            <div id="telegram-card" className="mb-4 w-full bg-gradient-to-r from-blue-50/50 to-indigo-50/50 dark:from-blue-900/10 dark:to-indigo-900/10 border border-blue-100 dark:border-blue-900/30 rounded-xl p-2.5 sm:p-3 flex items-center justify-between gap-4 shadow-sm relative overflow-hidden transition-all duration-300">
-                                <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full blur-2xl -mr-16 -mt-16 pointer-events-none" />
-                                <div className="flex items-center gap-3 z-10 flex-1 min-w-0">
-                                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900/30 shrink-0">
-                                        <Send className="h-5 w-5 text-[#0088cc]" />
-                                    </div>
-                                    <div className="flex flex-col min-w-0">
-                                        <h3 className="text-[13px] sm:text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                                            Join our Private Telegram
-                                            <span className="hidden xs:inline-block px-1.5 py-0.5 rounded-[4px] bg-blue-500 text-[9px] font-black text-white uppercase tracking-tighter">Instant Alerts</span>
-                                        </h3>
-                                        <p className="text-[11px] sm:text-xs text-slate-500 dark:text-slate-400 font-medium truncate hidden sm:block">
-                                            Get ultra-fast notifications before jobs are posted anywhere else.
-                                        </p>
-                                    </div>
+                        {/* Telegram Alert Banner - Shows to all users now */}
+                        <div id="telegram-card" className={`mb-4 w-full bg-gradient-to-r border rounded-xl p-2.5 sm:p-3 flex items-center justify-between gap-4 shadow-sm relative overflow-hidden transition-all duration-300 ${isPremiumUser ? 'from-amber-50/50 to-orange-50/50 dark:from-amber-900/10 dark:to-orange-900/10 border-amber-200 dark:border-amber-900/30' : 'from-blue-50/50 to-indigo-50/50 dark:from-blue-900/10 dark:to-indigo-900/10 border-blue-100 dark:border-blue-900/30'}`}>
+                            <div className={`absolute top-0 right-0 w-32 h-32 rounded-full blur-2xl -mr-16 -mt-16 pointer-events-none ${isPremiumUser ? 'bg-amber-500/10' : 'bg-blue-500/5'}`} />
+                            <div className="flex items-center gap-3 z-10 flex-1 min-w-0">
+                                <div className={`flex h-10 w-10 items-center justify-center rounded-full shrink-0 ${isPremiumUser ? 'bg-amber-100 dark:bg-amber-900/30' : 'bg-blue-100 dark:bg-blue-900/30'}`}>
+                                    <Send className={`h-5 w-5 ${isPremiumUser ? 'text-amber-600' : 'text-[#0088cc]'}`} />
                                 </div>
-                                <a
-                                    href="https://t.me/+ud_U0D07RkY3YTk1"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    onClick={() => {
-                                        localStorage.setItem('skillhire_telegram_joined', 'true');
-                                        const card = document.getElementById('telegram-card');
-                                        if (card) {
-                                            card.style.opacity = '0';
-                                            setTimeout(() => card.style.display = 'none', 300);
-                                        }
-                                    }}
-                                    className="shrink-0 flex items-center gap-2 bg-[#0088cc] hover:bg-[#0077b5] text-white px-4 py-2 rounded-lg text-xs sm:text-sm font-bold transition-all shadow-sm active:scale-95 z-10"
-                                >
-                                    Join Now
-                                </a>
-                                <script dangerouslySetInnerHTML={{
-                                    __html: `
-                                    if (typeof window !== 'undefined' && localStorage.getItem('skillhire_telegram_joined') === 'true') {
-                                        document.getElementById('telegram-card') && (document.getElementById('telegram-card').style.display = 'none');
-                                    }
-                                `}} />
+                                <div className="flex flex-col min-w-0">
+                                    <h3 className="text-[13px] sm:text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                                        {isPremiumUser ? 'Join your Private Premium Telegram' : 'Join 5,000+ Devs on Telegram'}
+                                        <span className={`hidden xs:inline-block px-1.5 py-0.5 rounded-[4px] text-[9px] font-black white uppercase tracking-tighter text-white ${isPremiumUser ? 'bg-amber-500' : 'bg-blue-500'}`}>{isPremiumUser ? 'VIP Access' : 'Zero-Day Alerts'}</span>
+                                    </h3>
+                                    <p className="text-[11px] sm:text-xs text-slate-500 dark:text-slate-400 font-medium truncate hidden sm:block">
+                                        {isPremiumUser ? 'Get instant alerts the exact second we score a new premium job.' : 'We drop 20+ hidden remote jobs in Telegram every day.'}
+                                    </p>
+                                </div>
                             </div>
-                        )}
+                            <a
+                                href={isPremiumUser ? "https://t.me/+ud_U0D07RkY3YTk1" : "https://t.me/skillhire_jobs"}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                onClick={() => {
+                                    localStorage.setItem('skillhire_telegram_joined', 'true');
+                                    const card = document.getElementById('telegram-card');
+                                    if (card) {
+                                        card.style.opacity = '0';
+                                        setTimeout(() => card.style.display = 'none', 300);
+                                    }
+                                }}
+                                className={`shrink-0 flex items-center gap-2 text-white px-4 py-2 rounded-lg text-xs sm:text-sm font-bold transition-all shadow-sm active:scale-95 z-10 ${isPremiumUser ? 'bg-amber-500 hover:bg-amber-600' : 'bg-[#0088cc] hover:bg-[#0077b5]'}`}
+                            >
+                                Join Now
+                            </a>
+                            <script dangerouslySetInnerHTML={{
+                                __html: `
+                                if (typeof window !== 'undefined' && localStorage.getItem('skillhire_telegram_joined') === 'true') {
+                                    document.getElementById('telegram-card') && (document.getElementById('telegram-card').style.display = 'none');
+                                }
+                            `}} />
+                        </div>
                         <div className="flex flex-col md:flex-row gap-3 md:gap-4 items-center">
                             <h1 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white whitespace-nowrap hidden sm:block md:block">Find your dream job</h1>
                             <div className="flex flex-row gap-2 w-full">
