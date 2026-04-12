@@ -203,8 +203,7 @@
     },
     {
       "parameters": {
-        "mode": "combine",
-        "combineBy": "position"
+        "mode": "append"
       },
       "id": "d89e1018-4456-4d36-abb2-c226e7968596",
       "name": "Merge (Caption + Image)",
@@ -316,7 +315,7 @@
     {
       "parameters": {
         "resource": "chat",
-        "chatModel": "=llama-3.3-70b-versatile",
+        "chatModel": "llama-3.3-70b-versatile",
         "prompt": {
           "messages": [
             {
@@ -777,6 +776,17 @@
       "main": [
         [
           {
+            "node": "Upload to ImgBB",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload to ImgBB": {
+      "main": [
+        [
+          {
             "node": "Merge (Caption + Image)",
             "type": "main",
             "index": 1
@@ -796,17 +806,6 @@
       ]
     },
     "Set Caption Variables": {
-      "main": [
-        [
-          {
-            "node": "Upload to ImgBB",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Upload to ImgBB": {
       "main": [
         [
           {
