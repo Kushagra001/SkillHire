@@ -493,23 +493,11 @@
     },
     {
       "parameters": {
-        "values": {
-          "string": [
-            {
-              "name": "message",
-              "value": "=\ud83d\udea8 <b>Top Tier Role Alert!</b>\\n\\n\ud83d\udcbb <b>{{$json.title}}</b> at <b>{{$json.company}}</b>\\n\\n\ud83d\udccd <b>Location:</b> {{$json.location}}\\n\ud83d\udcb0 <b>Estimated Salary:</b> {{$json.salary_status || 'Competitive CTC'}}\\n\ud83c\udf93 <b>Experience:</b> {{$json.experience || 'Fresher'}}\\n\\n\u2b50 <b>Premium Early Access</b>\\nBe among the first applicants.\\n\\n\ud83d\ude80 <b>Apply Now (Direct Link):</b>\\n<a href=\"{{$json.apply_link}}\">{{$json.apply_link}}</a>\\n\\n\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\\n#SkillHire #PremiumJobs #TechJobs"
-            },
-            {
-              "name": "channel_name",
-              "value": "telegram_premium"
-            }
-          ]
-        },
-        "options": {}
+        "jsCode": "const escapeHtml = (str) => (str ? String(str) : '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\"/g, '&quot;');\\n\\nfor (const item of $input.all()) {\\n  const j = item.json;\\n  item.json.message = `\ud83d\udea8 <b>Top Tier Role Alert!</b>\\n\\n\ud83d\udcbb <b>${escapeHtml(j.title)}</b> at <b>${escapeHtml(j.company)}</b>\\n\\n\ud83d\udccd <b>Location:</b> ${escapeHtml(j.location)}\\n\ud83d\udcb0 <b>Estimated Salary:</b> ${escapeHtml(j.salary_status || 'Competitive CTC')}\\n\ud83c\udf93 <b>Experience:</b> ${escapeHtml(j.experience || 'Fresher')}\\n\\n\u2b50 <b>Premium Early Access</b>\\nBe among the first applicants.\\n\\n\ud83d\ude80 <b>Apply Now (Direct Link):</b>\\n<a href=\"${escapeHtml(j.apply_link)}\">${escapeHtml(j.apply_link)}</a>\\n\\n\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\\n#SkillHire #PremiumJobs #TechJobs`;\\n  item.json.channel_name = 'telegram_premium';\\n}\\nreturn $input.all();"
       },
       "id": "9daa6a7d-dace-4524-8fae-848b466fe8f8",
       "name": "Format Premium",
-      "type": "n8n-nodes-base.set",
+      "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
         -240,
@@ -518,23 +506,11 @@
     },
     {
       "parameters": {
-        "values": {
-          "string": [
-            {
-              "name": "message",
-              "value": "=\ud83d\udea8 <b>Top Tier Role Alert!</b>\\n\\n\ud83d\udcbb <b>{{$json.title}}</b> (100% Verified)\\n\\n\ud83d\udccd <b>Location:</b> {{$json.location}}\\n\ud83d\udcb0 <b>Estimated Salary:</b> {{$json.salary_status || 'Competitive CTC'}}\\n\ud83c\udfe2 <b>Company:</b> <i>Hidden</i> \ud83d\udd12\\n\\n\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\\n[ <i>We just dropped the direct link to this in the Premium channel 24 hours before anyone else.</i> ]\\n\\n\u26a1 <b>Want instant, early access before positions close?</b>\\nUpgrade to Premium to apply instantly \u2192 <a href=\"https://skillhire.in/#pricing\">SkillHire Premium Checkout</a>\\n\\n#SkillHire #FresherJobs #TechJobs"
-            },
-            {
-              "name": "channel_name",
-              "value": "telegram_free"
-            }
-          ]
-        },
-        "options": {}
+        "jsCode": "const escapeHtml = (str) => (str ? String(str) : '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\"/g, '&quot;');\\n\\nfor (const item of $input.all()) {\\n  const j = item.json;\\n  item.json.message = `\ud83d\udea8 <b>Top Tier Role Alert!</b>\\n\\n\ud83d\udcbb <b>${escapeHtml(j.title)}</b> (100% Verified)\\n\\n\ud83d\udccd <b>Location:</b> ${escapeHtml(j.location)}\\n\ud83d\udcb0 <b>Estimated Salary:</b> ${escapeHtml(j.salary_status || 'Competitive CTC')}\\n\ud83c\udfe2 <b>Company:</b> <i>Hidden</i> \ud83d\udd12\\n\\n\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\\n[ <i>We just dropped the direct link to this in the Premium channel 24 hours before anyone else.</i> ]\\n\\n\u26a1 <b>Want instant, early access before positions close?</b>\\nUpgrade to Premium to apply instantly \u2192 <a href=\"https://skillhire.in/#pricing\">SkillHire Premium Checkout</a>\\n\\n#SkillHire #FresherJobs #TechJobs`;\\n  item.json.channel_name = 'telegram_free';\\n}\\nreturn $input.all();"
       },
       "id": "3f65c7fd-9bcc-40bb-809c-322aa1066834",
       "name": "Format Free",
-      "type": "n8n-nodes-base.set",
+      "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
         -240,
