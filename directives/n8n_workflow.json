@@ -134,7 +134,7 @@
         "url": "https://hook.eu1.make.com/vjf19g0id7rj09i2fklwqr5hj7mk75yu",
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={{ JSON.stringify({text: $('Generate Post Text').item.json.message.content + '\\\\n\\\\n\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\\\\n\ud83d\udd14 Join 5,000+ devs getting Zero-Day job alerts in our Private Telegram: https://t.me/skillhire_jobs\\\\n\\\\n(Follow SkillHire for more daily tech deep-dives and career insights!)', image_url: $('Upload to ImgBB (Organic)').item.json.data.url}) }}"
+        "jsonBody": "={{ JSON.stringify({text: $('Generate Post Text').item.json.message.content + '\\\\n\\\\n\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\\\\n\ud83d\udd14 Join 5,000+ devs getting Zero-Day job alerts in our Private Telegram: https://t.me/SkillHireFree1\\\\n\\\\n(Follow SkillHire for more daily tech deep-dives and career insights!)', image_url: $('Upload to ImgBB (Organic)').item.json.data.url}) }}"
       },
       "id": "3b7b380b-8cf6-4168-b0a8-d569452de492",
       "name": "Make - LinkedIn Organic Post",
