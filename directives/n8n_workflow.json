@@ -320,7 +320,7 @@
         "prompt": {
           "messages": [
             {
-              "content": "={{ 'You are doing dual-channel social curation for the tech job board SkillHire. We just added ' + $json.total_jobs + ' new tech jobs today. Highlights:\\\\n\\\\n' + $json.ai_context + '\\\\n\\\\nTask: Write two DISTINCT captions for these jobs.\\\\n1. \"linkedin_caption\": Professional but engaging tone, authoritative, emphasize career growth. End with \"Apply: https://skillhire.in/jobs\\\\n\\\\nJoin our Telegram for Zero-Day job alerts: https://t.me/skillhire_jobs\". Include 5 targeted hashtags.\\\\n2. \"instagram_caption\": High-energy, gen-z/millennial friendly, urgent. Use many emojis. Shorter and punchier. End with \"Link in Bio to apply & join our Telegram! \ud83d\udd17\". Include 4 trending hashtags.\\\\n\\\\nOutput ONLY a valid JSON object with exactly two string properties: \"linkedin_caption\" and \"instagram_caption\". Do NOT wrap in markdown or backticks.' }}"
+              "content": "={{ 'You are doing dual-channel social curation for the tech job board SkillHire. We just added ' + $json.total_jobs + ' new tech jobs today. Highlights:\\\\n\\\\n' + $json.ai_context + '\\\\n\\\\nTask: Write two DISTINCT captions for these jobs.\\\\n1. \"linkedin_caption\": Professional but engaging tone, authoritative, emphasize career growth. End with \"Apply: https://skillhire.in/jobs\\\\n\\\\nJoin our Telegram for Zero-Day job alerts: https://t.me/SkillHireFree1\". Include 5 targeted hashtags.\\\\n2. \"instagram_caption\": High-energy, gen-z/millennial friendly, urgent. Use many emojis. Shorter and punchier. End with \"Link in Bio to apply & join our Telegram! \ud83d\udd17\". Include 4 trending hashtags.\\\\n\\\\nOutput ONLY a valid JSON object with exactly two string properties: \"linkedin_caption\" and \"instagram_caption\". Do NOT wrap in markdown or backticks.' }}"
             }
           ]
         },
@@ -373,8 +373,8 @@
         "bodyParameters": {
           "parameters": [
             {
+              "parameterType": "formBinaryData",
               "name": "image",
-              "parameterType": "form-data-binary",
               "inputDataFieldName": "data"
             }
           ]
