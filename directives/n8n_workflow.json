@@ -219,7 +219,9 @@
           "assignments": [
             {
               "id": "cta-var-001",
-              "value": "={{ $json.message.content + '\\\\n\\\\n\ud83d\udd17 Apply: https://skillhire.in/jobs\\\\n\\\\nJoin our Telegram for Zero-Day job alerts: https://t.me/skillhire_jobs\\\\n\\\\n#SkillHire #TechJobs #SoftwareEngineering #Hiring #FreshersJobs' }}"
+              "name": "linkedin_caption",
+              "value": "={{ $json.message.content + '\\\\n\\\\n\ud83d\udd17 Apply: https://skillhire.in/jobs\\\\n\\\\nJoin our Telegram for Zero-Day job alerts: https://t.me/skillhire_jobs\\\\n\\\\n#SkillHire #TechJobs #SoftwareEngineering #Hiring #FreshersJobs' }}",
+              "type": "string"
             },
             {
               "id": "ig-caption-var-001",
