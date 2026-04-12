@@ -180,7 +180,7 @@
     },
     {
       "parameters": {
-        "url": "=https://skillhire.in/api/og?company={{ encodeURIComponent($json.best_job_company || 'Premium Company') }}&role={{ encodeURIComponent($json.best_job_title || 'Software Engineer') }}",
+        "url": "=https://skillhire.in/api/og?title={{ encodeURIComponent($json.best_job_title || 'Software Engineer') }}&subtitle={{ encodeURIComponent('Hiring at ' + ($json.best_job_company || 'Premium Company')) }}",
         "options": {
           "response": {
             "response": {
@@ -283,7 +283,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const jobs = $input.all().map(item => item.json);\n\nif (jobs.length === 0) return [{ json: { total_jobs: 0 } }];\n\n// Top 5 Entry Level Jobs for WhatsApp\nconst entryLevel = jobs\n  .filter(j => (j.experience && j.experience.toLowerCase().includes('fresher')) || !j.experience)\n  .slice(0, 5);\n\nlet waText = \"*\ud83d\ude80 Today's Top 5 Handpicked Tech Jobs!* \\n\\n\";\nentryLevel.forEach(job => {\n  waText += `\ud83d\udcbc *${job.title}* at *${job.company}*\\n\ud83d\udccd ${job.location || 'Remote'}\\n\ud83d\udcb0 ${job.salary_status || 'Competitive CTC'}\\n\ud83d\udc49 Apply: ${job.apply_link}\\n\\n`;\n});\nwaText += \"\ud83d\udd25 *Join Premium for instant alerts:* skillhire.in/#pricing\";\n\n// Top 5 summary for AI caption\nconst topJobsSummary = jobs.slice(0, 5).map(j => `- ${j.title} at ${j.company} (${j.location})`).join('\\n');\n\n// Best single job for OG image\nconst bestJob = jobs.find(j => j.title && j.company) || jobs[0] || {};\n\nreturn [{\n  json: {\n    discord_text: waText,\n    ai_context: topJobsSummary,\n    total_jobs: jobs.length,\n    best_job_company: bestJob.company,\n    best_job_title: bestJob.title\n  }\n}];"
+        "jsCode": "const jobs = $input.all().map(item => item.json).filter(j => j.title && j.company);\n\nif (jobs.length === 0) return [{ json: { total_jobs: 0 } }];\n\n// Top 5 Entry Level Jobs for WhatsApp\nconst entryLevel = jobs\n  .filter(j => (j.experience && j.experience.toLowerCase().includes('fresher')) || !j.experience)\n  .slice(0, 5);\n\nlet waText = \"*\ud83d\ude80 Today's Top 5 Handpicked Tech Jobs!* \\n\\n\";\nentryLevel.forEach(job => {\n  waText += `\ud83d\udcbc *${job.title}* at *${job.company}*\\n\ud83d\udccd ${job.location || 'Remote'}\\n\ud83d\udcb0 ${job.salary_status || 'Competitive CTC'}\\n\ud83d\udc49 Apply: ${job.apply_link}\\n\\n`;\n});\nwaText += \"\ud83d\udd25 *Join Premium for instant alerts:* skillhire.in/#pricing\";\n\n// Top 5 summary for AI caption\nconst topJobsSummary = jobs.slice(0, 5).map(j => `- ${j.title} at ${j.company} (${j.location})`).join('\\n');\n\n// Best single job for OG image\nconst bestJob = jobs[0];\n\nreturn [{\n  json: {\n    discord_text: waText,\n    ai_context: topJobsSummary,\n    total_jobs: jobs.length,\n    best_job_company: bestJob.company,\n    best_job_title: bestJob.title\n  }\n}];"
       },
       "id": "101603a3-3b0c-4065-b48f-00c8d7bd04b3",
       "name": "Aggregate & Format Data1",
