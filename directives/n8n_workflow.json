@@ -198,8 +198,7 @@
         400
       ],
       "notesInFlow": true,
-      "onError": "continueRegularOutput",
-      "notes": "Retry enabled: 3 attempts, 5s wait. Downloads binary PNG from Next.js OG endpoint."
+      "notes": "Downloads binary PNG from Next.js OG endpoint."
     },
     {
       "parameters": {
@@ -377,7 +376,8 @@
               "inputDataFieldName": "data"
             }
           ]
-        }
+        },
+        "options": {}
       },
       "id": "imgbb-12345",
       "name": "Upload to ImgBB",
