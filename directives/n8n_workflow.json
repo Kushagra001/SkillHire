@@ -202,7 +202,10 @@
       "notes": "Retry enabled: 3 attempts, 5s wait. Downloads binary PNG from Next.js OG endpoint."
     },
     {
-      "parameters": {},
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "position"
+      },
       "id": "d89e1018-4456-4d36-abb2-c226e7968596",
       "name": "Merge (Caption + Image)",
       "type": "n8n-nodes-base.merge",
@@ -341,7 +344,7 @@
         "url": "https://hook.eu1.make.com/m0h201rlug3e6t54asf4jkm5ncfmiwpb",
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={{ JSON.stringify({text: $json.linkedin_caption, image_url: $json.data.url}) }}"
+        "jsonBody": "={{ JSON.stringify({text: $('Set Caption Variables').item.json.linkedin_caption, image_url: $json.data.url || $json.data.display_url}) }}"
       },
       "id": "96fbd5ec-2af9-49f1-b6d4-abbf7a29b737",
       "name": "Make - LinkedIn Image Post",
@@ -361,7 +364,7 @@
           "parameters": [
             {
               "name": "key",
-              "value": "YOUR_IMGBB_API_KEY_HERE"
+              "value": "97c9412e6fa6e49e104ce5d135dec4e9"
             }
           ]
         },
@@ -796,11 +799,6 @@
       "main": [
         [
           {
-            "node": "Make - LinkedIn Image Post",
-            "type": "main",
-            "index": 0
-          },
-          {
             "node": "Upload to ImgBB",
             "type": "main",
             "index": 0
@@ -811,6 +809,11 @@
     "Upload to ImgBB": {
       "main": [
         [
+          {
+            "node": "Make - LinkedIn Image Post",
+            "type": "main",
+            "index": 0
+          },
           {
             "node": "Publish image on instagram",
             "type": "main",
