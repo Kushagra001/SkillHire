@@ -5,61 +5,61 @@ export const runtime = "edge";
 
 export async function GET(req: NextRequest) {
     try {
-        const { searchParams } = req.nextUrl;
+        // Switch back to explicit URL parsing (more stable in some Edge versions)
+        const { searchParams } = new URL(req.url);
         
-        // Handle both parameter sets for compatibility
-        const title = searchParams.get("title") || searchParams.get("role") || "Tech Insights by SkillHire";
+        const title = searchParams.get("title") || searchParams.get("role") || "New Job Opportunity";
         const subtitle = searchParams.get("subtitle") || 
-                         (searchParams.get("company") ? `Hiring at ${searchParams.get("company")}` : "Career advice for modern developers");
+                         (searchParams.get("company") ? `Hiring at ${searchParams.get("company")}` : "SkillHire.in");
         const type = searchParams.get("type") || "job";
         
         const isOrganic = type === "organic" || subtitle.includes("Career Advice");
-        
-        // Satori-Safe Solid colors
-        const colors = isOrganic 
-            ? { primary: "rgb(139, 92, 246)", accent: "rgba(139, 92, 246, 0.2)" } 
-            : { primary: "rgb(16, 185, 129)", accent: "rgba(16, 185, 129, 0.2)" };
+        const themeColor = isOrganic ? "rgb(139, 92, 246)" : "rgb(16, 185, 129)";
 
+        // REVERTING TO VERIFIED STRUCTURAL PATTERN (Centered Flex, No-Relative)
         return new ImageResponse(
             (
-                <div style={{ display: "flex", width: "100%", height: "100%", backgroundColor: "#060606", color: "white", position: "relative" }}>
+                <div 
+                    style={{ 
+                        display: "flex", 
+                        flexDirection: "column", 
+                        alignItems: "center", 
+                        justifyContent: "center", 
+                        width: "100%", 
+                        height: "100%", 
+                        backgroundColor: "#09090b", 
+                        color: "white",
+                        padding: "80px",
+                        textAlign: "center"
+                    }}
+                >
+                    {/* Brand Banner (Top) */}
+                    <div style={{ display: "flex", alignItems: "center", marginBottom: "60px" }}>
+                        <div style={{ display: "flex", width: "50px", height: "50px", borderRadius: "12px", backgroundColor: themeColor, alignItems: "center", justifyContent: "center", fontWeight: "bold", fontSize: "24px", color: "white" }}>
+                            S
+                        </div>
+                        <div style={{ marginLeft: "15px", fontSize: "32px", fontWeight: "bold" }}>SkillHire.in</div>
+                    </div>
+
+                    {/* Badge */}
+                    <div style={{ display: "flex", backgroundColor: "rgba(255,255,255,0.05)", border: `1px solid ${themeColor}`, padding: "6px 16px", borderRadius: "8px", marginBottom: "30px" }}>
+                        <span style={{ color: themeColor, fontSize: "14px", fontWeight: "bold", letterSpacing: "2px" }}>
+                            {isOrganic ? "INSIGHTS" : "OPPORTUNITY"}
+                        </span>
+                    </div>
+
+                    {/* Main Content */}
+                    <div style={{ display: "flex", fontSize: "75px", fontWeight: "900", lineHeight: 1.1, marginBottom: "20px" }}>
+                        {title}
+                    </div>
                     
-                    {/* NO GRADIENTS OR MESH GLOWS FOR FINAL ISOLATION TEST */}
+                    <div style={{ display: "flex", fontSize: "36px", color: "#94a3b8", fontWeight: "500" }}>
+                        {subtitle}
+                    </div>
 
-                    <div style={{ display: "flex", flexDirection: "column", width: "100%", height: "100%", padding: "80px", position: "relative" }}>
-                        
-                        {/* HEADER - Solid Branding */}
-                        <div style={{ display: "flex", alignItems: "center", marginBottom: "auto" }}>
-                            <div style={{ display: "flex", width: "60px", height: "60px", borderRadius: "14px", backgroundColor: colors.primary, alignItems: "center", justifyContent: "center", fontWeight: "bold", marginRight: "16px", fontSize: "28px" }}>S</div>
-                            <span style={{ fontSize: "36px", fontWeight: "bold", letterSpacing: "-1px" }}>SkillHire.in</span>
-                        </div>
-
-                        {/* CONTENT AREA */}
-                        <div style={{ display: "flex", flexDirection: "column", maxWidth: "90%" }}>
-                            <div style={{ display: "flex", backgroundColor: colors.accent, border: `1px solid ${colors.primary}`, padding: "8px 20px", borderRadius: "10px", alignSelf: "flex-start", marginBottom: "30px" }}>
-                                <span style={{ color: colors.primary, fontSize: "16px", fontWeight: "900", letterSpacing: "3px" }}>
-                                    {isOrganic ? "INSIGHTS" : "OPPORTUNITY"}
-                                </span>
-                            </div>
-                            
-                            <h1 style={{ fontSize: "80px", fontWeight: "900", lineHeight: 1, marginBottom: "28px", color: "#ffffff", letterSpacing: "-3px" }}>
-                                {title}
-                            </h1>
-                            
-                            <p style={{ color: "#94a3b8", fontSize: "36px", fontWeight: "500", lineHeight: 1.4, marginBottom: "40px" }}>
-                                {subtitle}
-                            </p>
-                        </div>
-
-                        {/* FOOTER - Professional Bar */}
-                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderTop: "2px solid rgba(255,255,255,0.05)", paddingTop: "50px", marginTop: "auto" }}>
-                            <div style={{ display: "flex", alignItems: "center", color: "#4b5563", fontSize: "22px", fontWeight: "bold", letterSpacing: "1px" }}>
-                                NEXT-GEN JOB DISTRIBUTION
-                            </div>
-                            <div style={{ fontSize: "24px", color: "#94a3b8" }}>
-                                apply now at <strong style={{ color: colors.primary, marginLeft: "8px" }}>skillhire.in</strong>
-                            </div>
-                        </div>
+                    {/* Simple Footer */}
+                    <div style={{ display: "flex", marginTop: "60px", fontSize: "20px", color: "#4b5563", fontWeight: "600", letterSpacing: "1px" }}>
+                        JOBS • CAREERS • TECH INSIGHTS
                     </div>
                 </div>
             ),
