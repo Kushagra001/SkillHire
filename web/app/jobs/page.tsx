@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useUser, useClerk, SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
@@ -122,7 +122,7 @@ const getBatch = (tags?: string[]) => {
     return batchTag ? batchTag.replace(/Batch:?/i, '').trim() : 'Any';
 }
 
-export default function JobsPage() {
+function JobsPageContent() {
     const router = useRouter();
     const { user, isSignedIn } = useUser();
     const isPremiumUser = user?.publicMetadata?.isPremium === true;
@@ -815,5 +815,18 @@ export default function JobsPage() {
                 />
             </div >
         </div >
+    );
+}
+
+export default function JobsPage() {
+    return (
+        <Suspense fallback={
+            <div className="h-screen w-full flex flex-col items-center justify-center bg-white dark:bg-[#0B0F19]">
+                <Loader2 className="h-10 w-10 text-[#41b4a5] animate-spin mb-4" />
+                <p className="text-slate-500 font-medium animate-pulse">Loading jobs...</p>
+            </div>
+        }>
+            <JobsPageContent />
+        </Suspense>
     );
 }
