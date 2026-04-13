@@ -1,10 +1,11 @@
 import { ImageResponse } from "next/og";
 import { NextRequest } from "next/server";
 
+export const runtime = "edge";
 
 export async function GET(req: NextRequest) {
     try {
-        const { searchParams } = new URL(req.url);
+        const { searchParams } = req.nextUrl;
         
         // Handle both parameter sets for compatibility
         const title = searchParams.get("title") || searchParams.get("role") || "Tech Insights by SkillHire";
