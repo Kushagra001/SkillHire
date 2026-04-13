@@ -420,7 +420,7 @@ function JobsPageContent() {
                                 </div>
                             </div>
                             <a
-                                href={isPremiumUser ? "https://t.me/+ud_U0D07RkY3YTk1" : "https://t.me/skillhire_jobs"}
+                                href={isPremiumUser ? "https://t.me/+ud_U0D07RkY3YTk1" : "https://t.me/SkillHireFree1"}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 onClick={() => {
