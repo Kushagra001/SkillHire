@@ -1,7 +1,6 @@
 import { ImageResponse } from "next/og";
 import { NextRequest } from "next/server";
 
-export const runtime = "edge";
 
 export async function GET(req: NextRequest) {
     try {
@@ -43,7 +42,7 @@ export async function GET(req: NextRequest) {
             (
                 <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", width: "100%", height: "100%", background: "#09090b", padding: "60px", color: "white" }}>
                     <div style={{ display: "flex", flexDirection: "column", gap: "30px" }}>
-                        <div style={{ display: "flex", padding: "10px 20px", borderRadius: "50px", background: "rgba(16,185,129,0.1)", border: "1px solid rgba(16,185,129,0.3)", color: "#10b981", fontSize: "16px", fontWeight: "bold", width: "fit-content" }}>🚀 ACTIVELY HIRING</div>
+                        <div style={{ display: "flex", padding: "10px 20px", borderRadius: "50px", background: "rgba(16,185,129,0.1)", border: "1px solid rgba(16,185,129,0.3)", color: "#10b981", fontSize: "16px", fontWeight: "bold" }}>🚀 ACTIVELY HIRING</div>
                         <div style={{ fontSize: "80px", fontWeight: "bold", lineHeight: 1 }}>{title}</div>
                         <div style={{ fontSize: "36px", color: "#94a3b8" }}>{subtitle}</div>
                     </div>

@@ -1,6 +1,9 @@
 import { clerkMiddleware } from "@clerk/nextjs/server";
 
-export default clerkMiddleware();
+export default clerkMiddleware((auth, req) => {
+    // Explicitly allow public access to the OG image API
+    if (req.nextUrl.pathname.startsWith('/api/og')) return;
+});
 
 export const config = {
     matcher: [

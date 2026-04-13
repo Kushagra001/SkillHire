@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useUser, useClerk, SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { Search, MapPin, Briefcase, ExternalLink, Loader2, Bookmark, Share2, Lock, ChevronLeft, ChevronRight, CheckCircle2, Wallet, Star, ChevronDown, Menu, X, Send } from 'lucide-react';
@@ -139,6 +139,9 @@ export default function JobsPage() {
     const [isMobileOpen, setIsMobileOpen] = useState(false);
     const [sortBy, setSortBy] = useState("newest");
 
+    const searchParams = useSearchParams();
+    const urlJobId = searchParams.get('jobId');
+
     // Back-gesture fix: push a hash state when opening mobile pane so the browser
     // back gesture pops the hash (closing the pane) rather than navigating away.
     const openMobilePane = (job: Job) => {
@@ -175,6 +178,17 @@ export default function JobsPage() {
     const debouncedSearch = useDebounce(search, 500);
     const debouncedLocation = useDebounce(location, 500);
 
+    // Sync URL with selected job
+    useEffect(() => {
+        if (selectedJob?._id) {
+            const params = new URLSearchParams(window.location.search);
+            if (params.get('jobId') !== selectedJob._id) {
+                params.set('jobId', selectedJob._id);
+                window.history.replaceState(null, '', `?${params.toString()}`);
+            }
+        }
+    }, [selectedJob?._id]);
+
     useEffect(() => {
         setPage(1);
     }, [debouncedSearch, debouncedLocation, selectedExperience, selectedTypes, showPremiumOnly]);
@@ -197,6 +211,16 @@ export default function JobsPage() {
         }),
         placeholderData: (previousData) => previousData,
     });
+
+    // Handle deep linking from jobId in URL
+    useEffect(() => {
+        if (urlJobId && data?.jobs && !selectedJob) {
+            const jobToSelect = data.jobs.find((j: Job) => j._id === urlJobId);
+            if (jobToSelect) {
+                setSelectedJob(jobToSelect);
+            }
+        }
+    }, [urlJobId, data?.jobs, selectedJob]);
 
     const allJobs: Job[] = data?.jobs || [];
     const pagination = data?.pagination || { currentPage: 1, totalPages: 1, totalJobs: 0 };

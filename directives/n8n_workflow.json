@@ -180,14 +180,9 @@
     },
     {
       "parameters": {
-        "url": "=https://skillhire.in/api/og?title={{ encodeURIComponent($json.best_job_title || 'Software Engineer') }}&subtitle={{ encodeURIComponent('Hiring at ' + ($json.best_job_company || 'Premium Company')) }}",
-        "options": {
-          "response": {
-            "response": {
-              "responseFormat": "file"
-            }
-          }
-        }
+        "url": "=https://www.skillhire.in/api/og?title={{ encodeURIComponent($json.best_job_title || 'Software Engineer') }}&subtitle={{ encodeURIComponent('Hiring at ' + ($json.best_job_company || 'Premium Company')) }}",
+        "responseFormat": "file",
+        "options": {}
       },
       "id": "7307995f-5f28-4861-ba71-4a742a3d41fd",
       "name": "Fetch OG Image",
@@ -202,7 +197,8 @@
     },
     {
       "parameters": {
-        "mode": "append"
+        "mode": "combine",
+        "combinationMode": "mergeByIndex"
       },
       "id": "d89e1018-4456-4d36-abb2-c226e7968596",
       "name": "Merge (Caption + Image)",
@@ -266,10 +262,10 @@
       "parameters": {
         "collection": "jobs",
         "options": {
-          "limit": 50,
+          "limit": 100,
           "sort": "={{ JSON.stringify({ created_at: -1 }) }}"
         },
-        "query": "={{ JSON.stringify({ is_active: true, created_at: { $gt: new Date(Date.now() - 86400000).toISOString() } }) }}"
+        "query": "={{ JSON.stringify({ is_active: true, is_premium: true }) }}"
       },
       "id": "6f4470e5-df89-47ce-8de2-be3a04c2b4a8",
       "name": "MongoDB (Last 24h Jobs)1",
@@ -283,7 +279,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const jobs = $input.all().map(item => item.json).filter(j => j.title && j.company);\n\nif (jobs.length === 0) return [{ json: { total_jobs: 0 } }];\n\n// Top 5 Entry Level Jobs for WhatsApp\nconst entryLevel = jobs\n  .filter(j => (j.experience && j.experience.toLowerCase().includes('fresher')) || !j.experience)\n  .slice(0, 5);\n\nlet waText = \"*\ud83d\ude80 Today's Top 5 Handpicked Tech Jobs!* \\n\\n\";\nentryLevel.forEach(job => {\n  waText += `\ud83d\udcbc *${job.title}* at *${job.company}*\\n\ud83d\udccd ${job.location || 'Remote'}\\n\ud83d\udcb0 ${job.salary_status || 'Competitive CTC'}\\n\ud83d\udc49 Apply: ${job.apply_link}\\n\\n`;\n});\nwaText += \"\ud83d\udd25 *Join Premium for instant alerts:* skillhire.in/#pricing\";\n\n// Top 5 summary for AI caption\nconst topJobsSummary = jobs.slice(0, 5).map(j => `- ${j.title} at ${j.company} (${j.location})`).join('\\n');\n\n// Best single job for OG image\nconst bestJob = jobs[0];\n\nreturn [{\n  json: {\n    discord_text: waText,\n    ai_context: topJobsSummary,\n    total_jobs: jobs.length,\n    best_job_company: bestJob.company,\n    best_job_title: bestJob.title\n  }\n}];"
+        "jsCode": "const cutoff = Date.now() - 86400000;\nconst allJobs = $input.all().map(item => item.json);\n\nconst jobs = allJobs.filter(j => {\n  const jobDate = new Date(j.created_at).getTime();\n  return jobDate > cutoff && j.title && j.company;\n});\n\nif (jobs.length === 0) return [{ json: { total_jobs: 0 } }];\n\nconst entryLevel = jobs\n  .filter(j => (j.experience && j.experience.toLowerCase().includes('fresher')) || !j.experience)\n  .slice(0, 5);\n\nlet waText = \"*🚀 Today's Top 5 Handpicked Tech Jobs!* \\n\\n\";\nentryLevel.forEach(job => {\n  waText += `💼 *${job.title}* at *${job.company}*\\n📍 ${job.location || 'Remote'}\\n💰 ${job.salary_status || 'Competitive CTC'}\\n👉 Apply: ${job.apply_link}\\n\\n`;\n});\nwaText += \"🔥 *Join Premium for instant alerts:* skillhire.in/#pricing\";\n\nconst topJobsSummary = jobs.slice(0, 5).map(j => `- ${j.title} at ${j.company} (${j.location})`).join('\\n');\nconst bestJob = jobs[0];\n\nreturn [{\n  json: {\n    discord_text: waText,\n    ai_context: topJobsSummary,\n    total_jobs: jobs.length,\n    best_job_company: bestJob.company,\n    best_job_title: bestJob.title\n  }\n}];"
       },
       "id": "101603a3-3b0c-4065-b48f-00c8d7bd04b3",
       "name": "Aggregate & Format Data1",

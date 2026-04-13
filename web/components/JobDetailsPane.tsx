@@ -200,8 +200,10 @@ export function JobDetailsPane({ job, onUnlock, isUnlocking }: { job: Job | null
     };
 
     const handleShare = async () => {
+        if (!job) return;
         try {
-            await navigator.clipboard.writeText(window.location.href);
+            const shareUrl = `${window.location.origin}/jobs?jobId=${job._id}`;
+            await navigator.clipboard.writeText(shareUrl);
             setIsCopied(true);
             setTimeout(() => setIsCopied(false), 2000);
         } catch (err) {
