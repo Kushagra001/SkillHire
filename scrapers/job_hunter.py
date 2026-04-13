@@ -242,6 +242,8 @@ def save_to_db(jobs):
                 "job_type": job.get("job_type", "Full-time"),
                 "is_processed": False
             }
+
+            job_doc["is_premium"] = utils.evaluate_premium_status(job_doc)
             
             collection.update_one(
                 {"source_hash": source_hash},

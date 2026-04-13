@@ -132,6 +132,7 @@ def scrape_greenhouse(board_tokens):
                     "raw_data": job
                 }
                 
+                job_doc["is_premium"] = utils.evaluate_premium_status(job_doc)
                 _jobs_col.update_one(
                     {"source_hash": source_hash},
                     {

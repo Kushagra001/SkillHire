@@ -138,6 +138,7 @@ def save_to_db(jobs: list) -> None:
             if job.get('salary_status'):
                 job_doc["salary_status"] = job['salary_status']
 
+            job_doc["is_premium"] = utils.evaluate_premium_status(job_doc)
             collection.update_one(
                 {"source_hash": source_hash},
                 {

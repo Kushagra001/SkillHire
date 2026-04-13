@@ -139,6 +139,7 @@ def save_to_db(items, source):
                 "raw_data": item
             }
             
+            job_doc["is_premium"] = utils.evaluate_premium_status(job_doc)
             jobs_collection.update_one(
                 {"source_hash": source_hash},
                 {

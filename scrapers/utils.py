@@ -88,3 +88,61 @@ def get_random_created_at():
     Returns a UTC datetime slightly in the past for realistic jitter.
     """
     return datetime.utcnow() - timedelta(minutes=random.randint(5, 120))
+
+# --- Premium Job Evaluation Logic ---
+
+PREMIUM_COMPANIES = {
+    "google", "microsoft", "amazon", "apple", "meta", "netflix", 
+    "uber", "airbnb", "stripe", "atlassian", "razorpay", "cred", 
+    "swiggy", "zomato", "flipkart", "phonepe", "paytm", "postman",
+    "browserstack", "browser stack", "coinbase", "rubrik", "snowflake",
+    "databricks", "openai", "anthropic"
+}
+
+HYPE_ROLES = [
+    "ai", "artificial intelligence", "ml", "machine learning", 
+    "deep learning", "nlp", "llm", "generative ai", "genai", "gen-ai",
+    "data scientist", "web3", "blockchain", "smart contract",
+    "site reliability", "sre", "devops", "platform engineer",
+    "staff engineer", "principal engineer", "architect"
+]
+
+HIGH_PAY_KEYWORDS = [
+    "30lpa", "40lpa", "50lpa", "60lpa", "100k", "150k", "200k", "competitive ctc",
+    "highly competitive", "esop", "equity", "stock options"
+]
+
+def evaluate_premium_status(job_doc):
+    """
+    Evaluates a job dictionary and returns True if it meets premium criteria,
+    otherwise returns False.
+    Criteria:
+    1. Belongs to a top tech giant or unicorn.
+    2. Is a 100% remote role.
+    3. Mentions high salary or equity.
+    4. Is a highly sought-after hype role (AI/ML/Web3/etc.).
+    """
+    title = str(job_doc.get("title") or "").lower()
+    company = str(job_doc.get("company") or "").lower().strip()
+    location = str(job_doc.get("location") or "").lower()
+    desc = str(job_doc.get("description") or "").lower()
+    salary = str(job_doc.get("salary_status") or "").lower()
+
+    # 1. Tech Giants
+    if company in PREMIUM_COMPANIES or any(c in company for c in PREMIUM_COMPANIES if len(c) > 4):
+        return True
+    
+    # 2. Remote Roles
+    if "remote" in location or "remote" in title:
+        return True
+    
+    # 3. High Salary / Equity
+    combined_pay_text = f"{title} {desc} {salary}"
+    if any(keyword in combined_pay_text for keyword in HIGH_PAY_KEYWORDS):
+        return True
+    
+    # 4. Hype Roles
+    if any(role in title for role in HYPE_ROLES) or "ai" in title.split():
+        return True
+
+    return False

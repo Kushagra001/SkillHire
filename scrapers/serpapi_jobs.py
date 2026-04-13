@@ -166,6 +166,7 @@ def save_to_db(jobs):
             if salary_info:
                 job_doc["salary_status"] = salary_info
             
+            job_doc["is_premium"] = utils.evaluate_premium_status(job_doc)
             jobs_collection.update_one(
                 {"source_hash": source_hash},
                 {
