@@ -14,34 +14,38 @@ export async function GET(req: NextRequest) {
         const type = searchParams.get("type") || "job";
         
         const isOrganic = type === "organic" || subtitle.includes("Career Advice");
-        const themeColor = isOrganic ? "#8b5cf6" : "#10b981";
+        
+        // Satori-Safe RGBA colors
+        const colors = isOrganic 
+            ? { primary: "rgb(139, 92, 246)", accent: "rgba(139, 92, 246, 0.2)", deep: "rgba(139, 92, 246, 0.1)" } 
+            : { primary: "rgb(16, 185, 129)", accent: "rgba(16, 185, 129, 0.2)", deep: "rgba(16, 185, 129, 0.1)" };
 
         return new ImageResponse(
             (
                 <div style={{ display: "flex", width: "100%", height: "100%", backgroundColor: "#060606", color: "white", position: "relative", overflow: "hidden" }}>
                     
-                    {/* PREMIUM BACKGROUND GRAPHICS */}
-                    {/* Background Mesh Glow 1 */}
-                    <div style={{ position: "absolute", top: "-150px", right: "-150px", width: "600px", height: "600px", borderRadius: "300px", background: `radial-gradient(circle, ${themeColor}22 0%, transparent 70%)` }} />
+                    {/* PREMIUM BACKGROUND GRAPHICS (Sanitized for Satori) */}
+                    {/* Background Mesh Glow 1 (No Inset) */}
+                    <div style={{ position: "absolute", top: "-150px", right: "-150px", width: "600px", height: "600px", borderRadius: "300px", background: `radial-gradient(circle, ${colors.accent} 0%, transparent 70%)` }} />
                     
-                    {/* Background Mesh Glow 2 */}
-                    <div style={{ position: "absolute", bottom: "-100px", left: "-100px", width: "500px", height: "500px", borderRadius: "250px", background: `radial-gradient(circle, ${themeColor}11 0%, transparent 70%)` }} />
+                    {/* Background Mesh Glow 2 (No Inset) */}
+                    <div style={{ position: "absolute", bottom: "-100px", left: "-100px", width: "500px", height: "500px", borderRadius: "250px", background: `radial-gradient(circle, ${colors.deep} 0%, transparent 70%)` }} />
                     
-                    {/* Subtle Technical Grid Overlay */}
-                    <div style={{ position: "absolute", inset: 0, opacity: 0.1, backgroundImage: "linear-gradient(#333 1px, transparent 1px), linear-gradient(90deg, #333 1px, transparent 1px)", backgroundSize: "40px 40px" }} />
+                    {/* Subtle Technical Grid (Explicit positioning + No comma-separated gradients) */}
+                    <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, opacity: 0.1, backgroundImage: "linear-gradient(#333 1px, transparent 1px)", backgroundSize: "100% 40px" }} />
 
-                    <div style={{ display: "flex", flexDirection: "column", width: "100%", height: "100%", padding: "60px", position: "relative", zIndex: 10 }}>
+                    <div style={{ display: "flex", flexDirection: "column", width: "100%", height: "100%", padding: "60px", position: "relative" }}>
                         
                         {/* HEADER */}
                         <div style={{ display: "flex", alignItems: "center", marginBottom: "auto" }}>
-                            <div style={{ display: "flex", width: "45px", height: "45px", borderRadius: "10px", backgroundColor: themeColor, alignItems: "center", justifyContent: "center", fontWeight: "bold", marginRight: "12px", boxShadow: `0 4px 12px ${themeColor}33` }}>S</div>
+                            <div style={{ display: "flex", width: "45px", height: "45px", borderRadius: "10px", backgroundColor: colors.primary, alignItems: "center", justifyContent: "center", fontWeight: "bold", marginRight: "12px" }}>S</div>
                             <span style={{ fontSize: "28px", fontWeight: "bold", letterSpacing: "-0.5px" }}>SkillHire</span>
                         </div>
 
                         {/* CONTENT AREA */}
                         <div style={{ display: "flex", flexDirection: "column", maxWidth: "90%" }}>
-                            <div style={{ display: "flex", backgroundColor: `${themeColor}11`, border: `1px solid ${themeColor}33`, padding: "6px 16px", borderRadius: "8px", alignSelf: "flex-start", marginBottom: "24px" }}>
-                                <span style={{ color: themeColor, fontSize: "14px", fontWeight: "900", letterSpacing: "2px" }}>
+                            <div style={{ display: "flex", backgroundColor: colors.deep, border: `1px solid ${colors.accent}`, padding: "6px 16px", borderRadius: "8px", alignSelf: "flex-start", marginBottom: "24px" }}>
+                                <span style={{ color: colors.primary, fontSize: "14px", fontWeight: "900", letterSpacing: "2px" }}>
                                     {isOrganic ? "INSIGHTS" : "OPPORTUNITY"}
                                 </span>
                             </div>
@@ -58,10 +62,10 @@ export async function GET(req: NextRequest) {
                         {/* FOOTER BAR */}
                         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderTop: "1px solid rgba(255,255,255,0.1)", paddingTop: "40px", marginTop: "auto" }}>
                             <div style={{ display: "flex", alignItems: "center", color: "#64748b", fontSize: "18px", fontWeight: "bold" }}>
-                                👔 HIRED ON SKILLHIRE
+                                HIRED ON SKILLHIRE.IN
                             </div>
                             <div style={{ fontSize: "22px", color: "#94a3b8" }}>
-                                explore at <strong style={{ color: "white", marginLeft: "6px" }}>skillhire.in</strong>
+                                join 5,000+ devs at <strong style={{ color: "white", marginLeft: "6px" }}>skillhire.in</strong>
                             </div>
                         </div>
                     </div>
