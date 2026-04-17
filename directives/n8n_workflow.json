@@ -111,7 +111,7 @@
         "url": "https://hook.eu1.make.com/vjf19g0id7rj09i2fklwqr5hj7mk75yu",
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={{ JSON.stringify({text: $('Generate Post Text').item.json.message.content + '\\\\n\\\\n\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\\\\n\ud83d\udd14 Join 5,000+ devs getting Zero-Day job alerts in our Private Telegram: https://t.me/SkillHireFree1\\\\n\\\\n(Follow SkillHire for more daily tech deep-dives and career insights!)', image_url: 'https://skillhire.in/api/og?title=' + encodeURIComponent($('Generate Post Text').item.json.message.content) + '&subtitle=Career%20Advice%20for%20Modern%20Developers&type=organic&format=.png'}) }}",
+        "jsonBody": "={{ JSON.stringify({text: $('Generate Post Text').item.json.message.content + '\\\\n\\\\n━━━━━━━━━━━━━━\\\\n🔔 Join 5,000+ devs getting Zero-Day job alerts in our Private Telegram: https://t.me/SkillHireFree1\\\\n\\\\n(Follow SkillHire for more daily tech deep-dives and career insights!)', image_url: $json.data.url}) }}",
         "options": {}
       },
       "id": "2a20cc77-398f-498d-b4e1-fab5b8086aca",
@@ -327,7 +327,7 @@
         "url": "https://hook.eu1.make.com/m0h201rlug3e6t54asf4jkm5ncfmiwpb",
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={{ JSON.stringify({text: $json.linkedin_caption, image_url: 'https://www.skillhire.in/api/og?title=' + encodeURIComponent($('Aggregate & Format Data1').item.json.best_job_title || 'Software Engineer') + '&subtitle=' + encodeURIComponent('Hiring at ' + ($('Aggregate & Format Data1').item.json.best_job_company || 'Premium Company')) + '&format=.png'}) }}",
+        "jsonBody": "={{ JSON.stringify({text: $json.linkedin_caption, image_url: $json.data.url}) }}",
         "options": {}
       },
       "id": "311bb24b-29c9-4f44-9267-8383e5db76d2",
@@ -594,7 +594,7 @@
         "resource": "instagram",
         "operation": "publishImage",
         "igUserId": "17841443320246110",
-        "mediaUrl": "={{ 'https://www.skillhire.in/api/og?title=' + encodeURIComponent($('Aggregate & Format Data1').item.json.best_job_title || 'Software Engineer') + '&subtitle=' + encodeURIComponent('Hiring at ' + ($('Aggregate & Format Data1').item.json.best_job_company || 'Premium Company')) + '&format=.png' }}",
+        "mediaUrl": "={{ $json.data.url }}",
         "caption": "={{ $json.instagram_caption }}"
       },
       "type": "n8n-nodes-meta-publisher.metaPublisher",
@@ -741,6 +741,76 @@
         -2640,
         1352
       ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.imgbb.com/1/upload",
+        "sendQueryParameters": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "key",
+              "value": "97c9412e6fa6e49e104ce5d135dec4e9"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "image",
+              "parameterType": "formBinaryData",
+              "inputDataFieldName": "data"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "imgbb-job-distribution",
+      "name": "Upload to ImgBB",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        -1088,
+        2480
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.imgbb.com/1/upload",
+        "sendQueryParameters": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "key",
+              "value": "97c9412e6fa6e49e104ce5d135dec4e9"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "image",
+              "parameterType": "formBinaryData",
+              "inputDataFieldName": "data"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "imgbb-organic",
+      "name": "Upload to ImgBB (Organic)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        -1376,
+        2832
+      ]
     }
   ],
   "connections": {
@@ -781,6 +851,17 @@
       "main": [
         [
           {
+            "node": "Upload to ImgBB (Organic)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload to ImgBB (Organic)": {
+      "main": [
+        [
+          {
             "node": "Make - LinkedIn Organic Post",
             "type": "main",
             "index": 0
@@ -817,6 +898,17 @@
       ]
     },
     "Fetch OG Image": {
+      "main": [
+        [
+          {
+            "node": "Upload to ImgBB",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload to ImgBB": {
       "main": [
         [
           {
