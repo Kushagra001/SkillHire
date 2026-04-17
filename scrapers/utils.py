@@ -132,10 +132,6 @@ def evaluate_premium_status(job_doc):
     if company in PREMIUM_COMPANIES or any(c in company for c in PREMIUM_COMPANIES if len(c) > 4):
         return True
     
-    # 2. Remote Roles
-    if "remote" in location or "remote" in title:
-        return True
-    
     # 3. High Salary / Equity
     combined_pay_text = f"{title} {desc} {salary}"
     if any(keyword in combined_pay_text for keyword in HIGH_PAY_KEYWORDS):

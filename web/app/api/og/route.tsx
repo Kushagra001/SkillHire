@@ -98,7 +98,13 @@ export async function GET(req: NextRequest) {
                     </div>
                 </div>
             ),
-            { width: 1200, height: 630 }
+            { 
+                width: 1200, 
+                height: 630,
+                headers: {
+                    "Cache-Control": "public, s-maxage=86400, stale-while-revalidate=600",
+                }
+            }
         );
     } catch (e: any) {
         return new Response(`Error: ${e.message}`, { status: 500 });
