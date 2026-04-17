@@ -746,19 +746,14 @@
       "parameters": {
         "method": "POST",
         "url": "https://api.imgbb.com/1/upload",
-        "sendQueryParameters": true,
-        "queryParameters": {
-          "parameters": [
-            {
-              "name": "key",
-              "value": "97c9412e6fa6e49e104ce5d135dec4e9"
-            }
-          ]
-        },
         "sendBody": true,
         "contentType": "multipart-form-data",
         "bodyParameters": {
           "parameters": [
+            {
+              "name": "key",
+              "value": "97c9412e6fa6e49e104ce5d135dec4e9"
+            },
             {
               "name": "image",
               "parameterType": "formBinaryData",
@@ -781,19 +776,14 @@
       "parameters": {
         "method": "POST",
         "url": "https://api.imgbb.com/1/upload",
-        "sendQueryParameters": true,
-        "queryParameters": {
-          "parameters": [
-            {
-              "name": "key",
-              "value": "97c9412e6fa6e49e104ce5d135dec4e9"
-            }
-          ]
-        },
         "sendBody": true,
         "contentType": "multipart-form-data",
         "bodyParameters": {
           "parameters": [
+            {
+              "name": "key",
+              "value": "97c9412e6fa6e49e104ce5d135dec4e9"
+            },
             {
               "name": "image",
               "parameterType": "formBinaryData",
