@@ -15,7 +15,7 @@ export default function PricingSection() {
 
     const handleUnlockPro = async (plan: string) => {
         if (!isSignedIn) {
-            openSignIn({ redirectUrl: '/jobs' });
+            openSignIn({ fallbackRedirectUrl: '/jobs' });
             return;
         }
 
@@ -181,7 +181,7 @@ export default function PricingSection() {
                             </li>
                         </ul>
                         <button
-                            onClick={() => isSignedIn ? router.push('/jobs') : openSignIn({ redirectUrl: '/jobs' })}
+                            onClick={() => isSignedIn ? router.push('/jobs') : openSignIn({ fallbackRedirectUrl: '/jobs' })}
                             className="flex items-center justify-center w-full h-12 rounded-lg border-2 border-slate-200 dark:border-slate-700 font-bold text-slate-900 dark:text-white hover:border-slate-300 dark:hover:border-slate-500 transition-colors mt-auto"
                         >
                             {isSignedIn ? 'Go to Jobs' : 'Get Started'}

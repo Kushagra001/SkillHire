@@ -276,7 +276,7 @@ function JobsPageContent() {
 
         // Step 1: Require sign-in — pass redirectUrl so user returns here after auth
         if (!isSignedIn) {
-            openSignIn({ redirectUrl: window.location.href });
+            openSignIn({ fallbackRedirectUrl: window.location.href });
             return;
         }
 
@@ -357,13 +357,13 @@ function JobsPageContent() {
                         <ThemeToggle />
                         <SignedOut>
                             <button
-                                onClick={() => openSignIn({ redirectUrl: window.location.href })}
+                                onClick={() => openSignIn({ fallbackRedirectUrl: window.location.href })}
                                 className="hidden md:flex h-9 items-center justify-center rounded-lg border border-gray-200 px-4 text-sm font-semibold text-slate-700 hover:bg-gray-50 transition-all"
                             >
                                 Sign in
                             </button>
                             <button
-                                onClick={() => openSignUp({ redirectUrl: window.location.href })}
+                                onClick={() => openSignUp({ fallbackRedirectUrl: window.location.href })}
                                 className="hidden md:flex h-9 items-center justify-center rounded-lg bg-[#41b4a5] px-4 text-sm font-bold text-white transition-all hover:bg-[#369689] shadow-sm"
                             >
                                 Get Premium
@@ -404,8 +404,8 @@ function JobsPageContent() {
                         <Link href="/resume" onClick={() => setIsMobileNavOpen(false)} className="text-lg font-semibold text-slate-900 dark:text-white border-none bg-transparent m-0 p-0 text-left">AI Resume Matcher</Link>
                         <div className="h-px bg-gray-200 dark:bg-slate-800 my-1" />
                         <SignedOut>
-                            <button onClick={() => { setIsMobileNavOpen(false); openSignIn({ redirectUrl: window.location.href }); }} className="text-left text-lg font-semibold text-slate-900 dark:text-white border-none bg-transparent m-0 p-0 cursor-pointer">Sign in</button>
-                            <button onClick={() => { setIsMobileNavOpen(false); openSignUp({ redirectUrl: window.location.href }); }} className="text-left text-lg font-bold text-[#41b4a5] border-none bg-transparent m-0 p-0 cursor-pointer">Get Premium</button>
+                            <button onClick={() => { setIsMobileNavOpen(false); openSignIn({ fallbackRedirectUrl: window.location.href }); }} className="text-left text-lg font-semibold text-slate-900 dark:text-white border-none bg-transparent m-0 p-0 cursor-pointer">Sign in</button>
+                            <button onClick={() => { setIsMobileNavOpen(false); openSignUp({ fallbackRedirectUrl: window.location.href }); }} className="text-left text-lg font-bold text-[#41b4a5] border-none bg-transparent m-0 p-0 cursor-pointer">Get Premium</button>
                         </SignedOut>
                         <SignedIn>
                             <span className="text-sm font-medium text-slate-500">Account management available via avatar</span>

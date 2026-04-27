@@ -71,13 +71,13 @@ export default function LandingPage() {
             <div className="w-px h-6 bg-slate-200 dark:bg-slate-700 hidden md:block"></div>
             <SignedOut>
               <button
-                onClick={() => openSignIn({ redirectUrl: window.location.href })}
+                onClick={() => openSignIn({ fallbackRedirectUrl: window.location.href })}
                 className="flex h-10 px-5 cursor-pointer items-center justify-center rounded-lg bg-sh-surface-light dark:bg-sh-surface-dark border border-slate-200 dark:border-slate-700 hover:border-sh-primary/50 text-slate-700 dark:text-slate-200 text-sm font-semibold transition-all"
               >
                 Sign in
               </button>
               <button
-                onClick={() => openSignIn({ redirectUrl: window.location.href })}
+                onClick={() => openSignIn({ fallbackRedirectUrl: window.location.href })}
                 className="flex h-10 px-5 cursor-pointer items-center justify-center rounded-lg bg-sh-primary hover:bg-sh-primary-dark text-white text-sm font-semibold shadow-sm transition-all"
               >
                 Get Premium
@@ -140,7 +140,7 @@ export default function LandingPage() {
                   <button
                     onClick={() => {
                       setIsMobileMenuOpen(false);
-                      openSignIn({ redirectUrl: window.location.href });
+                      openSignIn({ fallbackRedirectUrl: window.location.href });
                     }}
                     className="flex h-12 w-full items-center justify-center rounded-lg bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-base font-semibold"
                   >
@@ -149,7 +149,7 @@ export default function LandingPage() {
                   <button
                     onClick={() => {
                       setIsMobileMenuOpen(false);
-                      openSignIn({ redirectUrl: window.location.href });
+                      openSignIn({ fallbackRedirectUrl: window.location.href });
                     }}
                     className="flex h-12 w-full items-center justify-center rounded-lg bg-sh-primary hover:bg-sh-primary-dark text-white text-base font-semibold shadow-sm"
                   >

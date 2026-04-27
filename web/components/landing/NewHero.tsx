@@ -17,7 +17,7 @@ export default function NewHero() {
         if (isSignedIn) {
             router.push('/resume');
         } else {
-            openSignIn({ redirectUrl: '/resume' });
+            openSignIn({ fallbackRedirectUrl: '/resume' });
         }
     };
 
