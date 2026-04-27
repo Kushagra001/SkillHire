@@ -141,6 +141,21 @@ function JobsPageContent() {
 
     const searchParams = useSearchParams();
     const urlJobId = searchParams.get('jobId');
+    const shouldSignIn = searchParams.get('sign-in') === 'true';
+
+    useEffect(() => {
+        if (shouldSignIn && !isSignedIn) {
+            // Remove the sign-in param from URL so it doesn't reopen on refresh
+            const params = new URLSearchParams(window.location.search);
+            params.delete('sign-in');
+            window.history.replaceState(null, '', `?${params.toString()}`);
+            
+            // Short delay to ensure transition finishes and modal mounts correctly
+            setTimeout(() => {
+                openSignIn();
+            }, 100);
+        }
+    }, [shouldSignIn, isSignedIn, openSignIn]);
 
     // Back-gesture fix: push a hash state when opening mobile pane so the browser
     // back gesture pops the hash (closing the pane) rather than navigating away.

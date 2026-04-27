@@ -6,16 +6,13 @@ import { useClerk } from '@clerk/nextjs';
 import { useRouter } from 'next/navigation';
 
 export default function LoginRedirect() {
-    const { openSignIn } = useClerk();
     const router = useRouter();
 
     useEffect(() => {
-        // Push to /jobs first so there's a real page under the modal
-        router.replace('/jobs');
-        // Small delay lets the navigation start before triggering the modal
-        const t = setTimeout(() => openSignIn(), 150);
-        return () => clearTimeout(t);
-    }, [openSignIn, router]);
+        // Push to /jobs with a query parameter to reliably trigger the modal
+        // after the navigation completes.
+        router.replace('/jobs?sign-in=true');
+    }, [router]);
 
     return null;
 }
