@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CompanyLogo } from '@/components/CompanyLogo';
+import { ResponseRatePrompt } from '@/components/ResponseRatePrompt';
 
 export interface Job {
     _id: string;
@@ -72,9 +73,10 @@ const formatMarkdown = (text: string) => {
     return <div dangerouslySetInnerHTML={{ __html: html }} className="text-slate-600 dark:text-slate-300 space-y-2 leading-relaxed text-sm" />;
 };
 
-export function JobDetailsPane({ job, onUnlock, isUnlocking }: { job: Job | null, onUnlock: () => void, isUnlocking: boolean }) {
+export function JobDetailsPane({ job, onUnlock, isUnlocking, isSignedIn = false }: { job: Job | null, onUnlock: () => void, isUnlocking: boolean, isSignedIn?: boolean }) {
     const [isCopied, setIsCopied] = useState(false);
     const [showFullDesc, setShowFullDesc] = useState(false);
+    const [applyClicked, setApplyClicked] = useState(false);
 
     // AI Resume Matcher State
     const [hasSavedResume, setHasSavedResume] = useState<boolean | null>(null);
@@ -105,6 +107,7 @@ export function JobDetailsPane({ job, onUnlock, isUnlocking }: { job: Job | null
         setMatchResult(null);
         setShowFullReport(false);
         setQuotaExceeded(false);
+        setApplyClicked(false);
     }, [job?._id]);
 
     const handleQuickMatch = async () => {
@@ -253,7 +256,14 @@ export function JobDetailsPane({ job, onUnlock, isUnlocking }: { job: Job | null
                                     className="bg-[#41b4a5] hover:bg-[#369689] text-white font-bold py-6 px-8 rounded-lg shadow-sm transition-colors text-base shrink-0"
                                     asChild
                                 >
-                                    <a href={job.apply_link} target="_blank" rel="noopener noreferrer">Apply Now</a>
+                                    <a
+                                        href={job.apply_link}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        onClick={() => setApplyClicked(true)}
+                                    >
+                                        Apply Now
+                                    </a>
                                 </Button>
                             )}
                         </div>
@@ -517,6 +527,17 @@ export function JobDetailsPane({ job, onUnlock, isUnlocking }: { job: Job | null
                                 </>
                             )}
                         </div>
+
+                        {/* Response Rate Prompt — appears 3s after Apply click */}
+                        {!job.is_locked && (
+                            <ResponseRatePrompt
+                                company={job.company}
+                                jobId={job._id}
+                                isSignedIn={isSignedIn}
+                                show={applyClicked}
+                                onDismiss={() => setApplyClicked(false)}
+                            />
+                        )}
 
                         <div className="space-y-6 relative">
                             <div>
