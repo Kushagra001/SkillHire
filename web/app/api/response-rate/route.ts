@@ -13,36 +13,56 @@ import CompanyFeedback from '@/models/CompanyFeedback';
  */
 export async function GET(req: NextRequest) {
     try {
-        const company = req.nextUrl.searchParams.get('company')?.trim().toLowerCase();
-        if (!company) {
-            return NextResponse.json({ error: 'company param required' }, { status: 400 });
+        const companiesParam = req.nextUrl.searchParams.get('companies');
+        const singleCompany = req.nextUrl.searchParams.get('company')?.trim().toLowerCase();
+        
+        let companies: string[] = [];
+        if (companiesParam) {
+            companies = companiesParam.split(',').map(c => c.trim().toLowerCase());
+        } else if (singleCompany) {
+            companies = [singleCompany];
+        }
+
+        if (companies.length === 0) {
+            return NextResponse.json({ error: 'company or companies param required' }, { status: 400 });
         }
 
         await dbConnect();
 
-        const [result] = await CompanyFeedback.aggregate([
-            { $match: { company: new RegExp(`^${company}$`, 'i') } },
+        const results = await CompanyFeedback.aggregate([
+            { $match: { company: { $in: companies } } },
             {
                 $group: {
-                    _id: { $toLower: '$company' },
+                    _id: '$company',
                     total: { $sum: 1 },
                     responded: { $sum: { $cond: ['$responded', 1, 0] } },
                 },
             },
         ]);
 
-        if (!result || result.total < 3) {
-            // Don't show stats until we have at least 3 votes (avoid misleading single-vote rates)
-            return NextResponse.json({ hasData: false });
+        const formattedResults = results.reduce((acc: any, curr) => {
+            if (curr.total >= 3) {
+                acc[curr._id] = {
+                    hasData: true,
+                    responseRate: Math.round((curr.responded / curr.total) * 100),
+                    totalVotes: curr.total
+                };
+            }
+            return acc;
+        }, {});
+
+        // If single company was requested, return the old format for backward compatibility
+        if (singleCompany && !companiesParam) {
+            const result = formattedResults[singleCompany];
+            if (!result) return NextResponse.json({ hasData: false });
+            return NextResponse.json({
+                hasData: true,
+                company: singleCompany,
+                ...result
+            });
         }
 
-        const rate = Math.round((result.responded / result.total) * 100);
-        return NextResponse.json({
-            hasData: true,
-            company,
-            responseRate: rate,
-            totalVotes: result.total,
-        });
+        return NextResponse.json(formattedResults);
     } catch (err) {
         console.error('[response-rate GET]', err);
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
