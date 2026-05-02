@@ -216,7 +216,7 @@ ${resumeText}`;
             name: error.name
         });
         return NextResponse.json(
-            { error: `Analysis failed: ${error.message || 'Internal error'}` },
+            { error: 'Analysis failed. Please try again later.' },
             { status: 500 }
         );
     }
