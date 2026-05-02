@@ -45,15 +45,8 @@ export default async function CompaniesPage() {
             $group: {
                 _id: '$company',
                 newJobsCount: { $sum: 1 },
-                logo: { $first: '$logo' }
-            }
-        },
-        {
-            $project: {
-                _id: 0,
-                company: '$_id',
-                newJobsCount: 1,
-                logo: 1
+                logos: { $push: '$logo' },
+                rawLogos: { $push: '$raw_data.logo' }
             }
         },
         {
@@ -61,7 +54,18 @@ export default async function CompaniesPage() {
         }
     ];
 
-    const companies: { company: string; newJobsCount: number; logo: string }[] = await Job.aggregate(pipeline);
+    const aggregated = await Job.aggregate(pipeline);
+
+    const companies: { company: string; newJobsCount: number; logo: string | null }[] = aggregated.map((c: any) => {
+        const logo = c.logos.find((l: any) => typeof l === 'string' && l.trim().length > 0) || 
+                     c.rawLogos.find((l: any) => typeof l === 'string' && l.trim().length > 0) || 
+                     null;
+        return {
+            company: c._id,
+            newJobsCount: c.newJobsCount,
+            logo
+        };
+    });
 
     const totalCompanies = companies.length;
     const hotCompanies = companies.filter(c => c.newJobsCount >= 5).length;

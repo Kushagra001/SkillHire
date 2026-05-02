@@ -131,7 +131,9 @@ function JobsPageContent() {
     const { openSignIn, openSignUp } = useClerk();
     const queryClient = useQueryClient();
 
-    const [search, setSearch] = useState('');
+    const searchParams = useSearchParams();
+    
+    const [search, setSearch] = useState(searchParams.get('q') || '');
     const [location, setLocation] = useState('');
     const [gradYear, setGradYear] = useState('');
     const [selectedExperience, setSelectedExperience] = useState<string[]>([]);
@@ -141,9 +143,15 @@ function JobsPageContent() {
     const [isMobileOpen, setIsMobileOpen] = useState(false);
     const [sortBy, setSortBy] = useState("newest");
 
-    const searchParams = useSearchParams();
     const urlJobId = searchParams.get('jobId');
     const shouldSignIn = searchParams.get('sign-in') === 'true';
+
+    useEffect(() => {
+        const q = searchParams.get('q');
+        if (q !== null) {
+            setSearch(q);
+        }
+    }, [searchParams]);
 
     useEffect(() => {
         if (shouldSignIn && !isSignedIn) {
