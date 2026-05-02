@@ -6,7 +6,7 @@ export interface IUser extends Document {
     subscription_tier: 'free' | 'pro';
     subscription_expires_at?: Date;
     resume_text?: string;
-    skills: string[];
+    skills?: string[];
     ai_scans_count: number;
     last_scan_date?: Date;
     created_at: Date;
