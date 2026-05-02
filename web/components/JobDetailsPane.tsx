@@ -5,6 +5,9 @@ import { Button } from '@/components/ui/button';
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CompanyLogo } from '@/components/CompanyLogo';
+import { ResponseRatePrompt } from '@/components/ResponseRatePrompt';
+import { HiringPulseBadge } from '@/components/HiringPulseBadge';
+import { FitScoreBadge } from '@/components/FitScoreBadge';
 
 export interface Job {
     _id: string;
@@ -15,6 +18,7 @@ export interface Job {
     apply_link: string;
     tags?: string[];
     skills?: string[];
+    tech_stack?: string[];
     is_locked?: boolean;
     job_type?: string;
     salary_status?: string;
@@ -72,9 +76,10 @@ const formatMarkdown = (text: string) => {
     return <div dangerouslySetInnerHTML={{ __html: html }} className="text-slate-600 dark:text-slate-300 space-y-2 leading-relaxed text-sm" />;
 };
 
-export function JobDetailsPane({ job, onUnlock, isUnlocking }: { job: Job | null, onUnlock: () => void, isUnlocking: boolean }) {
+export function JobDetailsPane({ job, onUnlock, isUnlocking, isSignedIn = false }: { job: Job | null, onUnlock: () => void, isUnlocking: boolean, isSignedIn?: boolean }) {
     const [isCopied, setIsCopied] = useState(false);
     const [showFullDesc, setShowFullDesc] = useState(false);
+    const [applyClicked, setApplyClicked] = useState(false);
 
     // AI Resume Matcher State
     const [hasSavedResume, setHasSavedResume] = useState<boolean | null>(null);
@@ -105,6 +110,7 @@ export function JobDetailsPane({ job, onUnlock, isUnlocking }: { job: Job | null
         setMatchResult(null);
         setShowFullReport(false);
         setQuotaExceeded(false);
+        setApplyClicked(false);
     }, [job?._id]);
 
     const handleQuickMatch = async () => {
@@ -234,9 +240,11 @@ export function JobDetailsPane({ job, onUnlock, isUnlocking }: { job: Job | null
                         <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-6">
                             <div className="flex-1 min-w-0">
                                 <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white mb-2 leading-tight">{job.title}</h2>
-                                <div className="flex items-center gap-2 mb-4">
+                                <div className="flex items-center gap-2 mb-4 flex-wrap">
                                     <span className="text-lg font-medium text-slate-700 dark:text-slate-300">{job.company}</span>
                                     <CheckCircle2 className="h-5 w-5 text-[#41b4a5] fill-[#EAFBF9]" />
+                                    <HiringPulseBadge company={job.company} className="px-2 py-1 text-xs" />
+                                    <FitScoreBadge techStack={job.tech_stack || []} className="px-2 py-1 text-xs" />
                                 </div>
                             </div>
 
@@ -253,7 +261,14 @@ export function JobDetailsPane({ job, onUnlock, isUnlocking }: { job: Job | null
                                     className="bg-[#41b4a5] hover:bg-[#369689] text-white font-bold py-6 px-8 rounded-lg shadow-sm transition-colors text-base shrink-0"
                                     asChild
                                 >
-                                    <a href={job.apply_link} target="_blank" rel="noopener noreferrer">Apply Now</a>
+                                    <a
+                                        href={job.apply_link}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        onClick={() => setApplyClicked(true)}
+                                    >
+                                        Apply Now
+                                    </a>
                                 </Button>
                             )}
                         </div>
@@ -517,6 +532,17 @@ export function JobDetailsPane({ job, onUnlock, isUnlocking }: { job: Job | null
                                 </>
                             )}
                         </div>
+
+                        {/* Response Rate Prompt — appears 3s after Apply click */}
+                        {!job.is_locked && (
+                            <ResponseRatePrompt
+                                company={job.company}
+                                jobId={job._id}
+                                isSignedIn={isSignedIn}
+                                show={applyClicked}
+                                onDismiss={() => setApplyClicked(false)}
+                            />
+                        )}
 
                         <div className="space-y-6 relative">
                             <div>

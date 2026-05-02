@@ -3,6 +3,7 @@ import { auth } from '@clerk/nextjs/server';
 import dbConnect from '@/lib/mongodb';
 import User from '@/models/User';
 import pdfParse from 'pdf-parse';
+import Groq from 'groq-sdk';
 
 export const maxDuration = 60; // Prevent Vercel serverless function timeouts
 
@@ -23,7 +24,8 @@ export async function GET(req: NextRequest) {
 
         return NextResponse.json({
             hasSavedResume: !!user.resume_text,
-            resumeText: !!user.resume_text
+            resumeText: !!user.resume_text,
+            skills: user.skills || []
         }, { status: 200 });
 
     } catch (error) {
@@ -64,14 +66,47 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: 'Could not extract text from the PDF.' }, { status: 400 });
         }
 
-        // Upsert the user and save the text
+        // 3. Extract skills using AI
+        const groqApiKey = process.env.GROQ_API_KEY?.trim();
+        let extractedSkills: string[] | undefined;
+
+        if (groqApiKey) {
+            try {
+                const groq = new Groq({ apiKey: groqApiKey });
+                const completion = await groq.chat.completions.create({
+                    messages: [
+                        {
+                            role: 'system',
+                            content: 'Extract a flat list of technical skills, programming languages, frameworks, and tools from the resume text. Return ONLY a JSON object: { "skills": ["skill1", "skill2"] }. Be comprehensive but concise.'
+                        },
+                        { role: 'user', content: resumeText }
+                    ],
+                    model: 'llama-3.1-8b-instant',
+                    response_format: { type: 'json_object' }
+                });
+                const content = JSON.parse(completion.choices[0]?.message?.content || '{}');
+                extractedSkills = Array.isArray(content.skills) ? content.skills : [];
+            } catch (e) {
+                console.error('Skill extraction failed:', e);
+            }
+        } else {
+            console.warn('Skipping skill extraction because GROQ_API_KEY is not set.');
+        }
+
+        // 4. Upsert the user and save the text + skills.
+        // Only include `skills` in the update when extraction succeeded so that
+        // a missing/invalid GROQ_API_KEY or any Groq/parse error never overwrites
+        // the user's previously stored skills.
+        const skillsUpdate = extractedSkills !== undefined ? { skills: extractedSkills } : {};
+
         await User.findOneAndUpdate(
             { clerk_id: userId },
             {
                 $set: {
                     resume_text: resumeText,
+                    ...skillsUpdate
                 },
-                $setOnInsert: { created_at: new Date() } // In case the user doc didn't exist
+                $setOnInsert: { created_at: new Date() }
             },
             { upsert: true, new: true }
         );

@@ -43,6 +43,7 @@ export default function Footer() {
                             <li><Link href="#features" className="text-sm text-slate-500 hover:text-sh-primary transition-colors">Features</Link></li>
                             <li><Link href="#pricing" className="text-sm text-slate-500 hover:text-sh-primary transition-colors">Pricing</Link></li>
                             <li><Link href="/jobs" className="text-sm text-slate-500 hover:text-sh-primary transition-colors">Job Board</Link></li>
+                            <li><Link href="/companies" className="text-sm text-slate-500 hover:text-sh-primary transition-colors">Hiring Pulse</Link></li>
                             <li><Link href="/resume" className="text-sm text-slate-500 hover:text-sh-primary transition-colors">Resume AI Matcher</Link></li>
                         </ul>
                     </div>

@@ -3,6 +3,7 @@ import { auth, currentUser } from '@clerk/nextjs/server';
 import dbConnect from '@/lib/mongodb';
 import User from '@/models/User';
 import Groq from 'groq-sdk';
+import pdfParse from 'pdf-parse';
 
 export const maxDuration = 60; // Prevent Vercel serverless function timeouts
 
@@ -81,7 +82,6 @@ export async function POST(request: Request) {
             const arrayBuffer = await file.arrayBuffer();
             const buffer = Buffer.from(arrayBuffer);
 
-            const pdfParse = require('pdf-parse');
             try {
                 const parsedData = await pdfParse(buffer);
                 resumeText = parsedData.text;
@@ -131,9 +131,9 @@ export async function POST(request: Request) {
             }
         }
 
-        const groqApiKey = process.env.GROQ_API_KEY;
+        const groqApiKey = process.env.GROQ_API_KEY?.trim();
         if (!groqApiKey) {
-            console.error('GROQ_API_KEY is not set');
+            console.error('GROQ_API_KEY is not set or empty');
             return NextResponse.json(
                 { error: 'Server configuration error.' },
                 { status: 500 }
@@ -209,10 +209,14 @@ ${resumeText}`;
         }
 
         return NextResponse.json(parsedResult, { status: 200 });
-    } catch (error) {
-        console.error('API Error:', error);
+    } catch (error: any) {
+        console.error('API Error Details:', {
+            message: error.message,
+            stack: error.stack,
+            name: error.name
+        });
         return NextResponse.json(
-            { error: 'An internal error occurred during analysis.' },
+            { error: 'Analysis failed. Please try again later.' },
             { status: 500 }
         );
     }

@@ -70,6 +70,7 @@ interface Job {
     match_percentage?: number;
     job_type?: string;
     salary_status?: string;
+    tech_stack?: string[];
     raw_data?: {
         description?: string | { text?: string; html?: string };
         snippet?: string;
@@ -82,6 +83,9 @@ interface Job {
 import { MobileJobDetails } from '@/components/mobile-job-details';
 import { JobDetailsPane } from '@/components/JobDetailsPane';
 import { CompanyLogo } from '@/components/CompanyLogo';
+import { ResponseRateBadge, primeResponseRateCache } from '@/components/ResponseRateBadge';
+import { HiringPulseBadge } from '@/components/HiringPulseBadge';
+import { FitScoreBadge } from '@/components/FitScoreBadge';
 
 /** Apify/Indeed jobs store description as { text, html }; SerpAPI jobs store it as a plain string. */
 const getJobDescription = (raw_data?: { description?: string | { text?: string; html?: string }; snippet?: string; raw_snippet?: string }): string | undefined => {
@@ -129,7 +133,9 @@ function JobsPageContent() {
     const { openSignIn, openSignUp } = useClerk();
     const queryClient = useQueryClient();
 
-    const [search, setSearch] = useState('');
+    const searchParams = useSearchParams();
+    
+    const [search, setSearch] = useState(searchParams.get('q') || '');
     const [location, setLocation] = useState('');
     const [gradYear, setGradYear] = useState('');
     const [selectedExperience, setSelectedExperience] = useState<string[]>([]);
@@ -139,9 +145,15 @@ function JobsPageContent() {
     const [isMobileOpen, setIsMobileOpen] = useState(false);
     const [sortBy, setSortBy] = useState("newest");
 
-    const searchParams = useSearchParams();
     const urlJobId = searchParams.get('jobId');
     const shouldSignIn = searchParams.get('sign-in') === 'true';
+
+    useEffect(() => {
+        const q = searchParams.get('q');
+        if (q !== null) {
+            setSearch(q);
+        }
+    }, [searchParams]);
 
     useEffect(() => {
         if (shouldSignIn && !isSignedIn) {
@@ -262,6 +274,14 @@ function JobsPageContent() {
             return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
         });
 
+    // Prime the response rate cache for all unique companies on the page
+    useEffect(() => {
+        if (allJobs.length > 0) {
+            const uniqueCompanies = Array.from(new Set(allJobs.map(j => j.company)));
+            primeResponseRateCache(uniqueCompanies);
+        }
+    }, [allJobs]);
+
     useEffect(() => {
         if (!selectedJob && processedJobs.length > 0) {
 
@@ -350,6 +370,7 @@ function JobsPageContent() {
                     <div className="flex-1" />
                     <nav className="hidden md:flex items-center gap-8 mr-4">
                         <Link className="text-sm font-medium text-slate-700 dark:text-slate-300 hover:text-[#41b4a5] transition-colors" href="/jobs">Jobs</Link>
+                        <Link className="text-sm font-medium text-slate-700 dark:text-slate-300 hover:text-[#41b4a5] transition-colors" href="/companies">Hiring Pulse</Link>
                         <Link className="text-sm font-medium text-slate-700 dark:text-slate-300 hover:text-[#41b4a5] transition-colors" href="/resume">AI Resume Matcher</Link>
                     </nav>
                     {/* Auth — hard right */}
@@ -401,6 +422,7 @@ function JobsPageContent() {
                         className="md:hidden absolute top-16 left-0 right-0 z-40 bg-white dark:bg-[#0B0F19] border-b border-gray-200 dark:border-slate-800 shadow-lg flex flex-col p-5 gap-5"
                     >
                         <Link href="/jobs" onClick={() => setIsMobileNavOpen(false)} className="text-lg font-semibold text-slate-900 dark:text-white border-none bg-transparent m-0 p-0 text-left">Jobs</Link>
+                        <Link href="/companies" onClick={() => setIsMobileNavOpen(false)} className="text-lg font-semibold text-slate-900 dark:text-white border-none bg-transparent m-0 p-0 text-left">Hiring Pulse</Link>
                         <Link href="/resume" onClick={() => setIsMobileNavOpen(false)} className="text-lg font-semibold text-slate-900 dark:text-white border-none bg-transparent m-0 p-0 text-left">AI Resume Matcher</Link>
                         <div className="h-px bg-gray-200 dark:bg-slate-800 my-1" />
                         <SignedOut>
@@ -666,10 +688,13 @@ function JobsPageContent() {
                                                 </h3>
 
                                                 {/* Company + verified + lock + timestamp */}
-                                                <div className="flex items-center gap-1.5 mb-2">
+                                                <div className="flex items-center gap-1.5 mb-2 flex-wrap">
                                                     <span className="text-sm font-medium text-slate-700 dark:text-slate-300 truncate">{job.company}</span>
                                                     <CheckCircle2 className="h-3.5 w-3.5 text-[#41b4a5] fill-[#EAFBF9] shrink-0" />
                                                     {job.is_locked && <Lock className="h-3 w-3 text-amber-500 shrink-0" />}
+                                                    <ResponseRateBadge company={job.company} className="shrink-0" />
+                                                    <HiringPulseBadge company={job.company} className="shrink-0" />
+                                                    <FitScoreBadge techStack={job.tech_stack || []} className="shrink-0" />
                                                     <span className="text-[10px] font-medium text-slate-400 dark:text-slate-500 whitespace-nowrap ml-auto flex items-center gap-1.5">
                                                         {formatTimeAgo(job.created_at)}
                                                         {job.is_premium && <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-amber-100 text-amber-700">PRO</span>}
@@ -813,7 +838,7 @@ function JobsPageContent() {
                                 transition={{ duration: 0.15, ease: "easeInOut" }}
                                 className="h-full w-full flex flex-col"
                             >
-                                <JobDetailsPane job={selectedJob} onUnlock={handleUnlock} isUnlocking={isUnlocking} />
+                                <JobDetailsPane job={selectedJob} onUnlock={handleUnlock} isUnlocking={isUnlocking} isSignedIn={!!isSignedIn} />
                             </motion.div>
                         </AnimatePresence>
                     </div>
