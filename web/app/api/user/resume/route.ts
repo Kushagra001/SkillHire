@@ -67,25 +67,33 @@ export async function POST(req: NextRequest) {
         }
 
         // 3. Extract skills using AI
-        let extractedSkills: string[] = [];
-        try {
-            const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
-            const completion = await groq.chat.completions.create({
-                messages: [
-                    {
-                        role: 'system',
-                        content: 'Extract a flat list of technical skills, programming languages, frameworks, and tools from the resume text. Return ONLY a JSON object: { "skills": ["skill1", "skill2"] }. Be comprehensive but concise.'
-                    },
-                    { role: 'user', content: resumeText }
-                ],
-                model: 'llama-3.1-8b-instant',
-                response_format: { type: 'json_object' }
-            });
-            const content = JSON.parse(completion.choices[0]?.message?.content || '{}');
-            extractedSkills = content.skills || [];
-        } catch (e) {
-            console.error('Skill extraction failed:', e);
+        const groqApiKey = process.env.GROQ_API_KEY?.trim();
+        let extractedSkills: string[] | undefined;
+
+        if (groqApiKey) {
+            try {
+                const groq = new Groq({ apiKey: groqApiKey });
+                const completion = await groq.chat.completions.create({
+                    messages: [
+                        {
+                            role: 'system',
+                            content: 'Extract a flat list of technical skills, programming languages, frameworks, and tools from the resume text. Return ONLY a JSON object: { "skills": ["skill1", "skill2"] }. Be comprehensive but concise.'
+                        },
+                        { role: 'user', content: resumeText }
+                    ],
+                    model: 'llama-3.1-8b-instant',
+                    response_format: { type: 'json_object' }
+                });
+                const content = JSON.parse(completion.choices[0]?.message?.content || '{}');
+                extractedSkills = Array.isArray(content.skills) ? content.skills : [];
+            } catch (e) {
+                console.error('Skill extraction failed:', e);
+            }
+        } else {
+            console.warn('Skipping skill extraction because GROQ_API_KEY is not set.');
         }
+
+        const existingUser = await User.findOne({ clerk_id: userId });
 
         // 4. Upsert the user and save the text + skills
         await User.findOneAndUpdate(
@@ -93,7 +101,7 @@ export async function POST(req: NextRequest) {
             {
                 $set: {
                     resume_text: resumeText,
-                    skills: extractedSkills
+                    skills: extractedSkills ?? existingUser?.skills ?? []
                 },
                 $setOnInsert: { created_at: new Date() }
             },
