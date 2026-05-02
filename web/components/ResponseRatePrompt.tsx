@@ -144,9 +144,17 @@ export function ResponseRatePrompt({ company, jobId, isSignedIn, show, onDismiss
                             )}
                         </motion.div>
                     ) : voteState === 'error' ? (
-                        <p className="text-xs text-red-500 text-center">
-                            Something went wrong. Please try again.
-                        </p>
+                        <div className="text-center">
+                            <p className="text-xs text-red-500 mb-2">
+                                Something went wrong. Please try again.
+                            </p>
+                            <button
+                                onClick={() => { setVoteState('idle'); setVote(null); }}
+                                className="text-xs font-semibold text-[#41b4a5] hover:underline"
+                            >
+                                Try again
+                            </button>
+                        </div>
                     ) : (
                         /* Idle / submitting state */
                         <>

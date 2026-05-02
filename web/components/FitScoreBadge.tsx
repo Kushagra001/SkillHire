@@ -30,6 +30,7 @@ async function fetchUserProfile(): Promise<UserProfile> {
     }
 
     profileLoading = true;
+    const fallback: UserProfile = { hasSavedResume: false, skills: [] };
     try {
         const res = await fetch('/api/user/resume');
         const data = await res.json();
@@ -38,10 +39,13 @@ async function fetchUserProfile(): Promise<UserProfile> {
             skills: (data.skills || []).map((s: string) => s.toLowerCase().trim())
         };
         profileListeners.forEach(resolve => resolve(userProfileCache!));
+        profileListeners.length = 0;
         return userProfileCache;
     } catch (err) {
         console.error('Failed to fetch user profile for matching:', err);
-        return { hasSavedResume: false, skills: [] };
+        profileListeners.forEach(resolve => resolve(fallback));
+        profileListeners.length = 0;
+        return fallback;
     } finally {
         profileLoading = false;
     }

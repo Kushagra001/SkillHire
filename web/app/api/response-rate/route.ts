@@ -5,21 +5,34 @@ import CompanyFeedback from '@/models/CompanyFeedback';
 
 /**
  * GET /api/response-rate?company=google
+ * GET /api/response-rate?companies=google,amazon,...
  * Returns aggregated response rate for one or more companies.
  * Public endpoint — no auth required for reads.
  *
  * Query params:
- *   company   — single company name
- *   companies — comma-separated company names for batch fetching
+ *   company   — single company name (returns legacy single-object shape)
+ *   companies — comma-separated list of company names (returns map keyed by name)
+ *               Deduplicated; capped at MAX_COMPANIES per request.
+ *
+ * Single-company response: { hasData, company, responseRate?, totalVotes? }
+ * Batch response: { [company]: { hasData, responseRate?, totalVotes? }, ... }
  */
+
+const MAX_COMPANIES = 50;
+
 export async function GET(req: NextRequest) {
     try {
         const companiesParam = req.nextUrl.searchParams.get('companies');
         const singleCompany = req.nextUrl.searchParams.get('company')?.trim().toLowerCase();
-        
+
         let companies: string[] = [];
         if (companiesParam) {
-            companies = companiesParam.split(',').map(c => c.trim().toLowerCase());
+            companies = [...new Set<string>(
+                    companiesParam
+                        .split(',')
+                        .map(c => c.trim().toLowerCase())
+                        .filter(c => c.length > 0)
+                )].slice(0, MAX_COMPANIES);
         } else if (singleCompany) {
             companies = [singleCompany];
         }

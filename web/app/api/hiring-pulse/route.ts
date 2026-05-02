@@ -13,15 +13,16 @@ export async function GET() {
         const pipeline = [
             {
                 $group: {
-                    _id: '$company',
+                    _id: { $toLower: { $trim: { input: '$company' } } },
+                    company: { $first: '$company' }, // preserve original casing for display
                     newJobsCount: { $sum: 1 },
-                    logo: { $first: '$logo' } // get one logo for the company
+                    logo: { $first: '$logo' }
                 }
             },
             {
                 $project: {
                     _id: 0,
-                    company: '$_id',
+                    company: 1,
                     newJobsCount: 1,
                     logo: 1
                 }

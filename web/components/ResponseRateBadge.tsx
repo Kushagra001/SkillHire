@@ -20,7 +20,7 @@ interface ResponseRateData {
     totalVotes?: number;
 }
 
-const cache: Record<string, ResponseRateData | 'loading' | 'error'> = {};
+const cache: Record<string, ResponseRateData | 'loading'> = {};
 const listeners: Record<string, ((data: ResponseRateData) => void)[]> = {};
 const MAX_CACHE_SIZE = 500;
 
@@ -98,7 +98,8 @@ function fetchResponseRate(company: string): Promise<ResponseRateData> {
             return data;
         })
         .catch(() => {
-            cache[key] = 'error';
+            // Delete the cache entry so subsequent calls can trigger a fresh fetch
+            delete cache[key];
             const err: ResponseRateData = { hasData: false };
             listeners[key]?.forEach((fn) => fn(err));
             delete listeners[key];

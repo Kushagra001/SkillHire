@@ -43,7 +43,8 @@ export default async function CompaniesPage() {
     const pipeline = [
         {
             $group: {
-                _id: '$company',
+                _id: { $toLower: { $trim: { input: '$company' } } },
+                company: { $first: '$company' }, // preserve original casing for display
                 newJobsCount: { $sum: 1 },
                 logos: { $push: '$logo' },
                 rawLogos: { $push: '$raw_data.logo' },
@@ -63,7 +64,7 @@ export default async function CompaniesPage() {
                      c.rawLogos.find((l: any) => typeof l === 'string' && l.trim().length > 0) || 
                      null;
         return {
-            company: c._id,
+            company: c.company ?? c._id,
             newJobsCount: c.newJobsCount,
             logo
         };
