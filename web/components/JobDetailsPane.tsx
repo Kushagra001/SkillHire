@@ -6,6 +6,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CompanyLogo } from '@/components/CompanyLogo';
 import { ResponseRatePrompt } from '@/components/ResponseRatePrompt';
+import { HiringPulseBadge } from '@/components/HiringPulseBadge';
 
 export interface Job {
     _id: string;
@@ -237,9 +238,10 @@ export function JobDetailsPane({ job, onUnlock, isUnlocking, isSignedIn = false 
                         <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-6">
                             <div className="flex-1 min-w-0">
                                 <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white mb-2 leading-tight">{job.title}</h2>
-                                <div className="flex items-center gap-2 mb-4">
+                                <div className="flex items-center gap-2 mb-4 flex-wrap">
                                     <span className="text-lg font-medium text-slate-700 dark:text-slate-300">{job.company}</span>
                                     <CheckCircle2 className="h-5 w-5 text-[#41b4a5] fill-[#EAFBF9]" />
+                                    <HiringPulseBadge company={job.company} className="px-2 py-1 text-xs" />
                                 </div>
                             </div>
 
