@@ -4,6 +4,7 @@ import { useEffect, useState, useRef } from 'react';
 import { X, ExternalLink, MapPin, Briefcase, Share2, CheckCircle2, Wallet, Sparkles, Loader2, XCircle, UploadCloud } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { motion, AnimatePresence } from 'framer-motion';
+import { HiringPulseBadge } from '@/components/HiringPulseBadge';
 
 interface Job {
     _id: string;
@@ -215,9 +216,10 @@ export function MobileJobDetails({ job, onClose, onUnlock, isUnlocking }: Mobile
                                 </div>
                                 <div className="flex-1">
                                     <h1 className="text-xl font-bold text-slate-900 dark:text-white leading-tight mb-2">{job.title}</h1>
-                                    <div className="flex items-center gap-2 mb-3">
+                                    <div className="flex items-center gap-2 mb-3 flex-wrap">
                                         <span className="text-base font-medium text-slate-700 dark:text-slate-300">{job.company}</span>
                                         <CheckCircle2 className="h-4 w-4 text-[#41b4a5] fill-[#EAFBF9]" />
+                                        <HiringPulseBadge company={job.company} />
                                     </div>
                                     <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-slate-500 dark:text-slate-400">
                                         <span className="flex items-center gap-1.5">

@@ -6,6 +6,7 @@ export interface IUser extends Document {
     subscription_tier: 'free' | 'pro';
     subscription_expires_at?: Date;
     resume_text?: string;
+    skills: string[];
     ai_scans_count: number;
     last_scan_date?: Date;
     created_at: Date;
@@ -17,6 +18,7 @@ const UserSchema: Schema = new Schema({
     subscription_tier: { type: String, enum: ['free', 'pro'], default: 'free' },
     subscription_expires_at: { type: Date },
     resume_text: { type: String },
+    skills: { type: [String], default: [] },
     ai_scans_count: { type: Number, default: 0 },
     last_scan_date: { type: Date },
     created_at: { type: Date, default: Date.now },
