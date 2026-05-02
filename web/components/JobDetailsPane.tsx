@@ -18,6 +18,7 @@ export interface Job {
     apply_link: string;
     tags?: string[];
     skills?: string[];
+    tech_stack?: string[];
     is_locked?: boolean;
     job_type?: string;
     salary_status?: string;

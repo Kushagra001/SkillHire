@@ -64,12 +64,23 @@ export function FitScoreBadge({ techStack, className }: FitScoreBadgeProps) {
     }
 
     const jobSkills = techStack.map(s => s.toLowerCase().trim());
-    const matched = jobSkills.filter(skill => 
-        profile.skills.some(userSkill => 
-            userSkill.includes(skill) || skill.includes(userSkill)
-        )
+    const matched = jobSkills.filter(jobSkill => 
+        profile.skills.some(userSkill => {
+            const u = userSkill.toLowerCase();
+            const s = jobSkill.toLowerCase();
+            if (u === s) return true;
+            
+            // Use word boundary check to prevent "C" matching "CSS"
+            // but allow "AWS" matching "AWS Lambda" or "React" matching "React.js"
+            try {
+                const regex = new RegExp(`\\b${s}\\b`, 'i');
+                return regex.test(u);
+            } catch (e) {
+                return u.includes(s); // Fallback for special characters
+            }
+        })
     );
-    const missing = jobSkills.filter(skill => !matched.includes(skill));
+    const missing = jobSkills.filter(skill => !matched.some(m => m === skill));
 
     const score = Math.round((matched.length / jobSkills.length) * 100);
 
