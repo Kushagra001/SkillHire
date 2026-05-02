@@ -372,6 +372,7 @@ function JobsPageContent() {
                         <Link className="text-sm font-medium text-slate-700 dark:text-slate-300 hover:text-[#41b4a5] transition-colors" href="/jobs">Jobs</Link>
                         <Link className="text-sm font-medium text-slate-700 dark:text-slate-300 hover:text-[#41b4a5] transition-colors" href="/companies">Hiring Pulse</Link>
                         <Link className="text-sm font-medium text-slate-700 dark:text-slate-300 hover:text-[#41b4a5] transition-colors" href="/resume">AI Resume Matcher</Link>
+                        <Link className="text-sm font-medium text-slate-700 dark:text-slate-300 hover:text-[#41b4a5] transition-colors" href="/tracker">Tracker</Link>
                     </nav>
                     {/* Auth — hard right */}
                     <div className="flex items-center gap-3 shrink-0">
@@ -424,6 +425,7 @@ function JobsPageContent() {
                         <Link href="/jobs" onClick={() => setIsMobileNavOpen(false)} className="text-lg font-semibold text-slate-900 dark:text-white border-none bg-transparent m-0 p-0 text-left">Jobs</Link>
                         <Link href="/companies" onClick={() => setIsMobileNavOpen(false)} className="text-lg font-semibold text-slate-900 dark:text-white border-none bg-transparent m-0 p-0 text-left">Hiring Pulse</Link>
                         <Link href="/resume" onClick={() => setIsMobileNavOpen(false)} className="text-lg font-semibold text-slate-900 dark:text-white border-none bg-transparent m-0 p-0 text-left">AI Resume Matcher</Link>
+                        <Link href="/tracker" onClick={() => setIsMobileNavOpen(false)} className="text-lg font-semibold text-slate-900 dark:text-white border-none bg-transparent m-0 p-0 text-left">Tracker</Link>
                         <div className="h-px bg-gray-200 dark:bg-slate-800 my-1" />
                         <SignedOut>
                             <button onClick={() => { setIsMobileNavOpen(false); openSignIn({ fallbackRedirectUrl: window.location.href }); }} className="text-left text-lg font-semibold text-slate-900 dark:text-white border-none bg-transparent m-0 p-0 cursor-pointer">Sign in</button>

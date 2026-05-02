@@ -1,6 +1,6 @@
 "use client";
 
-import { MapPin, Briefcase, Wallet, CheckCircle2, Lock, ExternalLink, Share2, FileText, UploadCloud, Loader2, Sparkles, XCircle } from 'lucide-react';
+import { MapPin, Briefcase, Wallet, CheckCircle2, Lock, ExternalLink, Share2, FileText, UploadCloud, Loader2, Sparkles, XCircle, BookmarkPlus, BookmarkCheck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -90,6 +90,10 @@ export function JobDetailsPane({ job, onUnlock, isUnlocking, isSignedIn = false 
     const [quotaExceeded, setQuotaExceeded] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
+    // Tracker State
+    const [trackedJobId, setTrackedJobId] = useState<string | null>(null);
+    const [isTracking, setIsTracking] = useState(false);
+
     useEffect(() => {
         const fetchResumeStatus = async () => {
             try {
@@ -111,7 +115,67 @@ export function JobDetailsPane({ job, onUnlock, isUnlocking, isSignedIn = false 
         setShowFullReport(false);
         setQuotaExceeded(false);
         setApplyClicked(false);
+        setTrackedJobId(null);
     }, [job?._id]);
+
+    useEffect(() => {
+        const checkTrackerStatus = async () => {
+            if (!job?._id || !isSignedIn) {
+                setTrackedJobId(null);
+                return;
+            }
+            try {
+                const res = await fetch(`/api/tracker?jobId=${job._id}`);
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.length > 0) {
+                        setTrackedJobId(data[0]._id);
+                    } else {
+                        setTrackedJobId(null);
+                    }
+                }
+            } catch (err) {
+                console.error("Failed to check tracker status", err);
+            }
+        };
+        checkTrackerStatus();
+    }, [job?._id, isSignedIn]);
+
+    const handleToggleTracker = async () => {
+        if (!job) return;
+        if (!isSignedIn) {
+            alert("Please sign in to save jobs to your tracker.");
+            return;
+        }
+        setIsTracking(true);
+        try {
+            if (trackedJobId) {
+                const res = await fetch(`/api/tracker/${trackedJobId}`, { method: 'DELETE' });
+                if (res.ok) setTrackedJobId(null);
+            } else {
+                const res = await fetch('/api/tracker', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        job_id: job._id,
+                        title: job.title,
+                        company: job.company,
+                        location: job.location,
+                        logo: job.logo || job.raw_data?.logo,
+                        apply_link: job.apply_link
+                    })
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    setTrackedJobId(data._id);
+                }
+            }
+        } catch (error) {
+            console.error("Failed to toggle tracker", error);
+        } finally {
+            setIsTracking(false);
+        }
+    };
 
     const handleQuickMatch = async () => {
         if (!job) return;
@@ -257,19 +321,34 @@ export function JobDetailsPane({ job, onUnlock, isUnlocking, isSignedIn = false 
                                     {isUnlocking ? 'Unlocking...' : 'Unlock to Apply'}
                                 </Button>
                             ) : (
-                                <Button
-                                    className="bg-[#41b4a5] hover:bg-[#369689] text-white font-bold py-6 px-8 rounded-lg shadow-sm transition-colors text-base shrink-0"
-                                    asChild
-                                >
-                                    <a
-                                        href={job.apply_link}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        onClick={() => setApplyClicked(true)}
+                                <div className="flex items-center gap-3 shrink-0">
+                                    <Button
+                                        variant="outline"
+                                        onClick={handleToggleTracker}
+                                        disabled={isTracking}
+                                        className={`py-6 px-4 rounded-lg shadow-sm transition-colors border-gray-200 ${trackedJobId ? 'bg-indigo-50 text-indigo-700 border-indigo-200 hover:bg-indigo-100' : 'bg-white text-slate-700 hover:bg-gray-50'}`}
+                                        title="Save to Tracker"
                                     >
-                                        Apply Now
-                                    </a>
-                                </Button>
+                                        {isTracking ? <Loader2 className="h-5 w-5 animate-spin" /> : trackedJobId ? <BookmarkCheck className="h-5 w-5" /> : <BookmarkPlus className="h-5 w-5" />}
+                                    </Button>
+                                    <Button
+                                        className="bg-[#41b4a5] hover:bg-[#369689] text-white font-bold py-6 px-8 rounded-lg shadow-sm transition-colors text-base"
+                                        asChild
+                                    >
+                                        <a
+                                            href={job.apply_link}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            onClick={() => {
+                                                setApplyClicked(true);
+                                                // Auto-save to tracker if they apply and haven't saved it yet
+                                                if (!trackedJobId) handleToggleTracker();
+                                            }}
+                                        >
+                                            Apply Now
+                                        </a>
+                                    </Button>
+                                </div>
                             )}
                         </div>
                     </div>
