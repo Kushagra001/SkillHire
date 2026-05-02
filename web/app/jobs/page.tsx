@@ -84,6 +84,7 @@ import { JobDetailsPane } from '@/components/JobDetailsPane';
 import { CompanyLogo } from '@/components/CompanyLogo';
 import { ResponseRateBadge } from '@/components/ResponseRateBadge';
 import { HiringPulseBadge } from '@/components/HiringPulseBadge';
+import { FitScoreBadge } from '@/components/FitScoreBadge';
 
 /** Apify/Indeed jobs store description as { text, html }; SerpAPI jobs store it as a plain string. */
 const getJobDescription = (raw_data?: { description?: string | { text?: string; html?: string }; snippet?: string; raw_snippet?: string }): string | undefined => {
@@ -684,6 +685,7 @@ function JobsPageContent() {
                                                     {job.is_locked && <Lock className="h-3 w-3 text-amber-500 shrink-0" />}
                                                     <ResponseRateBadge company={job.company} className="shrink-0" />
                                                     <HiringPulseBadge company={job.company} className="shrink-0" />
+                                                    <FitScoreBadge techStack={job.tech_stack || []} className="shrink-0" />
                                                     <span className="text-[10px] font-medium text-slate-400 dark:text-slate-500 whitespace-nowrap ml-auto flex items-center gap-1.5">
                                                         {formatTimeAgo(job.created_at)}
                                                         {job.is_premium && <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-amber-100 text-amber-700">PRO</span>}

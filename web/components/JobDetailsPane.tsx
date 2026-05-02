@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { CompanyLogo } from '@/components/CompanyLogo';
 import { ResponseRatePrompt } from '@/components/ResponseRatePrompt';
 import { HiringPulseBadge } from '@/components/HiringPulseBadge';
+import { FitScoreBadge } from '@/components/FitScoreBadge';
 
 export interface Job {
     _id: string;
@@ -242,6 +243,7 @@ export function JobDetailsPane({ job, onUnlock, isUnlocking, isSignedIn = false 
                                     <span className="text-lg font-medium text-slate-700 dark:text-slate-300">{job.company}</span>
                                     <CheckCircle2 className="h-5 w-5 text-[#41b4a5] fill-[#EAFBF9]" />
                                     <HiringPulseBadge company={job.company} className="px-2 py-1 text-xs" />
+                                    <FitScoreBadge techStack={job.tech_stack || []} className="px-2 py-1 text-xs" />
                                 </div>
                             </div>
 

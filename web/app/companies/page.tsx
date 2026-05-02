@@ -46,7 +46,8 @@ export default async function CompaniesPage() {
                 _id: '$company',
                 newJobsCount: { $sum: 1 },
                 logos: { $push: '$logo' },
-                rawLogos: { $push: '$raw_data.logo' }
+                rawLogos: { $push: '$raw_data.logo' },
+                employerLogos: { $push: '$raw_data.employer.logoUrl' }
             }
         },
         {
@@ -58,6 +59,7 @@ export default async function CompaniesPage() {
 
     const companies: { company: string; newJobsCount: number; logo: string | null }[] = aggregated.map((c: any) => {
         const logo = c.logos.find((l: any) => typeof l === 'string' && l.trim().length > 0) || 
+                     c.employerLogos?.find((l: any) => typeof l === 'string' && l.trim().length > 0) ||
                      c.rawLogos.find((l: any) => typeof l === 'string' && l.trim().length > 0) || 
                      null;
         return {
@@ -124,12 +126,7 @@ export default async function CompaniesPage() {
                             <Link 
                                 href={`/jobs?q=${encodeURIComponent(companyData.company)}`}
                                 key={companyData.company}
-                                className={`
-                                    group flex flex-col bg-white dark:bg-[#0B0F19] rounded-2xl p-5 
-                                    border border-gray-200 dark:border-slate-800/80
-                                    hover:border-[#41b4a5]/40 hover:shadow-lg dark:hover:shadow-[#41b4a5]/10 
-                                    transition-all duration-300 relative overflow-hidden ${glow}
-                                `}
+                                className={`group flex flex-col bg-white dark:bg-[#0B0F19] rounded-2xl p-5 border border-gray-200 dark:border-slate-800/80 hover:border-[#41b4a5]/40 hover:shadow-lg dark:hover:shadow-[#41b4a5]/10 transition-all duration-300 relative overflow-hidden ${glow}`}
                             >
                                 <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-[#41b4a5]/5 to-transparent rounded-bl-full pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity" />
                                 
