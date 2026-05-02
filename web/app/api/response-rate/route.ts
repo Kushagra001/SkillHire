@@ -21,10 +21,10 @@ export async function GET(req: NextRequest) {
         await dbConnect();
 
         const [result] = await CompanyFeedback.aggregate([
-            { $match: { company } },
+            { $match: { company: new RegExp(`^${company}$`, 'i') } },
             {
                 $group: {
-                    _id: '$company',
+                    _id: { $toLower: '$company' },
                     total: { $sum: 1 },
                     responded: { $sum: { $cond: ['$responded', 1, 0] } },
                 },

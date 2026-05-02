@@ -86,7 +86,7 @@ export function ResponseRateBadge({ company, className = '' }: Props) {
             title={`${data.totalVotes} user${data.totalVotes === 1 ? '' : 's'} reported on this company`}
         >
             <MessageCircle className="w-2.5 h-2.5 shrink-0" />
-            {data.responseRate}% respond
+            {data.responseRate}% response
         </span>
     );
 }
