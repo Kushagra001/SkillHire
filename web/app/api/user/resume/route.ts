@@ -93,15 +93,18 @@ export async function POST(req: NextRequest) {
             console.warn('Skipping skill extraction because GROQ_API_KEY is not set.');
         }
 
-        const existingUser = await User.findOne({ clerk_id: userId });
+        // 4. Upsert the user and save the text + skills.
+        // Only include `skills` in the update when extraction succeeded so that
+        // a missing/invalid GROQ_API_KEY or any Groq/parse error never overwrites
+        // the user's previously stored skills.
+        const skillsUpdate = extractedSkills !== undefined ? { skills: extractedSkills } : {};
 
-        // 4. Upsert the user and save the text + skills
         await User.findOneAndUpdate(
             { clerk_id: userId },
             {
                 $set: {
                     resume_text: resumeText,
-                    skills: extractedSkills ?? existingUser?.skills ?? []
+                    ...skillsUpdate
                 },
                 $setOnInsert: { created_at: new Date() }
             },
