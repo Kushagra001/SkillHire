@@ -20,9 +20,18 @@ interface ResponseRateData {
     totalVotes?: number;
 }
 
-// Module-level cache so all badge instances for the same company share one fetch
-const cache: Record<string, ResponseRateData | 'loading'> = {};
+const cache: Record<string, ResponseRateData | 'loading' | 'error'> = {};
 const listeners: Record<string, ((data: ResponseRateData) => void)[]> = {};
+const MAX_CACHE_SIZE = 500;
+
+function clearCacheIfFull() {
+    if (Object.keys(cache).length > MAX_CACHE_SIZE) {
+        // Clear old entries to prevent memory leaks
+        Object.keys(cache).forEach(key => {
+            if (cache[key] !== 'loading') delete cache[key];
+        });
+    }
+}
 
 /**
  * Prime the cache for multiple companies at once to prevent N+1 fetching.
@@ -33,6 +42,8 @@ export async function primeResponseRateCache(companies: string[]) {
     // Filter for companies not already in cache or loading
     const missing = companies.map(c => c.trim().toLowerCase()).filter(c => !cache[c]);
     if (missing.length === 0) return;
+
+    clearCacheIfFull();
 
     // Mark as loading
     missing.forEach(c => { cache[c] = 'loading'; });
@@ -61,6 +72,8 @@ function fetchResponseRate(company: string): Promise<ResponseRateData> {
     if (cache[key] && cache[key] !== 'loading') {
         return Promise.resolve(cache[key] as ResponseRateData);
     }
+
+    clearCacheIfFull();
 
     if (cache[key] === 'loading') {
         // Already in-flight — return a promise that resolves when the first request settles
