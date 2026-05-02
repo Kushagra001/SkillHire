@@ -21,13 +21,44 @@ interface ResponseRateData {
 }
 
 // Module-level cache so all badge instances for the same company share one fetch
-const cache: Record<string, ResponseRateData | 'loading' | 'error'> = {};
-const listeners: Record<string, Array<(data: ResponseRateData) => void>> = {};
+const cache: Record<string, ResponseRateData | 'loading'> = {};
+const listeners: Record<string, ((data: ResponseRateData) => void)[]> = {};
+
+/**
+ * Prime the cache for multiple companies at once to prevent N+1 fetching.
+ */
+export async function primeResponseRateCache(companies: string[]) {
+    if (companies.length === 0) return;
+    
+    // Filter for companies not already in cache or loading
+    const missing = companies.map(c => c.trim().toLowerCase()).filter(c => !cache[c]);
+    if (missing.length === 0) return;
+
+    // Mark as loading
+    missing.forEach(c => { cache[c] = 'loading'; });
+
+    try {
+        const res = await fetch(`/api/response-rate?companies=${encodeURIComponent(missing.join(','))}`);
+        if (!res.ok) throw new Error();
+        const data = await res.json();
+
+        missing.forEach(c => {
+            const result = data[c] || { hasData: false };
+            cache[c] = result;
+            listeners[c]?.forEach(fn => fn(result));
+        });
+    } catch (e) {
+        missing.forEach(c => {
+            delete cache[c];
+            listeners[c]?.forEach(fn => fn({ hasData: false }));
+        });
+    }
+}
 
 function fetchResponseRate(company: string): Promise<ResponseRateData> {
     const key = company.toLowerCase().trim();
 
-    if (cache[key] && cache[key] !== 'loading' && cache[key] !== 'error') {
+    if (cache[key] && cache[key] !== 'loading') {
         return Promise.resolve(cache[key] as ResponseRateData);
     }
 
@@ -41,7 +72,10 @@ function fetchResponseRate(company: string): Promise<ResponseRateData> {
 
     cache[key] = 'loading';
     return fetch(`/api/response-rate?company=${encodeURIComponent(key)}`)
-        .then((r) => r.json())
+        .then(async (r) => {
+            if (!r.ok) throw new Error('API error');
+            return r.json();
+        })
         .then((data: ResponseRateData) => {
             cache[key] = data;
             listeners[key]?.forEach((fn) => fn(data));

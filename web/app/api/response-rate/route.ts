@@ -9,7 +9,8 @@ import CompanyFeedback from '@/models/CompanyFeedback';
  * Public endpoint — no auth required for reads.
  *
  * Query params:
- *   company  — single company name (required)
+ *   company   — single company name
+ *   companies — comma-separated company names for batch fetching
  */
 export async function GET(req: NextRequest) {
     try {
@@ -92,7 +93,25 @@ export async function POST(req: NextRequest) {
 
         await dbConnect();
 
-        // Upsert: if user already voted on this job, update their vote
+        // 1. Security: Verify that the job_id actually belongs to the claimed company
+        const Job = (await import('@/models/Job')).default;
+        const jobDoc = await Job.findById(job_id);
+        
+        if (!jobDoc) {
+            return NextResponse.json({ error: 'Job not found' }, { status: 404 });
+        }
+
+        // Normalize for comparison
+        const actualCompany = jobDoc.company.trim().toLowerCase();
+        const providedCompany = company.trim().toLowerCase();
+
+        if (actualCompany !== providedCompany) {
+            return NextResponse.json({ 
+                error: 'Company mismatch. Vote must match the company of the job listing.' 
+            }, { status: 400 });
+        }
+
+        // 2. Upsert: if user already voted on this job, update their vote
         await CompanyFeedback.findOneAndUpdate(
             { job_id, user_id: userId },
             {
@@ -125,9 +144,9 @@ export async function POST(req: NextRequest) {
             responseRate: rate,
             totalVotes: result?.total ?? 1,
         });
-    } catch (err: unknown) {
-        // Duplicate key (user already voted & upsert conflict) — treat as success
-        if (err instanceof Error && 'code' in err && (err as NodeJS.ErrnoException).code === '11000') {
+    } catch (err: any) {
+        // Duplicate key (user already voted & upsert conflict)
+        if (err?.code === 11000) {
             return NextResponse.json({ success: true, duplicate: true });
         }
         console.error('[response-rate POST]', err);

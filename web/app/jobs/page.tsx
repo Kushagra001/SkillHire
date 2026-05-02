@@ -82,7 +82,9 @@ interface Job {
 import { MobileJobDetails } from '@/components/mobile-job-details';
 import { JobDetailsPane } from '@/components/JobDetailsPane';
 import { CompanyLogo } from '@/components/CompanyLogo';
-import { ResponseRateBadge } from '@/components/ResponseRateBadge';
+import { ResponseRateBadge, primeResponseRateCache } from '@/components/ResponseRateBadge';
+import { HiringPulseBadge } from '@/components/HiringPulseBadge';
+import { FitScoreBadge } from '@/components/FitScoreBadge';
 
 /** Apify/Indeed jobs store description as { text, html }; SerpAPI jobs store it as a plain string. */
 const getJobDescription = (raw_data?: { description?: string | { text?: string; html?: string }; snippet?: string; raw_snippet?: string }): string | undefined => {
@@ -262,6 +264,14 @@ function JobsPageContent() {
             }
             return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
         });
+
+    // Prime the response rate cache for all unique companies on the page
+    useEffect(() => {
+        if (allJobs.length > 0) {
+            const uniqueCompanies = Array.from(new Set(allJobs.map(j => j.company)));
+            primeResponseRateCache(uniqueCompanies);
+        }
+    }, [allJobs]);
 
     useEffect(() => {
         if (!selectedJob && processedJobs.length > 0) {
