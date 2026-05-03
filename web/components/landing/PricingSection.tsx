@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 
 export default function PricingSection() {
     const router = useRouter();
-    const { isSignedIn } = useUser();
+    const { isSignedIn, isLoaded } = useUser();
     const { openSignIn } = useClerk();
     const [isUnlocking, setIsUnlocking] = useState<string | null>(null);
     const [showSuccessModal, setShowSuccessModal] = useState(false);
@@ -22,8 +22,7 @@ export default function PricingSection() {
         setIsUnlocking(plan);
         try {
             await new Promise<void>((resolve, reject) => {
-                // @ts-expect-error Razorpay is injected globally
-                if (window.Razorpay) return resolve();
+                if ((window as any).Razorpay) return resolve();
                 const script = document.createElement('script');
                 script.src = 'https://checkout.razorpay.com/v1/checkout.js';
                 script.onload = () => resolve();
@@ -41,7 +40,7 @@ export default function PricingSection() {
 
             await new Promise<void>((resolve, reject) => {
                 const options = {
-                    key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+                    key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || '',
                     amount,
                     currency: 'INR',
                     name: 'SkillHire',
@@ -56,8 +55,7 @@ export default function PricingSection() {
                         ondismiss: () => reject(new Error('Payment cancelled')),
                     },
                 };
-                // @ts-expect-error Razorpay is injected globally
-                const rzp = new window.Razorpay(options);
+                const rzp = new (window as any).Razorpay(options);
                 rzp.open();
             });
 
@@ -121,7 +119,7 @@ export default function PricingSection() {
                                 onClick={() => { setShowSuccessModal(false); router.push('/jobs'); }}
                                 className="flex items-center justify-center gap-2 w-full h-10 rounded-xl border-2 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-semibold text-sm transition-all hover:border-[#41b4a5] hover:text-[#41b4a5]"
                             >
-                                Go to Jobs Dashboard →
+                                Go to Jobs Dashboard &rarr;
                             </button>
                             <p className="text-[11px] text-slate-400 mt-4">You can also join Telegram anytime from the Jobs page banner.</p>
                         </div>
@@ -181,10 +179,10 @@ export default function PricingSection() {
                             </li>
                         </ul>
                         <button
-                            onClick={() => isSignedIn ? router.push('/jobs') : openSignIn({ fallbackRedirectUrl: '/jobs' })}
+                            onClick={() => (isLoaded && isSignedIn) ? router.push('/jobs') : openSignIn({ fallbackRedirectUrl: '/jobs' })}
                             className="flex items-center justify-center w-full h-12 rounded-lg border-2 border-slate-200 dark:border-slate-700 font-bold text-slate-900 dark:text-white hover:border-slate-300 dark:hover:border-slate-500 transition-colors mt-auto"
                         >
-                            {isSignedIn ? 'Go to Jobs' : 'Get Started'}
+                            {(isLoaded && isSignedIn) ? 'Go to Jobs' : 'Get Started'}
                         </button>
                     </motion.div>
 
@@ -233,7 +231,7 @@ export default function PricingSection() {
                             {isUnlocking === 'monthly' ? (
                                 <><Loader2 className="h-5 w-5 animate-spin" /> Processing...</>
                             ) : (
-                                <>Unlock Monthly <span className="group-hover:translate-x-1 transition-transform inline-block">→</span></>
+                                <>Unlock Monthly <span className="group-hover:translate-x-1 transition-transform inline-block">&rarr;</span></>
                             )}
                         </button>
                     </motion.div>
@@ -277,7 +275,7 @@ export default function PricingSection() {
                             {isUnlocking === '6month' ? (
                                 <><Loader2 className="h-5 w-5 animate-spin" /> Processing...</>
                             ) : (
-                                <>Get 6 Months <span className="group-hover:translate-x-1 transition-transform inline-block">→</span></>
+                                <>Get 6 Months <span className="group-hover:translate-x-1 transition-transform inline-block">&rarr;</span></>
                             )}
                         </button>
                     </motion.div>
