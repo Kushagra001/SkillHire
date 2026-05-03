@@ -37,6 +37,13 @@ interface MobileJobDetailsProps {
     isUnlocking: boolean;
 }
 
+interface MatchResult {
+    match_percentage: number;
+    ai_recommendation: string;
+    matched_skills?: string[];
+    missing_skills?: string[];
+}
+
 export function MobileJobDetails({ job, onClose, onUnlock, isUnlocking }: MobileJobDetailsProps) {
     const [isVisible, setIsVisible] = useState(false);
     const [isRendered, setIsRendered] = useState(false);
@@ -46,7 +53,7 @@ export function MobileJobDetails({ job, onClose, onUnlock, isUnlocking }: Mobile
     // Quick Match state
     const [hasSavedResume, setHasSavedResume] = useState<boolean | null>(null);
     const [isAnalyzing, setIsAnalyzing] = useState(false);
-    const [matchResult, setMatchResult] = useState<any>(null);
+    const [matchResult, setMatchResult] = useState<MatchResult | null>(null);
     const [showFullReport, setShowFullReport] = useState(false);
     const [isUploadingBase, setIsUploadingBase] = useState(false);
     const [quotaExceeded, setQuotaExceeded] = useState(false);
@@ -152,9 +159,10 @@ export function MobileJobDetails({ job, onClose, onUnlock, isUnlocking }: Mobile
             const data = await res.json();
             setMatchResult(data);
             setShowFullReport(false);
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error(error);
-            alert(error.message || 'Failed to perform Quick Match');
+            const err = error as Error;
+            alert(err.message || 'Failed to perform Quick Match');
         } finally {
             setIsAnalyzing(false);
         }
@@ -171,9 +179,10 @@ export function MobileJobDetails({ job, onClose, onUnlock, isUnlocking }: Mobile
             if (!res.ok) throw new Error('Failed to upload base resume');
             setHasSavedResume(true);
             handleQuickMatch();
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error(error);
-            alert(error.message || 'Failed to upload resume');
+            const err = error as Error;
+            alert(err.message || 'Failed to upload resume');
         } finally {
             setIsUploadingBase(false);
             if (fileInputRef.current) fileInputRef.current.value = '';
@@ -321,7 +330,7 @@ export function MobileJobDetails({ job, onClose, onUnlock, isUnlocking }: Mobile
                                                             <div className="bg-emerald-50/50 dark:bg-emerald-900/10 rounded-lg p-3 border border-emerald-100/50 dark:border-emerald-900/30">
                                                                 <h5 className="text-[11px] font-bold text-emerald-800 dark:text-emerald-400 uppercase mb-2 flex items-center gap-1"><CheckCircle2 className="h-3 w-3" />Matched</h5>
                                                                 <div className="flex flex-wrap gap-1">
-                                                                    {matchResult.matched_skills?.length > 0 ? matchResult.matched_skills.map((s: string, i: number) => (
+                                                                    {(matchResult.matched_skills?.length ?? 0) > 0 ? matchResult.matched_skills!.map((s: string, i: number) => (
                                                                         <span key={i} className="px-1.5 py-0.5 bg-white dark:bg-slate-800 border border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-400 rounded text-[10px] font-medium">{s}</span>
                                                                     )) : <span className="text-[10px] text-emerald-600/70 italic">No direct matches.</span>}
                                                                 </div>
@@ -329,7 +338,7 @@ export function MobileJobDetails({ job, onClose, onUnlock, isUnlocking }: Mobile
                                                             <div className="bg-red-50/50 dark:bg-red-900/10 rounded-lg p-3 border border-red-100/50 dark:border-red-900/30">
                                                                 <h5 className="text-[11px] font-bold text-red-800 dark:text-red-400 uppercase mb-2 flex items-center gap-1"><XCircle className="h-3 w-3" />Missing</h5>
                                                                 <div className="flex flex-wrap gap-1">
-                                                                    {matchResult.missing_skills?.length > 0 ? matchResult.missing_skills.map((s: string, i: number) => (
+                                                                    {(matchResult.missing_skills?.length ?? 0) > 0 ? matchResult.missing_skills!.map((s: string, i: number) => (
                                                                         <span key={i} className="px-1.5 py-0.5 bg-white dark:bg-slate-800 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 rounded text-[10px] font-medium">{s}</span>
                                                                     )) : <span className="text-[10px] text-red-600/70 italic">All requirements met!</span>}
                                                                 </div>
