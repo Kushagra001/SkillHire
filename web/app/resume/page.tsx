@@ -179,7 +179,9 @@ export default function ResumePage() {
                     <div className="flex-1" />
                     <nav className="hidden md:flex items-center gap-8 mr-4">
                         <Link className="text-sm font-medium text-slate-700 hover:text-[#41b4a5] transition-colors" href="/jobs">Jobs</Link>
+                        <Link className="text-sm font-medium text-slate-700 hover:text-[#41b4a5] transition-colors" href="/companies">Hiring Pulse</Link>
                         <Link className="text-sm font-medium text-[#41b4a5] hover:text-[#41b4a5] transition-colors" href="/resume">AI Resume Matcher</Link>
+                        <Link className="text-sm font-medium text-slate-700 hover:text-[#41b4a5] transition-colors" href="/tracker">Tracker</Link>
                     </nav>
                     {/* Auth — hard right */}
                     <div className="flex items-center gap-3 shrink-0">
@@ -230,7 +232,9 @@ export default function ResumePage() {
                         className="md:hidden absolute top-16 left-0 right-0 z-40 bg-white dark:bg-[#0B1120] border-b border-gray-200 dark:border-gray-800 shadow-lg flex flex-col p-5 gap-5"
                     >
                         <Link href="/jobs" onClick={() => setIsMobileNavOpen(false)} className="text-lg font-semibold text-slate-900 dark:text-gray-100 border-none bg-transparent m-0 p-0 text-left">Jobs</Link>
+                        <Link href="/companies" onClick={() => setIsMobileNavOpen(false)} className="text-lg font-semibold text-slate-900 dark:text-gray-100 border-none bg-transparent m-0 p-0 text-left">Hiring Pulse</Link>
                         <Link href="/resume" onClick={() => setIsMobileNavOpen(false)} className="text-lg font-semibold text-[#41b4a5] border-none bg-transparent m-0 p-0 text-left">AI Resume Matcher</Link>
+                        <Link href="/tracker" onClick={() => setIsMobileNavOpen(false)} className="text-lg font-semibold text-slate-900 dark:text-gray-100 border-none bg-transparent m-0 p-0 text-left">Tracker</Link>
                         <div className="h-px bg-gray-200 dark:bg-gray-800 my-1" />
                         <SignedOut>
                             <button onClick={() => { setIsMobileNavOpen(false); openSignIn({ fallbackRedirectUrl: window.location.href }); }} className="text-left text-lg font-semibold text-slate-900 border-none bg-transparent m-0 p-0 cursor-pointer dark:text-white">Sign in</button>

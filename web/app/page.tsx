@@ -60,6 +60,7 @@ export default function LandingPage() {
             <Link className="text-slate-600 dark:text-slate-300 hover:text-sh-primary font-medium text-sm transition-colors" href="/jobs">Jobs</Link>
             <Link className="text-slate-600 dark:text-slate-300 hover:text-sh-primary font-medium text-sm transition-colors" href="/companies">Hiring Pulse</Link>
             <Link className="text-slate-600 dark:text-slate-300 hover:text-sh-primary font-medium text-sm transition-colors" href="/resume">AI Resume Matcher</Link>
+            <Link className="text-slate-600 dark:text-slate-300 hover:text-sh-primary font-medium text-sm transition-colors" href="/tracker">Tracker</Link>
             <button
               onClick={() => document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' })}
               className="text-slate-600 dark:text-slate-300 hover:text-sh-primary font-medium text-sm transition-colors bg-transparent border-0 p-0 cursor-pointer"
@@ -126,6 +127,9 @@ export default function LandingPage() {
               </Link>
               <Link href="/resume" onClick={() => setIsMobileMenuOpen(false)} className="text-lg font-medium text-slate-900 dark:text-white">
                 AI Resume Matcher
+              </Link>
+              <Link href="/tracker" onClick={() => setIsMobileMenuOpen(false)} className="text-lg font-medium text-slate-900 dark:text-white">
+                Tracker
               </Link>
               <button
                 onClick={() => {
