@@ -1,6 +1,6 @@
 "use client";
 
-import { MapPin, Briefcase, Wallet, CheckCircle2, Lock, ExternalLink, Share2, FileText, UploadCloud, Loader2, Sparkles, XCircle, BookmarkPlus, BookmarkCheck } from 'lucide-react';
+import { CheckCircle2, Lock, ExternalLink, Share2, FileText, UploadCloud, Loader2, Sparkles, XCircle, BookmarkPlus, BookmarkCheck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -8,6 +8,13 @@ import { CompanyLogo } from '@/components/CompanyLogo';
 import { ResponseRatePrompt } from '@/components/ResponseRatePrompt';
 import { HiringPulseBadge } from '@/components/HiringPulseBadge';
 import { FitScoreBadge } from '@/components/FitScoreBadge';
+
+interface MatchResult {
+    match_percentage: number;
+    ai_recommendation: string;
+    matched_skills?: string[];
+    missing_skills?: string[];
+}
 
 export interface Job {
     _id: string;
@@ -84,7 +91,7 @@ export function JobDetailsPane({ job, onUnlock, isUnlocking, isSignedIn = false 
     // AI Resume Matcher State
     const [hasSavedResume, setHasSavedResume] = useState<boolean | null>(null);
     const [isAnalyzing, setIsAnalyzing] = useState(false);
-    const [matchResult, setMatchResult] = useState<any>(null);
+    const [matchResult, setMatchResult] = useState<MatchResult | null>(null);
     const [showFullReport, setShowFullReport] = useState(false);
     const [isUploadingBase, setIsUploadingBase] = useState(false);
     const [quotaExceeded, setQuotaExceeded] = useState(false);
@@ -240,9 +247,10 @@ export function JobDetailsPane({ job, onUnlock, isUnlocking, isSignedIn = false 
                 console.error("Failed to save to history", e);
             }
 
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error(error);
-            alert(error.message || 'Failed to perform Quick Match');
+            const msg = error instanceof Error ? error.message : 'Failed to perform Quick Match';
+            alert(msg);
         } finally {
             setIsAnalyzing(false);
         }
@@ -269,9 +277,10 @@ export function JobDetailsPane({ job, onUnlock, isUnlocking, isSignedIn = false 
             setHasSavedResume(true);
             // Auto trigger match right after successful upload
             handleQuickMatch();
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error(error);
-            alert(error.message || 'Failed to upload resume');
+            const msg = error instanceof Error ? error.message : 'Failed to upload resume';
+            alert(msg);
         } finally {
             setIsUploadingBase(false);
             if (fileInputRef.current) {
@@ -431,7 +440,7 @@ export function JobDetailsPane({ job, onUnlock, isUnlocking, isSignedIn = false 
                                         <div className="flex flex-col flex-1">
                                             <h4 className="text-sm font-bold text-slate-900">Daily Limit Reached</h4>
                                             <p className="text-xs text-slate-500 line-clamp-2">
-                                                You've used your 3 free AI matches today. Upgrade to Pro for unlimited scans.
+                                                You&apos;ve used your 3 free AI matches today. Upgrade to Pro for unlimited scans.
                                             </p>
                                         </div>
                                     </div>

@@ -79,7 +79,7 @@ export function FitScoreBadge({ techStack, className }: FitScoreBadgeProps) {
             try {
                 const regex = new RegExp(`\\b${s}\\b`, 'i');
                 return regex.test(u);
-            } catch (e) {
+            } catch {
                 return u.includes(s); // Fallback for special characters
             }
         })

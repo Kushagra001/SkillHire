@@ -85,8 +85,8 @@ export default function TrackerPage() {
             if (!res.ok) {
                 throw new Error("Failed to update status");
             }
-        } catch (error: any) {
-            if (error.name === 'AbortError') return;
+        } catch (error: unknown) {
+            if (error instanceof Error && error.name === 'AbortError') return;
             console.error(error);
             // Revert on error (simple refresh for now)
             window.location.reload();

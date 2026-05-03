@@ -22,7 +22,7 @@ export default function PricingSection() {
         setIsUnlocking(plan);
         try {
             await new Promise<void>((resolve, reject) => {
-                // @ts-ignore
+                // @ts-expect-error Razorpay is injected globally
                 if (window.Razorpay) return resolve();
                 const script = document.createElement('script');
                 script.src = 'https://checkout.razorpay.com/v1/checkout.js';
@@ -56,7 +56,7 @@ export default function PricingSection() {
                         ondismiss: () => reject(new Error('Payment cancelled')),
                     },
                 };
-                // @ts-ignore
+                // @ts-expect-error Razorpay is injected globally
                 const rzp = new window.Razorpay(options);
                 rzp.open();
             });

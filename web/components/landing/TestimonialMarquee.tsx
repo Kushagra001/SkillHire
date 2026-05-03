@@ -90,7 +90,7 @@ export default function TestimonialMarquee() {
                                 ))}
                             </div>
                             <p className="text-slate-700 dark:text-slate-300 font-medium leading-relaxed mb-8 italic">
-                                "{testimonial.content}"
+                                &quot;{testimonial.content}&quot;
                             </p>
                             <div className="flex items-center gap-4 mt-auto">
                                 <Image

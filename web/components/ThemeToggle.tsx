@@ -11,6 +11,7 @@ export function ThemeToggle() {
         const stored = localStorage.getItem("skillhire-theme");
         const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
         const dark = stored === "dark" || (!stored && prefersDark);
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setIsDark(dark);
         document.documentElement.classList.toggle("dark", dark);
     }, []);

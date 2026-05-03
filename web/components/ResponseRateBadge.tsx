@@ -59,7 +59,7 @@ export async function primeResponseRateCache(companies: string[]) {
             listeners[c]?.forEach(fn => fn(result));
             delete listeners[c];
         });
-    } catch (e) {
+    } catch {
         missing.forEach(c => {
             delete cache[c];
             listeners[c]?.forEach(fn => fn({ hasData: false }));
