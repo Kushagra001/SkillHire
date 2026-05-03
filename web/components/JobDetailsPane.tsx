@@ -335,7 +335,7 @@ export function JobDetailsPane({ job, onUnlock, isUnlocking, isSignedIn = false 
                                 <div className="flex items-center gap-3 shrink-0">
                                     <Button
                                         variant="outline"
-                                        onClick={handleToggleTracker}
+                                        onClick={() => handleToggleTracker()}
                                         disabled={isTracking}
                                         className={`py-6 px-4 rounded-lg shadow-sm transition-colors border-gray-200 ${trackedJobId ? 'bg-indigo-50 text-indigo-700 border-indigo-200 hover:bg-indigo-100' : 'bg-white text-slate-700 hover:bg-gray-50'}`}
                                         title="Save to Tracker"
