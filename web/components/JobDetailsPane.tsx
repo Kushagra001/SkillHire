@@ -141,7 +141,7 @@ export function JobDetailsPane({ job, onUnlock, isUnlocking, isSignedIn = false 
         checkTrackerStatus();
     }, [job?._id, isSignedIn]);
 
-    const handleToggleTracker = async () => {
+    const handleToggleTracker = async (statusOverride?: string) => {
         if (!job) return;
         if (!isSignedIn) {
             alert("Please sign in to save jobs to your tracker.");
@@ -150,8 +150,18 @@ export function JobDetailsPane({ job, onUnlock, isUnlocking, isSignedIn = false 
         setIsTracking(true);
         try {
             if (trackedJobId) {
-                const res = await fetch(`/api/tracker/${trackedJobId}`, { method: 'DELETE' });
-                if (res.ok) setTrackedJobId(null);
+                if (statusOverride) {
+                    // Update the existing tracker entry's status
+                    await fetch(`/api/tracker/${trackedJobId}`, {
+                        method: 'PATCH',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ status: statusOverride })
+                    });
+                } else {
+                    // Toggle off (remove from tracker)
+                    const res = await fetch(`/api/tracker/${trackedJobId}`, { method: 'DELETE' });
+                    if (res.ok) setTrackedJobId(null);
+                }
             } else {
                 const res = await fetch('/api/tracker', {
                     method: 'POST',
@@ -162,7 +172,8 @@ export function JobDetailsPane({ job, onUnlock, isUnlocking, isSignedIn = false 
                         company: job.company,
                         location: job.location,
                         logo: job.logo || job.raw_data?.logo,
-                        apply_link: job.apply_link
+                        apply_link: job.apply_link,
+                        status: statusOverride || 'Saved'
                     })
                 });
                 if (res.ok) {
@@ -341,8 +352,8 @@ export function JobDetailsPane({ job, onUnlock, isUnlocking, isSignedIn = false 
                                             rel="noopener noreferrer"
                                             onClick={() => {
                                                 setApplyClicked(true);
-                                                // Auto-save to tracker if they apply and haven't saved it yet
-                                                if (!trackedJobId) handleToggleTracker();
+                                                // Save/update tracker to Applied status when they click Apply
+                                                handleToggleTracker('Applied');
                                             }}
                                         >
                                             Apply Now

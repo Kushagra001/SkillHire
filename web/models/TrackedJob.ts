@@ -34,6 +34,9 @@ const TrackedJobSchema: Schema = new Schema({
     timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' }
 });
 
+// Enforce one tracker entry per user per job atomically
+TrackedJobSchema.index({ clerk_id: 1, job_id: 1 }, { unique: true });
+
 // Prevent model recompilation error in development
 const TrackedJob: Model<ITrackedJob> = (mongoose.models.TrackedJob as Model<ITrackedJob>) || mongoose.model<ITrackedJob>('TrackedJob', TrackedJobSchema);
 

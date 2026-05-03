@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from "@clerk/nextjs";
 import { CompanyLogo } from '@/components/CompanyLogo';
 import { Button } from '@/components/ui/button';
-import { Loader2, ExternalLink, Briefcase, Trash2, Calendar, MapPin } from 'lucide-react';
+import { Loader2, ExternalLink, Briefcase, Trash2, Calendar } from 'lucide-react';
 import { TrackerStatus } from '@/models/TrackedJob';
 import Link from 'next/link';
 import { formatDistanceToNow } from 'date-fns';
@@ -39,9 +39,15 @@ export default function TrackerPage() {
     const { isLoaded, isSignedIn } = useAuth();
     const [jobs, setJobs] = useState<TrackedJobItem[]>([]);
     const [isLoading, setIsLoading] = useState(true);
+    // Per-job AbortControllers to cancel stale status-update requests
+    const statusControllers = useRef<Map<string, AbortController>>(new Map());
 
     useEffect(() => {
-        if (!isLoaded || !isSignedIn) return;
+        if (!isLoaded) return;
+        if (!isSignedIn) {
+            setIsLoading(false);
+            return;
+        }
         
         const fetchJobs = async () => {
             try {
@@ -64,16 +70,23 @@ export default function TrackerPage() {
         // Optimistic update
         setJobs(prev => prev.map(job => job._id === id ? { ...job, status: newStatus } : job));
 
+        // Cancel any in-flight request for this job to prevent stale overwrites
+        statusControllers.current.get(id)?.abort();
+        const controller = new AbortController();
+        statusControllers.current.set(id, controller);
+
         try {
             const res = await fetch(`/api/tracker/${id}`, {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ status: newStatus })
+                body: JSON.stringify({ status: newStatus }),
+                signal: controller.signal,
             });
             if (!res.ok) {
                 throw new Error("Failed to update status");
             }
-        } catch (error) {
+        } catch (error: any) {
+            if (error.name === 'AbortError') return;
             console.error(error);
             // Revert on error (simple refresh for now)
             window.location.reload();
@@ -83,12 +96,15 @@ export default function TrackerPage() {
     const handleDelete = async (id: string) => {
         if (!confirm("Are you sure you want to remove this job from your tracker?")) return;
         
-        setJobs(prev => prev.filter(job => job._id !== id));
         try {
-            await fetch(`/api/tracker/${id}`, { method: 'DELETE' });
+            const res = await fetch(`/api/tracker/${id}`, { method: 'DELETE' });
+            if (!res.ok) {
+                throw new Error("Failed to delete job");
+            }
+            setJobs(prev => prev.filter(job => job._id !== id));
         } catch (error) {
             console.error(error);
-            window.location.reload();
+            alert("Failed to remove this job. Please try again.");
         }
     };
 
@@ -107,7 +123,7 @@ export default function TrackerPage() {
                 <h1 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">Application Tracker</h1>
                 <p className="text-slate-500 mb-6 text-center max-w-md">Sign in to track your job applications, monitor your pipeline, and manage interviews.</p>
                 <Button asChild className="bg-[#41b4a5] hover:bg-[#369689] text-white">
-                    <Link href="/login">Sign In</Link>
+                    <Link href="/jobs?sign-in=true">Sign In</Link>
                 </Button>
             </div>
         );
@@ -191,23 +207,23 @@ export default function TrackerPage() {
                                                 </select>
                                             </div>
                                             
-                                            <Link href={`/jobs?jobId=${job.job_id}`} className="block group-hover:text-[#41b4a5] transition-colors">
+                                            <div>
                                                 <h4 className="font-bold text-slate-900 dark:text-white leading-tight mb-1">{job.title}</h4>
                                                 <p className="text-sm text-slate-500 mb-3">{job.company}</p>
-                                            </Link>
+                                            </div>
                                             
                                             <div className="flex items-center justify-between mt-auto pt-3 border-t border-slate-50 dark:border-slate-700/50">
                                                 <div className="flex items-center text-xs text-slate-400 gap-1">
                                                     <Calendar className="h-3 w-3" />
                                                     {formatDistanceToNow(new Date(job.updated_at), { addSuffix: true })}
                                                 </div>
-                                                <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                <div className="flex items-center gap-1 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
                                                     {job.apply_link && (
-                                                        <a href={job.apply_link} target="_blank" rel="noopener noreferrer" className="p-1.5 text-slate-400 hover:text-[#41b4a5] hover:bg-teal-50 rounded-md transition-colors">
+                                                        <a href={job.apply_link} target="_blank" rel="noopener noreferrer" aria-label={`Open external application for ${job.title}`} className="p-1.5 text-slate-400 hover:text-[#41b4a5] hover:bg-teal-50 rounded-md transition-colors">
                                                             <ExternalLink className="h-3.5 w-3.5" />
                                                         </a>
                                                     )}
-                                                    <button onClick={() => handleDelete(job._id)} className="p-1.5 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-md transition-colors">
+                                                    <button onClick={() => handleDelete(job._id)} aria-label={`Remove ${job.title} from tracker`} className="p-1.5 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-md transition-colors">
                                                         <Trash2 className="h-3.5 w-3.5" />
                                                     </button>
                                                 </div>

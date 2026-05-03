@@ -45,29 +45,21 @@ export async function POST(request: Request) {
 
         await dbConnect();
 
-        // Check if already tracked to avoid duplicates
-        let trackedJob = await TrackedJob.findOne({ clerk_id: userId, job_id });
-
-        if (trackedJob) {
-            // Update existing
-            trackedJob.status = status;
-            trackedJob.updated_at = new Date();
-            await trackedJob.save();
-        } else {
-            // Create new
-            trackedJob = await TrackedJob.create({
-                clerk_id: userId,
-                job_id,
-                title,
-                company,
-                location,
-                apply_link,
-                logo,
-                status,
-                created_at: new Date(),
-                updated_at: new Date()
-            });
-        }
+        // Atomic upsert: only set status/fields on first insert, never overwrite existing status
+        const trackedJob = await TrackedJob.findOneAndUpdate(
+            { clerk_id: userId, job_id },
+            {
+                $setOnInsert: {
+                    title,
+                    company,
+                    location: location ?? 'Unknown',
+                    apply_link,
+                    logo,
+                    status,
+                },
+            },
+            { new: true, upsert: true, setDefaultsOnInsert: true }
+        );
 
         return NextResponse.json(trackedJob, { status: 201 });
     } catch (error) {

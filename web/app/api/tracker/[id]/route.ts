@@ -19,6 +19,11 @@ export async function PATCH(
         const body = await request.json();
         const { status, notes } = body;
 
+        const VALID_STATUSES = ['Saved', 'Applied', 'Responded', 'Interview', 'Offer', 'Rejected'];
+        if (status !== undefined && !VALID_STATUSES.includes(status)) {
+            return NextResponse.json({ error: "Invalid status value" }, { status: 400 });
+        }
+
         await dbConnect();
 
         // Ensure user owns this tracked job
