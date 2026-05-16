@@ -82,11 +82,11 @@ export default async function CompaniesPage() {
     const totalJobs = companies.reduce((acc, curr) => acc + curr.newJobsCount, 0);
 
     return (
-        <div className="min-h-screen bg-[#f9fbfb] dark:bg-background text-slate-900 dark:text-slate-100 font-sans selection:bg-sh-primary/30 selection:text-sh-primary-dark">
+        <div className="relative min-h-screen bg-background text-slate-900 dark:text-slate-100 font-sans selection:bg-sh-primary/30 selection:text-sh-primary-dark">
+            <PremiumBackground />
+            
             {/* Header section with gradient and blur */}
-            <div className="relative pt-32 pb-24 overflow-hidden border-b border-gray-200 dark:border-slate-800/60 bg-white dark:bg-background">
-                <PremiumBackground className="z-0" />
-                
+            <div className="relative pt-32 pb-24 overflow-hidden border-b border-gray-200 dark:border-slate-800/60">
                 <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                     <Link href="/jobs" className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-900/50 backdrop-blur-md px-4 py-2 text-sm font-semibold text-slate-500 dark:text-slate-400 hover:text-sh-primary transition-all mb-8 shadow-sm w-fit">
                         <ArrowRight className="h-4 w-4 rotate-180" /> Back to Jobs

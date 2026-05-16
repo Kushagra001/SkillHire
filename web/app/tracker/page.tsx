@@ -8,6 +8,9 @@ import { Loader2, ExternalLink, Briefcase, Trash2, Calendar } from 'lucide-react
 import { TrackerStatus } from '@/models/TrackedJob';
 import Link from 'next/link';
 import { formatDistanceToNow } from 'date-fns';
+import { toast } from 'sonner';
+import { PremiumBackground } from '@/components/PremiumBackground';
+import { motion } from 'framer-motion';
 
 interface TrackedJobItem {
     _id: string;
@@ -139,11 +142,10 @@ export default function TrackerPage() {
     const responseRate = totalApplied > 0 ? Math.round((totalResponses / totalApplied) * 100) : 0;
 
     return (
-        <div className="min-h-screen bg-[#f9fbfb] dark:bg-[#060D18] text-slate-900 dark:text-slate-100 font-sans selection:bg-sh-primary/30 selection:text-sh-primary-dark">
+        <div className="relative min-h-screen bg-background text-slate-900 dark:text-slate-100 font-sans selection:bg-sh-primary/30 selection:text-sh-primary-dark">
+            <PremiumBackground />
             {/* Header section with gradient and blur */}
-            <div className="relative pt-24 pb-16 overflow-hidden border-b border-gray-200 dark:border-slate-800/60 bg-white dark:bg-[#0B0F19]">
-                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-sh-primary/10 rounded-full blur-3xl -mr-64 -mt-64 pointer-events-none" />
-                <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-indigo-500/5 rounded-full blur-3xl -ml-32 -mb-32 pointer-events-none" />
+            <div className="relative pt-24 pb-16 overflow-hidden border-b border-gray-200 dark:border-slate-800/60 bg-white/60 dark:bg-[#0B0F19]/60 backdrop-blur">
                 
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                     <Link href="/jobs" className="inline-flex items-center gap-1.5 text-sm font-semibold text-slate-500 dark:text-slate-400 hover:text-sh-primary transition-colors mb-6">
@@ -175,10 +177,10 @@ export default function TrackerPage() {
             </div>
         </div>
 
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 relative z-10">
                 <div className="flex overflow-x-auto pb-8 snap-x snap-mandatory hide-scrollbar gap-6 h-[calc(100vh-220px)] min-h-[500px]">
                     {STATUS_COLUMNS.map(status => (
-                        <div key={status} className="flex-none w-[320px] snap-center flex flex-col bg-slate-100/50 dark:bg-slate-800/30 rounded-2xl p-4">
+                        <div key={status} className="flex-none w-[320px] snap-center flex flex-col bg-white/40 dark:bg-white/[0.03] backdrop-blur-md rounded-2xl p-4 border border-slate-200/50 dark:border-white/[0.06] shadow-sm">
                             <div className="flex items-center justify-between mb-4 px-2">
                                 <h3 className="font-bold text-slate-700 dark:text-slate-300">{status}</h3>
                                 <span className="bg-white dark:bg-slate-700 text-slate-500 dark:text-slate-400 text-xs font-semibold px-2 py-1 rounded-full shadow-sm">
@@ -188,12 +190,12 @@ export default function TrackerPage() {
                             
                             <div className="flex-1 overflow-y-auto custom-scrollbar space-y-3 pr-2">
                                 {groupedJobs[status].length === 0 ? (
-                                    <div className="h-24 border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-xl flex items-center justify-center">
+                                    <div className="h-24 border-2 border-dashed border-slate-200 dark:border-slate-800/40 rounded-xl flex items-center justify-center">
                                         <p className="text-sm text-slate-400 font-medium">Empty</p>
                                     </div>
                                 ) : (
                                     groupedJobs[status].map(job => (
-                                        <div key={job._id} className="bg-white dark:bg-slate-800 rounded-xl p-4 shadow-sm border border-gray-100 dark:border-slate-700 relative group transition-all hover:shadow-md">
+                                        <div key={job._id} className="bg-white/80 dark:bg-slate-900/40 rounded-xl p-4 shadow-sm border border-slate-100 dark:border-white/[0.05] relative group transition-all hover:shadow-md hover:scale-[1.02]">
                                             <div className="flex items-start justify-between mb-3">
                                                 <CompanyLogo company={job.company} logo={job.logo} size="sm" />
                                                 <select 

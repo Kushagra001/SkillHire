@@ -2,6 +2,7 @@
 
 import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { PremiumBackground } from '@/components/PremiumBackground';
 import { useUser, useClerk, SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { Search, MapPin, Briefcase, ExternalLink, Loader2, Bookmark, Share2, Lock, ChevronLeft, ChevronRight, CheckCircle2, Wallet, Star, ChevronDown, Menu, X, Send } from 'lucide-react';
@@ -9,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ThemeToggle } from '@/components/ThemeToggle';
+import { toast } from 'sonner';
 
 // Razorpay global type
 declare global {
@@ -356,7 +358,8 @@ function JobsPageContent() {
     };
 
     return (
-        <div className="h-screen overflow-hidden flex flex-col bg-[#f9fbfb] dark:bg-[#060D18] text-slate-900 dark:text-slate-100 font-sans selection:bg-sh-primary/30 selection:text-sh-primary-dark">
+        <div className="relative h-screen overflow-hidden flex flex-col bg-background text-slate-900 dark:text-slate-100 font-sans selection:bg-sh-primary/30 selection:text-sh-primary-dark">
+            <PremiumBackground />
             {/* Sticky Navigation */}
             <header className="shrink-0 z-50 w-full border-b border-gray-200 dark:border-slate-800/60 bg-white/95 dark:bg-[#060D18]/90 backdrop-blur supports-[backdrop-filter]:bg-white/80 dark:supports-[backdrop-filter]:bg-[#060D18]/80">
                 <div className="flex h-16 w-full items-center px-4 sm:px-6 lg:px-8 gap-4">

@@ -6,6 +6,7 @@ import Providers from "@/components/providers";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Analytics } from "@vercel/analytics/next";
 import JsonLd from "@/components/JsonLd";
+import { Toaster } from "sonner";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
@@ -66,6 +67,7 @@ export default function RootLayout({
               <JsonLd />
               {children}
               <Analytics />
+              <Toaster position="top-right" richColors />
             </Providers>
           </ThemeProvider>
         </body>

@@ -6,6 +6,7 @@ import { useEffect, useState, MouseEvent } from "react";
 import Link from "next/link";
 import { useClerk, useAuth } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
+import { PremiumBackground } from "@/components/PremiumBackground";
 
 export default function NewHero() {
     const { openSignIn } = useClerk();
@@ -64,43 +65,7 @@ export default function NewHero() {
 
     return (
         <div className="relative w-full bg-background pt-32 pb-20 md:pt-40 md:pb-32 px-4 md:px-10 overflow-hidden font-sans tracking-tight isolate">
-
-            {/* --- Premium Background Aesthetics --- */}
-            {/* Base Background */}
-            <div className="absolute inset-0 z-0 bg-background" />
-
-            {/* Premium Noise Texture */}
-            <div className="absolute inset-0 z-0 opacity-[0.4] dark:opacity-[0.3] mix-blend-overlay pointer-events-none" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22 opacity=%220.5%22/%3E%3C/svg%3E")' }} />
-
-            {/* Animated Aurora Glows */}
-            <motion.div 
-                animate={{ 
-                    x: [0, 80, -40, 0], 
-                    y: [0, -60, 80, 0],
-                    scale: [1, 1.1, 0.9, 1]
-                }}
-                transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-                className="absolute top-[-10%] right-[-5%] w-[600px] h-[600px] bg-sh-primary/20 rounded-full blur-[100px] mix-blend-multiply dark:mix-blend-screen pointer-events-none" 
-            />
-            <motion.div 
-                animate={{ 
-                    x: [0, -80, 50, 0], 
-                    y: [0, 80, -50, 0],
-                    scale: [1, 0.9, 1.2, 1]
-                }}
-                transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
-                className="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] bg-teal-400/20 rounded-full blur-[100px] mix-blend-multiply dark:mix-blend-screen pointer-events-none" 
-            />
-            
-            {/* Modern Dot Grid Overlay */}
-            <div className="absolute inset-0 z-0 opacity-[0.2] dark:opacity-[0.1]" 
-                 style={{ 
-                     backgroundImage: "radial-gradient(#94a3b8 1px, transparent 1px)", 
-                     backgroundSize: "32px 32px",
-                     maskImage: "radial-gradient(ellipse at center, black 40%, transparent 80%)",
-                     WebkitMaskImage: "radial-gradient(ellipse at center, black 40%, transparent 80%)"
-                 }} 
-            />
+            <PremiumBackground />
 
             <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-16 relative z-10 w-full">
 

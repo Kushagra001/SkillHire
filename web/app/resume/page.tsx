@@ -7,6 +7,8 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { motion, AnimatePresence, animate } from 'framer-motion';
 import { ThemeToggle } from '@/components/ThemeToggle';
+import { toast } from 'sonner';
+import { PremiumBackground } from '@/components/PremiumBackground';
 
 interface AnalysisResult {
     job_title?: string;
@@ -152,19 +154,8 @@ export default function ResumePage() {
     };
 
     return (
-        <div className="relative min-h-screen bg-gradient-to-br from-slate-50 via-white to-teal-50/40 dark:from-[#060D18] dark:via-[#0B0F19] dark:to-[#0B1520] text-slate-900 dark:text-slate-100 font-sans flex flex-col selection:bg-primary/30 selection:text-primary-dark overflow-hidden">
-
-            {/* Premium noise texture */}
-            <div className="absolute inset-0 z-0 opacity-[0.4] dark:opacity-[0.15] pointer-events-none" style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E\")", backgroundSize: "180px 180px" }} />
-
-            {/* Top-right teal glow */}
-            <div className="absolute top-0 right-0 w-[700px] h-[700px] bg-sh-primary/15 dark:bg-teal-500/8 rounded-full blur-[130px] -translate-y-1/3 translate-x-1/4 pointer-events-none z-0" />
-
-            {/* Left green accent */}
-            <div className="absolute top-1/4 left-0 w-[400px] h-[400px] bg-emerald-400/8 dark:bg-emerald-500/4 rounded-full blur-[100px] -translate-x-1/3 pointer-events-none z-0" />
-
-            {/* Subtle grid overlay */}
-            <div className="absolute inset-0 z-0 opacity-[0.02] dark:opacity-[0.035] pointer-events-none" style={{ backgroundImage: "linear-gradient(#1b2532 1px, transparent 1px), linear-gradient(90deg, #1b2532 1px, transparent 1px)", backgroundSize: "48px 48px" }} />
+        <div className="relative min-h-screen bg-background text-slate-900 dark:text-slate-100 font-sans flex flex-col selection:bg-primary/30 selection:text-primary-dark overflow-hidden">
+            <PremiumBackground />
 
             {/* Top Navigation */}
             <header className="relative z-10 shrink-0 w-full border-b border-gray-200/80 dark:border-slate-800/60 bg-white/80 dark:bg-[#060D18]/80 backdrop-blur supports-[backdrop-filter]:bg-white/70 dark:supports-[backdrop-filter]:bg-[#060D18]/70">

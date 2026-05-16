@@ -3,6 +3,8 @@
 import { useEffect, useState } from 'react';
 import { useUser } from '@clerk/nextjs';
 import { Crown, ShieldOff, Loader2, RefreshCw, Users } from 'lucide-react';
+import { toast } from 'sonner';
+import { PremiumBackground } from '@/components/PremiumBackground';
 
 interface ClerkUser {
     id: string;
@@ -70,10 +72,11 @@ export default function AdminUsersPage() {
         }
     };
 
-    if (!isLoaded) {
+    if (!isLoaded || loading) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-[#f9fbfb]">
-                <Loader2 aria-hidden="true" className="h-6 w-6 animate-spin text-sh-primary" />
+            <div className="min-h-screen flex items-center justify-center bg-background">
+                <PremiumBackground />
+                <Loader2 className="h-8 w-8 animate-spin text-sh-primary z-10" />
             </div>
         );
     }
@@ -81,29 +84,23 @@ export default function AdminUsersPage() {
     const premiumCount = users.filter(u => u.isPremium).length;
 
     return (
-        <div className="min-h-screen bg-[#f9fbfb] font-sans">
-            {/* Header */}
-            <header className="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                    <div className="h-9 w-9 rounded-xl bg-sh-primary/10 flex items-center justify-center">
-                        <Users aria-hidden="true" className="h-5 w-5 text-sh-primary" />
-                    </div>
+        <div className="relative min-h-screen bg-background text-slate-900 dark:text-slate-100 font-sans flex flex-col selection:bg-sh-primary/30 selection:text-sh-primary-dark overflow-hidden">
+            <PremiumBackground />
+            <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 w-full">
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
                     <div>
-                        <h1 className="text-lg font-bold text-slate-900">User Management</h1>
-                        <p className="text-xs text-slate-400">Signed in as {user?.primaryEmailAddress?.emailAddress}</p>
+                        <h1 className="text-4xl font-black tracking-tight text-slate-900 dark:text-white flex items-center gap-3">
+                            Admin <Users className="h-8 w-8 text-sh-primary" />
+                        </h1>
+                        <p className="text-slate-500 dark:text-slate-400 mt-2">Manage premium access for all SkillHire users.</p>
                     </div>
+                    <button
+                        onClick={fetchUsers}
+                        className="inline-flex items-center gap-2 px-4 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-50 transition-all shadow-sm"
+                    >
+                        <RefreshCw className="h-4 w-4" /> Refresh
+                    </button>
                 </div>
-                <button
-                    onClick={fetchUsers}
-                    disabled={loading}
-                    className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-gray-200 text-sm font-medium text-slate-600 hover:bg-gray-50 transition-colors"
-                >
-                    <RefreshCw aria-hidden="true" className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
-                    Refresh
-                </button>
-            </header>
-
-            <main className="max-w-5xl mx-auto px-4 py-8">
 
                 {/* Stats row */}
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-8">
@@ -129,7 +126,7 @@ export default function AdminUsersPage() {
                 )}
 
                 {/* Users table */}
-                <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+                <div className="bg-white/60 dark:bg-white/[0.03] backdrop-blur-md border border-slate-200/50 dark:border-white/[0.06] rounded-2xl shadow-sm overflow-hidden">
                     {loading ? (
                         <div className="flex items-center justify-center py-20">
                             <Loader2 aria-hidden="true" className="h-6 w-6 animate-spin text-sh-primary" />
@@ -213,7 +210,7 @@ export default function AdminUsersPage() {
                         </table>
                     )}
                 </div>
-            </main>
+            </div>
         </div>
     );
 }
