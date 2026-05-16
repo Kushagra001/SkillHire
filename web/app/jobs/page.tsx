@@ -294,7 +294,7 @@ function JobsPageContent() {
     const handleUnlock = async () => {
         if (!selectedJob) return;
 
-        // Step 1: Require sign-in — pass redirectUrl so user returns here after auth
+        // Step 1: Require sign-in - pass redirectUrl so user returns here after auth
         if (!isSignedIn) {
             openSignIn({ fallbackRedirectUrl: window.location.href });
             return;
@@ -324,11 +324,11 @@ function JobsPageContent() {
                     amount,
                     currency: 'INR',
                     name: 'SkillHire',
-                    description: 'Premium Access — ₹199/month',
+                    description: 'Premium Access - ₹199/month',
                     order_id: orderId,
-                    theme: { color: '#41b4a5' },
+                    theme: { color: 'sh-primary' },
                     handler: () => {
-                        // Payment captured — invalidate jobs cache so locked jobs re-fetch as unlocked
+                        // Payment captured - invalidate jobs cache so locked jobs re-fetch as unlocked
                         // (Clerk metadata updated async via webhook, brief delay gives webhook time to process)
                         setTimeout(() => {
                             queryClient.invalidateQueries({ queryKey: ['jobs'] });
@@ -348,7 +348,7 @@ function JobsPageContent() {
             const msg = error instanceof Error ? error.message : 'Payment failed';
             if (msg !== 'Payment cancelled') {
                 console.error('Unlock error:', error);
-                alert(msg);
+                toast.error(msg);
             }
         } finally {
             setIsUnlocking(false);
@@ -356,11 +356,11 @@ function JobsPageContent() {
     };
 
     return (
-        <div className="h-screen overflow-hidden flex flex-col bg-[#f9fbfb] dark:bg-[#060D18] text-slate-900 dark:text-slate-100 font-sans selection:bg-[#41b4a5]/30 selection:text-[#369689]">
+        <div className="h-screen overflow-hidden flex flex-col bg-[#f9fbfb] dark:bg-[#060D18] text-slate-900 dark:text-slate-100 font-sans selection:bg-sh-primary/30 selection:text-sh-primary-dark">
             {/* Sticky Navigation */}
             <header className="shrink-0 z-50 w-full border-b border-gray-200 dark:border-slate-800/60 bg-white/95 dark:bg-[#060D18]/90 backdrop-blur supports-[backdrop-filter]:bg-white/80 dark:supports-[backdrop-filter]:bg-[#060D18]/80">
                 <div className="flex h-16 w-full items-center px-4 sm:px-6 lg:px-8 gap-4">
-                    {/* Logo — hard left */}
+                    {/* Logo - hard left */}
                     <Link href="/" className="flex items-center gap-3 decoration-transparent">
                         <div className="h-10 md:h-12 flex items-center justify-start py-1">
                             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -369,12 +369,12 @@ function JobsPageContent() {
                     </Link>
                     <div className="flex-1" />
                     <nav className="hidden md:flex items-center gap-8 mr-4">
-                        <Link className="text-sm font-medium text-slate-700 dark:text-slate-300 hover:text-[#41b4a5] transition-colors" href="/jobs">Jobs</Link>
-                        <Link className="text-sm font-medium text-slate-700 dark:text-slate-300 hover:text-[#41b4a5] transition-colors" href="/companies">Hiring Pulse</Link>
-                        <Link className="text-sm font-medium text-slate-700 dark:text-slate-300 hover:text-[#41b4a5] transition-colors" href="/resume">AI Resume Matcher</Link>
-                        <Link className="text-sm font-medium text-slate-700 dark:text-slate-300 hover:text-[#41b4a5] transition-colors" href="/tracker">Tracker</Link>
+                        <Link className="text-sm font-medium text-slate-700 dark:text-slate-300 hover:text-sh-primary transition-colors" href="/jobs">Jobs</Link>
+                        <Link className="text-sm font-medium text-slate-700 dark:text-slate-300 hover:text-sh-primary transition-colors" href="/companies">Hiring Pulse</Link>
+                        <Link className="text-sm font-medium text-slate-700 dark:text-slate-300 hover:text-sh-primary transition-colors" href="/resume">AI Resume Matcher</Link>
+                        <Link className="text-sm font-medium text-slate-700 dark:text-slate-300 hover:text-sh-primary transition-colors" href="/tracker">Tracker</Link>
                     </nav>
-                    {/* Auth — hard right */}
+                    {/* Auth - hard right */}
                     <div className="flex items-center gap-3 shrink-0">
                         <ThemeToggle />
                         <SignedOut>
@@ -386,7 +386,7 @@ function JobsPageContent() {
                             </button>
                             <button
                                 onClick={() => openSignUp({ fallbackRedirectUrl: window.location.href })}
-                                className="hidden md:flex h-9 items-center justify-center rounded-lg bg-[#41b4a5] px-4 text-sm font-bold text-white transition-all hover:bg-[#369689] shadow-sm"
+                                className="hidden md:flex h-9 items-center justify-center rounded-lg bg-sh-primary px-4 text-sm font-bold text-white transition-all hover:bg-sh-primary-dark shadow-sm"
                             >
                                 Get Premium
                             </button>
@@ -429,7 +429,7 @@ function JobsPageContent() {
                         <div className="h-px bg-gray-200 dark:bg-slate-800 my-1" />
                         <SignedOut>
                             <button onClick={() => { setIsMobileNavOpen(false); openSignIn({ fallbackRedirectUrl: window.location.href }); }} className="text-left text-lg font-semibold text-slate-900 dark:text-white border-none bg-transparent m-0 p-0 cursor-pointer">Sign in</button>
-                            <button onClick={() => { setIsMobileNavOpen(false); openSignUp({ fallbackRedirectUrl: window.location.href }); }} className="text-left text-lg font-bold text-[#41b4a5] border-none bg-transparent m-0 p-0 cursor-pointer">Get Premium</button>
+                            <button onClick={() => { setIsMobileNavOpen(false); openSignUp({ fallbackRedirectUrl: window.location.href }); }} className="text-left text-lg font-bold text-sh-primary border-none bg-transparent m-0 p-0 cursor-pointer">Get Premium</button>
                         </SignedOut>
                         <SignedIn>
                             <span className="text-sm font-medium text-slate-500">Account management available via avatar</span>
@@ -492,7 +492,7 @@ function JobsPageContent() {
                                         <Search className="h-4 w-4 shrink-0" />
                                     </div>
                                     <input
-                                        className="block w-full min-w-0 truncate rounded-lg border border-gray-200 dark:border-slate-700 dark:bg-slate-900/60 dark:text-slate-100 dark:placeholder-slate-500 pl-9 sm:pl-10 pr-3 py-2 text-[13px] sm:text-sm focus:border-[#41b4a5] focus:outline-none shadow-sm h-10 transition-all bg-white"
+                                        className="block w-full min-w-0 truncate rounded-lg border border-gray-200 dark:border-slate-700 dark:bg-slate-900/60 dark:text-slate-100 dark:placeholder-slate-500 pl-9 sm:pl-10 pr-3 py-2 text-[13px] sm:text-sm focus:border-sh-primary focus:outline-none shadow-sm h-10 transition-all bg-white"
                                         placeholder="Role, Skills, or Company"
                                         type="text"
                                         value={search}
@@ -509,7 +509,7 @@ function JobsPageContent() {
                                         <MapPin className="h-4 w-4 shrink-0" />
                                     </div>
                                     <input
-                                        className="block w-full min-w-0 truncate rounded-lg border border-gray-200 dark:border-slate-700 dark:bg-slate-900/60 dark:text-slate-100 dark:placeholder-slate-500 pl-9 sm:pl-10 pr-3 py-2 text-[13px] sm:text-sm focus:border-[#41b4a5] focus:outline-none shadow-sm h-10 transition-all bg-white"
+                                        className="block w-full min-w-0 truncate rounded-lg border border-gray-200 dark:border-slate-700 dark:bg-slate-900/60 dark:text-slate-100 dark:placeholder-slate-500 pl-9 sm:pl-10 pr-3 py-2 text-[13px] sm:text-sm focus:border-sh-primary focus:outline-none shadow-sm h-10 transition-all bg-white"
                                         placeholder="Location (e.g. Bangalore)"
                                         type="text"
                                         value={location}
@@ -546,7 +546,7 @@ function JobsPageContent() {
                                         e.stopPropagation();
                                         setSelectedExperience([]); setLocation(''); setSearch(''); setSelectedTypes([]);
                                     }}
-                                    className="text-[11px] font-semibold text-[#41B3A3] hover:underline px-2 py-0.5 rounded hover:bg-teal-50"
+                                    className="text-[11px] font-semibold text-sh-primary hover:underline px-2 py-0.5 rounded hover:bg-teal-50"
                                 >
                                     Reset
                                 </button>
@@ -572,7 +572,7 @@ function JobsPageContent() {
                                                             }}
                                                             className={`px-2.5 py-1 rounded-full text-[11px] font-semibold border transition-all ${isSelected
                                                                 ? 'bg-[#09090b] text-white border-[#09090b]'
-                                                                : 'bg-white text-slate-600 border-slate-200 hover:border-[#41B3A3] hover:text-[#41B3A3]'
+                                                                : 'bg-white text-slate-600 border-slate-200 hover:border-sh-primary hover:text-sh-primary'
                                                                 }`}
                                                         >
                                                             {exp}
@@ -597,7 +597,7 @@ function JobsPageContent() {
                                                             }}
                                                             className={`px-2.5 py-1 rounded-full text-[11px] font-semibold border transition-all ${isSelected
                                                                 ? 'bg-[#09090b] text-white border-[#09090b]'
-                                                                : 'bg-white text-slate-600 border-slate-200 hover:border-[#41B3A3] hover:text-[#41B3A3]'
+                                                                : 'bg-white text-slate-600 border-slate-200 hover:border-sh-primary hover:text-sh-primary'
                                                                 }`}
                                                         >
                                                             {type}
@@ -609,7 +609,7 @@ function JobsPageContent() {
 
                                         <div className="flex flex-col gap-2 pt-2 border-t border-gray-100">
                                             <div className="flex items-center gap-2">
-                                                <div className={`w-8 h-4 rounded-full transition-colors relative cursor-pointer ${location.toLowerCase() === 'remote' ? 'bg-[#41B3A3]' : 'bg-slate-300'}`} onClick={() => setLocation(location.toLowerCase() === 'remote' ? '' : 'Remote')}>
+                                                <div className={`w-8 h-4 rounded-full transition-colors relative cursor-pointer ${location.toLowerCase() === 'remote' ? 'bg-sh-primary' : 'bg-slate-300'}`} onClick={() => setLocation(location.toLowerCase() === 'remote' ? '' : 'Remote')}>
                                                     <div className={`w-3 h-3 bg-white rounded-full absolute top-0.5 transition-transform ${location.toLowerCase() === 'remote' ? 'left-4.5' : 'left-0.5'}`} />
                                                 </div>
                                                 <span className="text-[12px] font-medium text-slate-600">Remote Only</span>
@@ -631,13 +631,13 @@ function JobsPageContent() {
                                                 <select
                                                     value={sortBy}
                                                     onChange={(e) => setSortBy(e.target.value)}
-                                                    className="text-[11px] font-medium text-slate-600 bg-slate-50 border border-slate-200 rounded-md outline-none focus:ring-1 focus:ring-[#41B3A3] focus:border-[#41B3A3] cursor-pointer py-1 pl-2 pr-6 appearance-none transition-all hover:bg-slate-100"
+                                                    className="text-[11px] font-medium text-slate-600 bg-slate-50 border border-slate-200 rounded-md outline-none focus:ring-1 focus:ring-sh-primary focus:border-sh-primary cursor-pointer py-1 pl-2 pr-6 appearance-none transition-all hover:bg-slate-100"
                                                 >
                                                     <option value="newest">Newest First</option>
                                                     <option value="match">Highest Match</option>
                                                 </select>
                                                 <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-1.5 text-slate-400 group-hover:text-slate-600">
-                                                    <svg className="fill-current h-3 w-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" /></svg>
+                                                    <svg aria-hidden="true" className="fill-current h-3 w-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" /></svg>
                                                 </div>
                                             </div>
                                         </div>
@@ -646,7 +646,7 @@ function JobsPageContent() {
                             </div>
                         </div>
 
-                        {isLoading && <div className="flex justify-center p-4"><Loader2 className="animate-spin text-[#41b4a5]" /></div>}
+                        {isLoading && <div className="flex justify-center p-4"><Loader2 aria-hidden="true" className="animate-spin text-sh-primary" /></div>}
                         {isError && <div className="flex justify-center p-4 text-red-500 text-sm">Error loading jobs.</div>}
 
                         <div className="flex-1 overflow-y-auto overflow-x-hidden custom-scrollbar pr-1 sm:pr-3 space-y-2 pb-2 mt-1 sm:mt-0">
@@ -669,13 +669,13 @@ function JobsPageContent() {
                                         className={`
                                             relative p-2.5 sm:p-3 rounded-xl transition-all cursor-pointer group overflow-hidden
                                             ${selectedJob?._id === job._id
-                                                ? 'border border-l-4 border-l-[#41B3A3] border-r-0 border-y-transparent bg-[#41B3A3]/5 dark:bg-[#41B3A3]/10 rounded-r-none shadow-none z-10'
-                                                : `border hover:border-[#41B3A3] hover:shadow-sm ${job.is_locked ? 'bg-amber-50/60 dark:bg-amber-900/10 border-amber-100 dark:border-amber-900/30' : 'bg-white dark:bg-slate-800/50 border-gray-200 dark:border-slate-800/60'}`
+                                                ? 'border border-l-4 border-l-sh-primary border-r-0 border-y-transparent bg-sh-primary/5 dark:bg-sh-primary/10 rounded-r-none shadow-none z-10'
+                                                : `border hover:border-sh-primary hover:shadow-sm ${job.is_locked ? 'bg-amber-50/60 dark:bg-amber-900/10 border-amber-100 dark:border-amber-900/30' : 'bg-white dark:bg-slate-800/50 border-gray-200 dark:border-slate-800/60'}`
                                             }
                                         `}
                                     >
                                         <div className="flex gap-2.5 sm:gap-3 items-start">
-                                            {/* Logo — compact */}
+                                            {/* Logo - compact */}
                                             <CompanyLogo
                                                 logo={job.logo}
                                                 company={job.company}
@@ -685,14 +685,14 @@ function JobsPageContent() {
                                             {/* Content */}
                                             <div className="flex-1 min-w-0">
                                                 {/* Title */}
-                                                <h3 className={`text-sm font-bold leading-snug break-words mb-1 ${selectedJob?._id === job._id ? 'text-[#0A3D62] dark:text-[#41b4a5]' : 'text-slate-900 dark:text-slate-100'}`}>
+                                                <h3 className={`text-sm font-bold leading-snug break-words mb-1 ${selectedJob?._id === job._id ? 'text-sh-primary-dark dark:text-sh-primary' : 'text-slate-900 dark:text-slate-100'}`}>
                                                     {job.title}
                                                 </h3>
 
                                                 {/* Company + verified + lock + timestamp */}
                                                 <div className="flex items-center gap-1.5 mb-2 flex-wrap">
                                                     <span className="text-sm font-medium text-slate-700 dark:text-slate-300 truncate">{job.company}</span>
-                                                    <CheckCircle2 className="h-3.5 w-3.5 text-[#41b4a5] fill-[#EAFBF9] shrink-0" />
+                                                    <CheckCircle2 aria-hidden="true" className="h-3.5 w-3.5 text-sh-primary fill-[#EAFBF9] shrink-0" />
                                                     {job.is_locked && <Lock className="h-3 w-3 text-amber-500 shrink-0" />}
                                                     <ResponseRateBadge company={job.company} className="shrink-0" />
                                                     <HiringPulseBadge company={job.company} className="shrink-0" />
@@ -703,7 +703,7 @@ function JobsPageContent() {
                                                     </span>
                                                 </div>
 
-                                                {/* Location · Type · Salary — one compact row */}
+                                                {/* Location · Type · Salary - one compact row */}
                                                 <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-slate-500">
                                                     <span className="flex items-center gap-1 font-bold text-slate-700 dark:text-slate-300">
                                                         <Star className={`h-3.5 w-3.5 ${job.match_percentage && job.match_percentage >= 85 ? 'text-amber-400 fill-amber-400' : 'text-slate-400'}`} />
@@ -720,7 +720,7 @@ function JobsPageContent() {
                                                         </span>
                                                     )}
                                                     {job.salary_status && job.salary_status !== "Not Disclosed" && (
-                                                        <span className="flex items-center gap-1 text-[#41b4a5] font-medium">
+                                                        <span className="flex items-center gap-1 text-sh-primary font-medium">
                                                             <Wallet className="h-3.5 w-3.5 shrink-0" />
                                                             {job.salary_status}
                                                         </span>
@@ -780,7 +780,7 @@ function JobsPageContent() {
                                             <Button
                                                 variant="ghost"
                                                 onClick={() => setPage(1)}
-                                                className={`h-7 w-7 p-0 rounded-full text-xs font-medium ${page === 1 ? 'bg-slate-800 dark:bg-[#41b4a5] text-white hover:bg-slate-700 hover:text-white' : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'}`}
+                                                className={`h-7 w-7 p-0 rounded-full text-xs font-medium ${page === 1 ? 'bg-slate-800 dark:bg-sh-primary text-white hover:bg-slate-700 hover:text-white' : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'}`}
                                                 disabled={isLoading}
                                             >
                                                 1
@@ -793,7 +793,7 @@ function JobsPageContent() {
                                                     key={p}
                                                     variant="ghost"
                                                     onClick={() => setPage(p)}
-                                                    className={`h-7 w-7 p-0 rounded-full text-xs font-medium ${page === p ? 'bg-slate-800 dark:bg-[#41b4a5] text-white hover:bg-slate-700 hover:text-white' : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'}`}
+                                                    className={`h-7 w-7 p-0 rounded-full text-xs font-medium ${page === p ? 'bg-slate-800 dark:bg-sh-primary text-white hover:bg-slate-700 hover:text-white' : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'}`}
                                                     disabled={isLoading}
                                                 >
                                                     {p}
@@ -806,7 +806,7 @@ function JobsPageContent() {
                                                 <Button
                                                     variant="ghost"
                                                     onClick={() => setPage(pagination.totalPages)}
-                                                    className={`h-7 w-7 p-0 rounded-full text-xs font-medium ${page === pagination.totalPages ? 'bg-slate-800 dark:bg-[#41b4a5] text-white hover:bg-slate-700 hover:text-white' : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'}`}
+                                                    className={`h-7 w-7 p-0 rounded-full text-xs font-medium ${page === pagination.totalPages ? 'bg-slate-800 dark:bg-sh-primary text-white hover:bg-slate-700 hover:text-white' : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'}`}
                                                     disabled={isLoading}
                                                 >
                                                     {pagination.totalPages}
@@ -864,7 +864,7 @@ export default function JobsPage() {
     return (
         <Suspense fallback={
             <div className="h-screen w-full flex flex-col items-center justify-center bg-white dark:bg-[#0B0F19]">
-                <Loader2 className="h-10 w-10 text-[#41b4a5] animate-spin mb-4" />
+                <Loader2 className="h-10 w-10 text-sh-primary animate-spin mb-4" />
                 <p className="text-slate-500 font-medium animate-pulse">Loading jobs...</p>
             </div>
         }>

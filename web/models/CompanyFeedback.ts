@@ -16,7 +16,7 @@ const CompanyFeedbackSchema: Schema = new Schema({
     created_at: { type: Date, default: Date.now },
 });
 
-// One vote per user per job — prevents ballot-stuffing
+// One vote per user per job - prevents ballot-stuffing
 CompanyFeedbackSchema.index({ job_id: 1, user_id: 1 }, { unique: true });
 
 // TTL: auto-delete votes older than 6 months (keeps data fresh / relevant)

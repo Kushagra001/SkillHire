@@ -65,6 +65,8 @@ export function CompanyLogo({ logo, company, size = 'sm', className = '' }: Comp
             <div
                 className={`${badgeSize} ${badgeRadius} flex items-center justify-center ${badgeFontSize} tracking-tight select-none`}
                 style={{ backgroundColor: bg, color: text }}
+                role="img"
+                aria-label={company}
                 title={company}
             >
                 {initials}

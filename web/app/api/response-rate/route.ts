@@ -7,11 +7,11 @@ import CompanyFeedback from '@/models/CompanyFeedback';
  * GET /api/response-rate?company=google
  * GET /api/response-rate?companies=google,amazon,...
  * Returns aggregated response rate for one or more companies.
- * Public endpoint — no auth required for reads.
+ * Public endpoint - no auth required for reads.
  *
  * Query params:
- *   company   — single company name (returns legacy single-object shape)
- *   companies — comma-separated list of company names (returns map keyed by name)
+ *   company   - single company name (returns legacy single-object shape)
+ *   companies - comma-separated list of company names (returns map keyed by name)
  *               Deduplicated; capped at MAX_COMPANIES per request.
  *
  * Single-company response: { hasData, company, responseRate?, totalVotes? }

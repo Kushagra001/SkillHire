@@ -13,14 +13,14 @@ const BASE_URL = 'https://skillhire.in';
 
 export const metadata: Metadata = {
   title: {
-    default: "SkillHire | Hired for What You Know",
+    default: "SkillHire | Outsmart the ATS & Get Hired Faster",
     template: "%s | SkillHire",
   },
-  description: "Skill-based hiring for 2023-2026 freshers. Get matched to top companies based on what you can build.",
+  description: "The ultimate AI-powered job hunt platform for 2024-2026 grads. Instantly match your resume to top roles, track company response rates, and organize your applications.",
   metadataBase: new URL(BASE_URL),
   openGraph: {
-    title: "SkillHire | Hired for What You Know",
-    description: "Skill-based hiring for 2023-2026 freshers. Get matched to top companies based on what you can build.",
+    title: "SkillHire | Outsmart the ATS & Get Hired Faster",
+    description: "The ultimate AI-powered job hunt platform for 2024-2026 grads. Instantly match your resume to top roles, track company response rates, and organize your applications.",
     url: BASE_URL,
     siteName: "SkillHire",
     type: "website",
@@ -29,14 +29,14 @@ export const metadata: Metadata = {
         url: "/assets/og-image.png",
         width: 1200,
         height: 630,
-        alt: "SkillHire — Hired for What You Know",
+        alt: "SkillHire - Outsmart the ATS",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "SkillHire | Hired for What You Know",
-    description: "Skill-based hiring for 2023-2026 freshers. Get matched to top companies based on what you can build.",
+    title: "SkillHire | Outsmart the ATS & Get Hired Faster",
+    description: "The ultimate AI-powered job hunt platform for 2024-2026 grads. Instantly match your resume to top roles, track company response rates, and organize your applications.",
     images: ["/assets/og-image.png"],
   },
   icons: {

@@ -5,7 +5,7 @@ from pymongo import MongoClient
 from datetime import datetime
 from bs4 import BeautifulSoup
 
-# Optional retry support — install with: pip install tenacity
+# Optional retry support - install with: pip install tenacity
 try:
     from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_exception_type
     _HAS_TENACITY = True
@@ -41,7 +41,7 @@ def _do_request(params):
             return r.json()
         return _fetch()
     else:
-        # No tenacity — plain single request
+        # No tenacity - plain single request
         r = requests.get("https://serpapi.com/search", params=params, timeout=15)
         r.raise_for_status()
         return r.json()

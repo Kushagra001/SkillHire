@@ -5,7 +5,7 @@ import Job from '@/models/Job';
 
 export async function POST(request: Request) {
     try {
-        // 1. Verify auth server-side — cannot be spoofed by client
+        // 1. Verify auth server-side - cannot be spoofed by client
         const { userId } = await auth();
         if (!userId) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });

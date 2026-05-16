@@ -1,8 +1,9 @@
 'use client';
 
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { X, ExternalLink, MapPin, Briefcase, Share2, CheckCircle2, Wallet, Sparkles, Loader2, XCircle, UploadCloud } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
 import { HiringPulseBadge } from '@/components/HiringPulseBadge';
 
@@ -58,6 +59,8 @@ export function MobileJobDetails({ job, onClose, onUnlock, isUnlocking }: Mobile
     const [isUploadingBase, setIsUploadingBase] = useState(false);
     const [quotaExceeded, setQuotaExceeded] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const containerRef = useRef<HTMLDivElement | null>(null);
+    const prevActiveRef = useRef<HTMLElement | null>(null);
 
     useEffect(() => {
         const fetchResumeStatus = async () => {
@@ -92,6 +95,55 @@ export function MobileJobDetails({ job, onClose, onUnlock, isUnlocking }: Mobile
         }
         return () => { document.body.style.overflow = ''; };
     }, [job]);
+
+    // Manage focus for the slide-over dialog: focus container on open, restore on close
+    useEffect(() => {
+        if (isVisible) {
+            prevActiveRef.current = document.activeElement as HTMLElement | null;
+            // focus the dialog container for screen readers and keyboard users
+            containerRef.current?.focus?.();
+        } else {
+            // restore focus to previous element when dialog closes
+            try {
+                prevActiveRef.current?.focus?.();
+            } catch (e) {
+                // ignore
+            }
+            prevActiveRef.current = null;
+        }
+    }, [isVisible]);
+
+    const FOCUSABLE_SELECTORS = 'a[href], area[href], input:not([disabled]):not([type="hidden"]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, [tabindex]:not([tabindex="-1"]), [contenteditable]';
+
+    const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
+        if (e.key === 'Escape') {
+            e.stopPropagation();
+            onClose();
+            return;
+        }
+        if (e.key !== 'Tab') return;
+
+        const container = containerRef.current;
+        if (!container) return;
+        const nodes = Array.from(container.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTORS)).filter((el) => !!(el.offsetWidth || el.offsetHeight || el.getClientRects().length));
+        if (nodes.length === 0) {
+            e.preventDefault();
+            return;
+        }
+        const first = nodes[0];
+        const last = nodes[nodes.length - 1];
+        const active = document.activeElement as HTMLElement | null;
+
+        if (!e.shiftKey && active === last) {
+            e.preventDefault();
+            first.focus();
+        }
+
+        if (e.shiftKey && (active === first || active === container)) {
+            e.preventDefault();
+            last.focus();
+        }
+    }, [onClose]);
 
     if (!isRendered && !job) return null;
 
@@ -162,7 +214,7 @@ export function MobileJobDetails({ job, onClose, onUnlock, isUnlocking }: Mobile
         } catch (error: unknown) {
             console.error(error);
             const err = error as Error;
-            alert(err.message || 'Failed to perform Quick Match');
+            toast.error(err.message || 'Failed to perform Quick Match');
         } finally {
             setIsAnalyzing(false);
         }
@@ -182,7 +234,7 @@ export function MobileJobDetails({ job, onClose, onUnlock, isUnlocking }: Mobile
         } catch (error: unknown) {
             console.error(error);
             const err = error as Error;
-            alert(err.message || 'Failed to upload resume');
+            toast.error(err.message || 'Failed to upload resume');
         } finally {
             setIsUploadingBase(false);
             if (fileInputRef.current) fileInputRef.current.value = '';
@@ -194,15 +246,23 @@ export function MobileJobDetails({ job, onClose, onUnlock, isUnlocking }: Mobile
             {/* Backdrop click to close */}
             <div className="absolute inset-0" onClick={onClose} />
 
-            <div className={`
+            <div
+                ref={containerRef}
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="job-details-title"
+                tabIndex={-1}
+                onKeyDown={handleKeyDown}
+                className={`
                 w-full sm:max-w-md bg-white dark:bg-[#0B0F19] h-full shadow-2xl flex flex-col transform transition-transform duration-300 ease-in-out
                 ${isVisible ? 'translate-x-0' : 'translate-x-full'}
-            `}>
+            `}
+            >
                 {/* Header */}
                 <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-slate-800 bg-white dark:bg-[#0B0F19]">
-                    <h2 className="text-sm font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Job Details</h2>
-                    <button onClick={onClose} className="p-2 -mr-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
-                        <X className="h-5 w-5" />
+                    <h2 id="job-details-title" className="text-sm font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Job Details</h2>
+                    <button type="button" onClick={onClose} aria-label="Close" className="p-2 -mr-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                        <X className="h-5 w-5" aria-hidden="true" />
                     </button>
                 </div>
 
@@ -227,29 +287,29 @@ export function MobileJobDetails({ job, onClose, onUnlock, isUnlocking }: Mobile
                                     <h1 className="text-xl font-bold text-slate-900 dark:text-white leading-tight mb-2">{job.title}</h1>
                                     <div className="flex items-center gap-2 mb-3 flex-wrap">
                                         <span className="text-base font-medium text-slate-700 dark:text-slate-300">{job.company}</span>
-                                        <CheckCircle2 className="h-4 w-4 text-[#41b4a5] fill-[#EAFBF9]" />
+                                        <CheckCircle2 aria-hidden="true" className="h-4 w-4 text-sh-primary fill-sh-primary/10" />
                                         <HiringPulseBadge company={job.company} />
                                     </div>
                                     <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-slate-500 dark:text-slate-400">
                                         <span className="flex items-center gap-1.5">
-                                            <MapPin className="h-3.5 w-3.5 text-slate-400" /> {job.location}
+                                            <MapPin aria-hidden="true" className="h-3.5 w-3.5 text-slate-400" /> {job.location}
                                         </span>
                                         {job.job_type && (
                                             <span className="flex items-center gap-1.5">
-                                                <Briefcase className="h-3.5 w-3.5 text-slate-400" /> {job.job_type}
+                                                <Briefcase aria-hidden="true" className="h-3.5 w-3.5 text-slate-400" /> {job.job_type}
                                             </span>
                                         )}
                                         {job.salary_status && job.salary_status !== "Not Disclosed" && (
                                             <span className="flex items-center gap-1.5">
-                                                <Wallet className="h-3.5 w-3.5 text-[#41b4a5]" />
-                                                <span className="text-[#41b4a5] font-medium">{job.salary_status}</span>
+                                                <Wallet aria-hidden="true" className="h-3.5 w-3.5 text-sh-primary" />
+                                                <span className="text-sh-primary font-medium">{job.salary_status}</span>
                                             </span>
                                         )}
                                     </div>
                                 </div>
                             </div>
 
-                            <Button className="w-full bg-[#41b4a5] hover:bg-[#369689] text-white font-bold h-12 rounded-xl mb-6 shadow-sm" asChild>
+                            <Button className="w-full bg-sh-primary hover:bg-sh-primary-dark text-white font-bold h-12 rounded-xl mb-6 shadow-sm" asChild>
                                 <a href={job.apply_link} target="_blank" rel="noopener noreferrer">Apply Now</a>
                             </Button>
 
@@ -259,7 +319,7 @@ export function MobileJobDetails({ job, onClose, onUnlock, isUnlocking }: Mobile
                                     <h4 className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase mb-3">Tags &amp; Skills</h4>
                                     <div className="flex flex-wrap gap-2">
                                         {job.tags.map((tag: string) => (
-                                            <span key={tag} className="inline-flex items-center rounded-md bg-[#41b4a5]/10 px-2.5 py-1 text-xs font-semibold text-[#369689] ring-1 ring-inset ring-[#41b4a5]/20">
+                                            <span key={tag} className="inline-flex items-center rounded-md bg-sh-primary/10 px-2.5 py-1 text-xs font-semibold text-sh-primary-dark ring-1 ring-inset ring-sh-primary/20">
                                                 {tag}
                                             </span>
                                         ))}
@@ -274,19 +334,19 @@ export function MobileJobDetails({ job, onClose, onUnlock, isUnlocking }: Mobile
                                         <div className="flex items-center gap-4 w-full justify-between">
                                             <div className="flex items-center gap-3">
                                                 <div className="flex h-10 w-10 items-center justify-center rounded-full bg-red-50 dark:bg-red-900/20 shrink-0">
-                                                    <XCircle className="h-5 w-5 text-red-500" />
+                                                    <XCircle aria-hidden="true" className="h-5 w-5 text-red-500" />
                                                 </div>
                                                 <div>
                                                     <h4 className="text-sm font-bold text-slate-900 dark:text-white">Daily Limit Reached</h4>
                                                     <p className="text-xs text-slate-500 dark:text-slate-400">Upgrade to Pro for unlimited scans.</p>
                                                 </div>
                                             </div>
-                                            <Button onClick={onUnlock} size="sm" className="bg-[#41b4a5] hover:bg-[#369689] text-white shrink-0 shadow-sm">Upgrade</Button>
+                                            <Button onClick={onUnlock} size="sm" className="bg-sh-primary hover:bg-sh-primary-dark text-white shrink-0 shadow-sm">Upgrade</Button>
                                         </div>
                                     ) : isAnalyzing ? (
                                         <div className="flex items-center gap-3 w-full">
                                             <div className="flex h-10 w-10 items-center justify-center shrink-0">
-                                                <Loader2 className="h-5 w-5 text-[#41b4a5] animate-spin" />
+                                                <Loader2 aria-hidden="true" className="h-5 w-5 text-sh-primary animate-spin" />
                                             </div>
                                             <div>
                                                 <h4 className="text-sm font-bold text-slate-900 dark:text-white">Analyzing Match...</h4>
@@ -297,7 +357,7 @@ export function MobileJobDetails({ job, onClose, onUnlock, isUnlocking }: Mobile
                                         <div className="flex flex-col gap-3 w-full">
                                             <div className="flex items-center gap-3">
                                                 <div className="relative h-12 w-12 shrink-0">
-                                                    <svg className="h-full w-full transform -rotate-90" viewBox="0 0 56 56">
+                                                    <svg aria-hidden="true" className="h-full w-full transform -rotate-90" viewBox="0 0 56 56">
                                                         <circle cx="28" cy="28" r="24" stroke="currentColor" strokeWidth="4" fill="transparent" className="text-slate-100 dark:text-slate-700" />
                                                         <circle
                                                             cx="28" cy="28" r="24" stroke="currentColor" strokeWidth="4" fill="transparent"
@@ -336,7 +396,7 @@ export function MobileJobDetails({ job, onClose, onUnlock, isUnlocking }: Mobile
                                                                 </div>
                                                             </div>
                                                             <div className="bg-red-50/50 dark:bg-red-900/10 rounded-lg p-3 border border-red-100/50 dark:border-red-900/30">
-                                                                <h5 className="text-[11px] font-bold text-red-800 dark:text-red-400 uppercase mb-2 flex items-center gap-1"><XCircle className="h-3 w-3" />Missing</h5>
+                                                                <h5 className="text-[11px] font-bold text-red-800 dark:text-red-400 uppercase mb-2 flex items-center gap-1"><XCircle aria-hidden="true" className="h-3 w-3" />Missing</h5>
                                                                 <div className="flex flex-wrap gap-1">
                                                                     {(matchResult.missing_skills?.length ?? 0) > 0 ? matchResult.missing_skills!.map((s: string, i: number) => (
                                                                         <span key={i} className="px-1.5 py-0.5 bg-white dark:bg-slate-800 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 rounded text-[10px] font-medium">{s}</span>
@@ -351,8 +411,8 @@ export function MobileJobDetails({ job, onClose, onUnlock, isUnlocking }: Mobile
                                     ) : (
                                         <>
                                             <div className="flex items-center gap-3">
-                                                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#EAFBF9] shrink-0 border border-[#41b4a5]/20">
-                                                    <Sparkles className="h-4 w-4 text-[#41b4a5]" />
+                                                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-sh-primary/10 shrink-0 border border-sh-primary/20">
+                                                    <Sparkles aria-hidden="true" className="h-4 w-4 text-sh-primary" />
                                                 </div>
                                                 <div className="flex flex-col">
                                                     <h4 className="text-sm font-bold text-slate-900 dark:text-white">Quick Match</h4>
@@ -369,18 +429,18 @@ export function MobileJobDetails({ job, onClose, onUnlock, isUnlocking }: Mobile
                                                     <div className="flex items-center gap-3">
                                                         <button 
                                                             onClick={() => fileInputRef.current?.click()} 
-                                                            className="text-[10px] text-slate-400 font-medium hover:text-[#41b4a5] hover:underline underline-offset-2 transition-colors"
+                                                            className="text-[10px] text-slate-400 font-medium hover:text-sh-primary hover:underline underline-offset-2 transition-colors"
                                                         >
                                                             Update
                                                         </button>
-                                                        <Button onClick={handleQuickMatch} size="sm" disabled={isUploadingBase} className="bg-[#41b4a5] hover:bg-[#369689] text-white text-xs font-semibold shadow-sm h-8">
-                                                            {isUploadingBase ? <Loader2 className="h-4 w-4 animate-spin mr-1" /> : <Sparkles className="h-4 w-4 mr-1" />}
+                                                        <Button onClick={handleQuickMatch} size="sm" disabled={isUploadingBase} className="bg-sh-primary hover:bg-sh-primary-dark text-white text-xs font-semibold shadow-sm h-8">
+                                                            {isUploadingBase ? <Loader2 aria-hidden="true" className="h-4 w-4 animate-spin mr-1" /> : <Sparkles aria-hidden="true" className="h-4 w-4 mr-1" />}
                                                             {isUploadingBase ? 'Uploading...' : 'Quick Match'}
                                                         </Button>
                                                     </div>
                                                 ) : (
-                                                    <Button onClick={() => fileInputRef.current?.click()} variant="outline" size="sm" disabled={isUploadingBase} className="text-xs border-gray-300 dark:border-slate-600 text-slate-700 dark:text-slate-200 hover:text-[#41B3A3] hover:border-[#41B3A3] h-8">
-                                                        {isUploadingBase ? <Loader2 className="h-4 w-4 animate-spin mr-1" /> : <UploadCloud className="h-4 w-4 mr-1" />}
+                                                    <Button onClick={() => fileInputRef.current?.click()} variant="outline" size="sm" disabled={isUploadingBase} className="text-xs border-gray-300 dark:border-slate-600 text-slate-700 dark:text-slate-200 hover:text-sh-primary hover:border-sh-primary h-8">
+                                                        {isUploadingBase ? <Loader2 aria-hidden="true" className="h-4 w-4 animate-spin mr-1" /> : <UploadCloud aria-hidden="true" className="h-4 w-4 mr-1" />}
                                                         Upload Resume
                                                     </Button>
                                                 )}
@@ -403,7 +463,7 @@ export function MobileJobDetails({ job, onClose, onUnlock, isUnlocking }: Mobile
                                                 {!job.is_locked && (
                                                     <Button variant="outline" asChild>
                                                         <a href={job.apply_link} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2">
-                                                            View Full Description <ExternalLink className="h-4 w-4" />
+                                                            View Full Description <ExternalLink aria-hidden="true" className="h-4 w-4" />
                                                         </a>
                                                     </Button>
                                                 )}
@@ -427,14 +487,14 @@ export function MobileJobDetails({ job, onClose, onUnlock, isUnlocking }: Mobile
                                 {job.is_locked && (
                                     <div className="absolute inset-0 z-20 flex flex-col items-center justify-center">
                                         <div className="bg-white/90 dark:bg-slate-900/90 backdrop-blur-md p-6 rounded-xl shadow-xl border border-gray-100/50 dark:border-slate-700/50 w-full text-center relative overflow-hidden mx-4">
-                                            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[#EAFBF9] mb-3 relative z-10">
-                                                <svg className="h-5 w-5 text-[#41B3A3]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
+                                            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-sh-primary/10 mb-3 relative z-10">
+                                                    <svg aria-hidden="true" className="h-5 w-5 text-sh-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
                                             </div>
                                             <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-1 relative z-10">Beat the crowd.</h3>
                                             <p className="text-slate-500 dark:text-slate-400 mb-4 text-xs relative z-10 px-1">
                                                 <span className="font-bold text-slate-900 dark:text-white">2025 Grads</span> are applying right now. Unlock instant access to beat the crowd.
                                             </p>
-                                            <Button onClick={onUnlock} disabled={isUnlocking} className="w-full bg-[#41b4a5] hover:bg-[#369689] text-white font-bold h-10 text-sm shadow-sm relative z-10">
+                                            <Button onClick={onUnlock} disabled={isUnlocking} className="w-full bg-sh-primary hover:bg-sh-primary-dark text-white font-bold h-10 text-sm shadow-sm relative z-10">
                                                 {isUnlocking ? 'Unlocking...' : 'Unlock for ₹199/month'}
                                             </Button>
                                             <p className="text-[10px] text-slate-400 dark:text-slate-500 font-medium relative z-10 mt-2">Cancel anytime.</p>
@@ -446,7 +506,7 @@ export function MobileJobDetails({ job, onClose, onUnlock, isUnlocking }: Mobile
                     )}
                 </div>
 
-                {/* Footer — share + apply */}
+                {/* Footer - share + apply */}
                 <div className="bg-gray-50 dark:bg-slate-900/80 border-t border-gray-100 dark:border-slate-800 p-4 flex items-center gap-3 shrink-0 safe-area-bottom">
                     <Button
                         variant="outline"
@@ -454,14 +514,14 @@ export function MobileJobDetails({ job, onClose, onUnlock, isUnlocking }: Mobile
                         onClick={handleShare}
                         className="text-slate-500 dark:text-slate-400 border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors shrink-0"
                     >
-                        {isCopied ? <CheckCircle2 className="h-5 w-5 text-[#41b4a5]" /> : <Share2 className="h-5 w-5" />}
+                        {isCopied ? <CheckCircle2 aria-hidden="true" className="h-5 w-5 text-sh-primary" /> : <Share2 aria-hidden="true" className="h-5 w-5" />}
                     </Button>
                     {job?.is_locked ? (
-                        <Button onClick={onUnlock} disabled={isUnlocking} className="bg-[#41b4a5] hover:bg-[#369689] text-white font-bold px-6 h-10 rounded-lg shadow-sm flex-1">
+                        <Button onClick={onUnlock} disabled={isUnlocking} className="bg-sh-primary hover:bg-sh-primary-dark text-white font-bold px-6 h-10 rounded-lg shadow-sm flex-1">
                             {isUnlocking ? 'Unlocking...' : 'Unlock to Apply'}
                         </Button>
                     ) : (
-                        <Button className="bg-[#41b4a5] hover:bg-[#369689] text-white font-bold px-6 h-10 rounded-lg shadow-sm flex-1" asChild>
+                        <Button className="bg-sh-primary hover:bg-sh-primary-dark text-white font-bold px-6 h-10 rounded-lg shadow-sm flex-1" asChild>
                             <a href={job?.apply_link} target="_blank" rel="noopener noreferrer">Apply</a>
                         </Button>
                     )}

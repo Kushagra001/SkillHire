@@ -29,7 +29,7 @@ APIFY_TOKEN = os.getenv("APIFY_API_TOKEN")
 
 # UPGRADE 1: Split the domains. Greenhouse gets city-loops. Lever/Ashby get keyword-loops.
 GREENHOUSE_DOMAIN = "site:boards.greenhouse.io"
-# Parentheses required — without them, Google treats the OR as low-precedence and may
+# Parentheses required - without them, Google treats the OR as low-precedence and may
 # apply it across the whole query instead of just the site: operators.
 LEVER_ASHBY_DOMAINS = "(site:jobs.lever.co OR site:jobs.ashbyhq.com)"
 
@@ -104,7 +104,7 @@ class ATSHunter:
         q_lever_ashby = self.build_query(LEVER_ASHBY_DOMAINS, '("India" OR "Remote")')
         results_la = self.search_google(q_lever_ashby)
         
-        # "India/Remote" as the region — Refinery will extract exact cities later.
+        # "India/Remote" as the region - Refinery will extract exact cities later.
         all_jobs.extend(self._process_results(results_la, "lever_or_ashby", "India/Remote"))
             
         return all_jobs
@@ -252,7 +252,7 @@ def main():
     except Exception as e:
         logger.error(f"ATS Hunter Failed: {e}")
 
-    # 2. Run Aggregator Hunter (Indeed via Apify — see apify_jobs.py for the live runner)
+    # 2. Run Aggregator Hunter (Indeed via Apify - see apify_jobs.py for the live runner)
     # try:
     #     agg_hunter = AggregatorHunter()
     #     agg_hunter.run_indeed()

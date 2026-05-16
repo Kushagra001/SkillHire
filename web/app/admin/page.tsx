@@ -34,7 +34,7 @@ export default function AdminUsersPage() {
         try {
             const r = await fetch('/api/admin/users');
             if (!r.ok) {
-                setError(r.status === 403 ? 'Access denied — admins only.' : 'Failed to load users.');
+                setError(r.status === 403 ? 'Access denied - admins only.' : 'Failed to load users.');
                 return;
             }
             const data = await r.json();
@@ -64,7 +64,7 @@ export default function AdminUsersPage() {
                     : u
             ));
         } catch {
-            alert('Failed to update. Try again.');
+            toast.error('Failed to update. Try again.');
         } finally {
             setToggling(null);
         }
@@ -73,7 +73,7 @@ export default function AdminUsersPage() {
     if (!isLoaded) {
         return (
             <div className="min-h-screen flex items-center justify-center bg-[#f9fbfb]">
-                <Loader2 className="h-6 w-6 animate-spin text-[#41b4a5]" />
+                <Loader2 aria-hidden="true" className="h-6 w-6 animate-spin text-sh-primary" />
             </div>
         );
     }
@@ -85,8 +85,8 @@ export default function AdminUsersPage() {
             {/* Header */}
             <header className="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                    <div className="h-9 w-9 rounded-xl bg-[#41b4a5]/10 flex items-center justify-center">
-                        <Users className="h-5 w-5 text-[#41b4a5]" />
+                    <div className="h-9 w-9 rounded-xl bg-sh-primary/10 flex items-center justify-center">
+                        <Users aria-hidden="true" className="h-5 w-5 text-sh-primary" />
                     </div>
                     <div>
                         <h1 className="text-lg font-bold text-slate-900">User Management</h1>
@@ -98,7 +98,7 @@ export default function AdminUsersPage() {
                     disabled={loading}
                     className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-gray-200 text-sm font-medium text-slate-600 hover:bg-gray-50 transition-colors"
                 >
-                    <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
+                    <RefreshCw aria-hidden="true" className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
                     Refresh
                 </button>
             </header>
@@ -132,7 +132,7 @@ export default function AdminUsersPage() {
                 <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
                     {loading ? (
                         <div className="flex items-center justify-center py-20">
-                            <Loader2 className="h-6 w-6 animate-spin text-[#41b4a5]" />
+                            <Loader2 aria-hidden="true" className="h-6 w-6 animate-spin text-sh-primary" />
                         </div>
                     ) : (
                         <table className="w-full text-sm">
@@ -160,7 +160,7 @@ export default function AdminUsersPage() {
                                                     <p className="font-semibold text-slate-900 truncate">
                                                         {u.firstName || u.lastName
                                                             ? `${u.firstName} ${u.lastName}`.trim()
-                                                            : '—'}
+                                                            : '-'}
                                                     </p>
                                                     <p className="text-xs text-slate-400 truncate">{u.email}</p>
                                                 </div>
@@ -195,15 +195,15 @@ export default function AdminUsersPage() {
                                                 disabled={toggling === u.id}
                                                 className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-bold transition-all ${u.isPremium
                                                         ? 'bg-red-50 text-red-600 hover:bg-red-100 border border-red-200'
-                                                        : 'bg-[#41b4a5]/10 text-[#369689] hover:bg-[#41b4a5]/20 border border-[#41b4a5]/20'
+                                                        : 'bg-sh-primary/10 text-sh-primary-dark hover:bg-sh-primary/20 border border-sh-primary/20'
                                                     }`}
                                             >
                                                 {toggling === u.id ? (
-                                                    <Loader2 className="h-3 w-3 animate-spin" />
+                                                    <Loader2 aria-hidden="true" className="h-3 w-3 animate-spin" />
                                                 ) : u.isPremium ? (
-                                                    <><ShieldOff className="h-3 w-3" /> Revoke</>
+                                                    <><ShieldOff aria-hidden="true" className="h-3 w-3" /> Revoke</>
                                                 ) : (
-                                                    <><Crown className="h-3 w-3" /> Grant</>
+                                                    <><Crown aria-hidden="true" className="h-3 w-3" /> Grant</>
                                                 )}
                                             </button>
                                         </td>

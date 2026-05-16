@@ -36,10 +36,10 @@ export default function InteractiveHero() {
                 {/* The "App Window" Frame */}
                 <div className="w-full max-w-4xl bg-slate-50 dark:bg-slate-900 rounded-2xl shadow-2xl shadow-sh-primary/10 border border-slate-200 dark:border-slate-800 overflow-hidden relative flex flex-col min-h-[500px]">
                     {/* Fake Window Header */}
-                    <div className="h-12 bg-slate-100 dark:bg-slate-950/50 border-b border-slate-200 dark:border-slate-800 flex items-center px-4 gap-2">
-                        <div className="w-3 h-3 rounded-full bg-red-400"></div>
-                        <div className="w-3 h-3 rounded-full bg-amber-400"></div>
-                        <div className="w-3 h-3 rounded-full bg-emerald-400"></div>
+                    <div className="h-12 bg-slate-100 dark:bg-slate-950/50 border-b border-slate-200 dark:border-slate-800 flex items-center px-4 gap-2" aria-hidden="true">
+                        <div aria-hidden="true" className="w-3 h-3 rounded-full bg-red-400"></div>
+                        <div aria-hidden="true" className="w-3 h-3 rounded-full bg-amber-400"></div>
+                        <div aria-hidden="true" className="w-3 h-3 rounded-full bg-emerald-400"></div>
                         <div className="ml-4 text-xs font-semibold text-slate-500 font-mono tracking-wide">app.skillhire.com/match</div>
                     </div>
 
@@ -57,7 +57,7 @@ export default function InteractiveHero() {
                                         className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-xl border border-slate-200 dark:border-slate-700"
                                     >
                                         <div className="border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-lg p-8 text-center flex flex-col items-center relative overflow-hidden">
-                                            <FileUp className="w-12 h-12 text-slate-400 mb-4" />
+                                            <FileUp aria-hidden="true" className="w-12 h-12 text-slate-400 mb-4" />
                                             <p className="text-sm font-medium text-slate-700 dark:text-slate-200">Drag & Drop your Resume</p>
                                             <p className="text-xs text-slate-500 mt-1">PDF, DOCX up to 5MB</p>
 
@@ -68,8 +68,8 @@ export default function InteractiveHero() {
                                                     animate={{ y: 0, opacity: 1 }}
                                                     className="absolute inset-0 bg-white/95 dark:bg-slate-800/95 flex flex-col items-center justify-center"
                                                 >
-                                                    <div className="p-3 bg-sh-primary/10 rounded-full text-sh-primary mb-2">
-                                                        <FileUp className="w-8 h-8" />
+                                                    <div className="p-3 bg-sh-primary/10 rounded-full text-sh-primary mb-2" aria-hidden="true">
+                                                        <FileUp aria-hidden="true" className="w-8 h-8" />
                                                     </div>
                                                     <p className="text-sm font-bold text-slate-800 dark:text-slate-100">resume_2024.pdf</p>
                                                     <motion.div
@@ -100,14 +100,14 @@ export default function InteractiveHero() {
                                             className="absolute left-0 right-0 h-1 bg-sh-primary/50 shadow-[0_0_15px_rgba(4,119,86,0.5)] z-20"
                                         />
 
-                                        <div className="relative flex h-24 w-24 items-center justify-center rounded-full bg-slate-50 dark:bg-slate-900 border-4 border-slate-100 dark:border-slate-800 mb-4 shadow-inner">
-                                            <motion.svg className="absolute inset-0 h-full w-full -rotate-90 pointer-events-none" viewBox="0 0 100 100">
+                                            <div className="relative flex h-24 w-24 items-center justify-center rounded-full bg-slate-50 dark:bg-slate-900 border-4 border-slate-100 dark:border-slate-800 mb-4 shadow-inner" aria-hidden="true">
+                                                <motion.svg className="absolute inset-0 h-full w-full -rotate-90 pointer-events-none" viewBox="0 0 100 100">
                                                 <motion.circle
                                                     cx="50"
                                                     cy="50"
                                                     r="46"
                                                     fill="none"
-                                                    stroke="#41b4a5"
+                                                    stroke="sh-primary"
                                                     strokeWidth="8"
                                                     strokeLinecap="round"
                                                     initial={{ pathLength: 0 }}
@@ -115,8 +115,8 @@ export default function InteractiveHero() {
                                                     transition={{ duration: 2, ease: "easeOut" }}
                                                 />
                                             </motion.svg>
-                                            <div className="flex flex-col items-center">
-                                                <Zap className="h-6 w-6 text-sh-primary mb-1 animate-pulse" />
+                                            <div className="flex flex-col items-center" aria-hidden="true">
+                                                <Zap aria-hidden="true" className="h-6 w-6 text-sh-primary mb-1 animate-pulse" />
                                             </div>
                                         </div>
                                         <h3 className="text-lg font-bold text-slate-900 dark:text-white">AI Analyzing Skills...</h3>
@@ -132,7 +132,7 @@ export default function InteractiveHero() {
                                     >
                                         <div className="flex items-center justify-between mb-4 px-2">
                                             <h3 className="font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                                                <CheckCircle2 className="w-5 h-5 text-sh-primary" />
+                                                <CheckCircle2 aria-hidden="true" className="w-5 h-5 text-sh-primary" />
                                                 Top Matches Found
                                             </h3>
                                             <span className="text-xs font-bold bg-sh-primary/10 text-sh-primary px-2 py-1 rounded-full">92% Match Avg</span>
@@ -151,8 +151,8 @@ export default function InteractiveHero() {
                                                 className="bg-white dark:bg-slate-800 p-4 rounded-lg shadow-md border border-slate-200 dark:border-slate-700 flex justify-between items-center"
                                             >
                                                 <div className="flex items-center gap-3">
-                                                    <div className="w-10 h-10 rounded bg-indigo-50 dark:bg-indigo-900/30 flex items-center justify-center text-indigo-600 dark:text-indigo-400 font-bold border border-indigo-100 dark:border-indigo-800">
-                                                        <Briefcase className="w-5 h-5" />
+                                                    <div className="w-10 h-10 rounded bg-indigo-50 dark:bg-indigo-900/30 flex items-center justify-center text-indigo-600 dark:text-indigo-400 font-bold border border-indigo-100 dark:border-indigo-800" aria-hidden="true">
+                                                        <Briefcase aria-hidden="true" className="w-5 h-5" />
                                                     </div>
                                                     <div>
                                                         <h4 className="font-bold text-sm text-slate-900 dark:text-white">{job.title}</h4>

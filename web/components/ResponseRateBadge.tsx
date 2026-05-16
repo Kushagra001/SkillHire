@@ -78,7 +78,7 @@ function fetchResponseRate(company: string): Promise<ResponseRateData> {
     clearCacheIfFull();
 
     if (cache[key] === 'loading') {
-        // Already in-flight — return a promise that resolves when the first request settles
+        // Already in-flight - return a promise that resolves when the first request settles
         return new Promise((resolve) => {
             if (!listeners[key]) listeners[key] = [];
             listeners[key].push(resolve);

@@ -11,7 +11,7 @@ const UI_AVATARS_HOST = 'ui-avatars.com';
  * Priority:
  *   1. Stored logo that isn't a ui-avatars placeholder (real logo from scraper)
  *   2. logo inside raw_data (Apify/SerpApi store it there)
- *   3. Google's high-res favicon service — free, no-key, works for 99% of companies
+ *   3. Google's high-res favicon service - free, no-key, works for 99% of companies
  *   4. null → frontend onError handler shows ui-avatars as absolute last resort
  */
 function resolveLogoUrl(
@@ -29,9 +29,9 @@ function resolveLogoUrl(
         return rawDataLogo;
     }
 
-    // 3. No real logo available — guess the domain from the company name and use
+    // 3. No real logo available - guess the domain from the company name and use
     //    Google's favicon service. Google returns high-res logos for known companies.
-    //    For unknown companies it returns a generic 16×16 globe — the CompanyLogo
+    //    For unknown companies it returns a generic 16×16 globe - the CompanyLogo
     //    component detects this via naturalWidth on load and falls back to an
     //    initials badge automatically.
     if (companyName) {
@@ -45,7 +45,7 @@ function resolveLogoUrl(
         }
     }
 
-    // 4. No logo available — frontend will render initials badge
+    // 4. No logo available - frontend will render initials badge
     return null;
 }
 
@@ -53,7 +53,7 @@ export async function GET(req: NextRequest) {
     try {
         await dbConnect();
 
-        // 1. Authenticate the user (server-side — cannot be spoofed by the client)
+        // 1. Authenticate the user (server-side - cannot be spoofed by the client)
         const { userId } = await auth();
         let isPremium = false;
 
@@ -168,7 +168,7 @@ export async function GET(req: NextRequest) {
         // Freshness threshold: jobs posted in the last 24h are premium-only
         const freshThreshold = Date.now() - 24 * 60 * 60 * 1000;
 
-        // The Redaction Engine — applied per-job, server-side
+        // The Redaction Engine - applied per-job, server-side
         const secureJobs = jobs.map((job) => {
             const { distribution_status, distributed_channels, ...jobObj } = job.toObject();
 
@@ -176,7 +176,7 @@ export async function GET(req: NextRequest) {
         // Priority chain:
         //   1. A real stored logo (not a ui-avatars placeholder)
         //   2. logo inside raw_data (some scrapers store it there)
-        //   3. logo.dev free API — resolves by guessed domain (e.g. "Google" → google.com)
+        //   3. logo.dev free API - resolves by guessed domain (e.g. "Google" → google.com)
         //   4. null → frontend onError handler shows ui-avatars as last resort
         const companyName: string = jobObj.company || '';
         const resolvedLogo: string | null = resolveLogoUrl(

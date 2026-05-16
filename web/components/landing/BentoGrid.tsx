@@ -29,7 +29,7 @@ export default function BentoGrid() {
                 {/* Card 1: Beat the ATS (Col Span 2) */}
                 <motion.div variants={itemVariants} className="md:col-span-2 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-3xl shadow-sm hover:shadow-md transition-shadow p-8 relative overflow-hidden group">
                     <div className="relative z-10 w-full md:w-1/2 flex flex-col justify-center h-full">
-                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#41B3A3]/10 text-[#41B3A3] font-semibold text-xs mb-6 w-max">
+                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sh-primary/10 text-sh-primary font-semibold text-xs mb-6 w-max">
                             <Zap className="w-4 h-4" /> AI Resume Parser
                         </div>
                         <h3 className="text-3xl font-bold text-slate-900 dark:text-white mb-4 tracking-tight">
@@ -58,7 +58,7 @@ export default function BentoGrid() {
                 {/* Card 2: Transparent Salary (Col Span 1) */}
                 <motion.div variants={itemVariants} className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-3xl shadow-sm hover:shadow-md transition-shadow p-8 relative overflow-hidden flex flex-col justify-between">
                     <div>
-                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#41B3A3]/10 text-[#41B3A3] font-semibold text-xs mb-6 w-max">
+                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sh-primary/10 text-sh-primary font-semibold text-xs mb-6 w-max">
                             <IndianRupee className="w-4 h-4" /> No Guessing
                         </div>
                         <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-3 tracking-tight">
@@ -72,7 +72,7 @@ export default function BentoGrid() {
                     {/* Mockup Element */}
                     <div className="mt-8 p-4 bg-slate-900 rounded-xl border border-slate-800 shadow-inner flex items-center justify-between">
                         <span className="text-slate-400 text-xs font-semibold uppercase tracking-wider">Salary</span>
-                        <span className="px-3 py-1 rounded-full bg-[#41B3A3]/20 text-[#41B3A3] border border-[#41B3A3]/30 font-bold text-sm shadow-[0_0_15px_rgba(65,179,163,0.3)]">
+                        <span className="px-3 py-1 rounded-full bg-sh-primary/20 text-sh-primary border border-sh-primary/30 font-bold text-sm shadow-[0_0_15px_rgba(65,179,163,0.3)]">
                             ₹12L - ₹18L
                         </span>
                     </div>

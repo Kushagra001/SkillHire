@@ -49,7 +49,7 @@ def create_indexes():
         name="active_created_at"
     )
 
-    # 3. Refinery queue — find unprocessed jobs fast
+    # 3. Refinery queue - find unprocessed jobs fast
     _make_index(jobs,
         [("is_processed", ASCENDING), ("created_at", ASCENDING)],
         name="refinery_queue"

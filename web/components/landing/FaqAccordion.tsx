@@ -30,8 +30,8 @@ export default function FaqAccordion() {
         <section className="py-24 bg-white dark:bg-[#0B0F19] relative">
             <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="text-center mb-16">
-                    <h2 className="text-4xl md:text-5xl font-black tracking-tight text-[#1E293B] dark:text-white capitalize mb-4">
-                        Frequently Asked <span className="text-[#41B3A3]">Questions</span>
+                    <h2 className="text-4xl md:text-5xl font-black tracking-tight text-slate-900 dark:text-white capitalize mb-4">
+                        Frequently Asked <span className="text-sh-primary">Questions</span>
                     </h2>
                     <p className="text-lg text-slate-500 dark:text-slate-400 font-medium max-w-2xl mx-auto">
                         Everything you need to know about the product and billing.
@@ -45,7 +45,7 @@ export default function FaqAccordion() {
                             <motion.div
                                 key={index}
                                 initial={false}
-                                className={`border ${isOpen ? 'border-[#41B3A3] dark:border-[#41B3A3] bg-white dark:bg-[#0F172A] shadow-md shadow-[#41B3A3]/5' : 'border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-[#0B101D]'} rounded-2xl overflow-hidden transition-colors duration-300`}
+                                className={`border ${isOpen ? 'border-sh-primary dark:border-sh-primary bg-white dark:bg-[#0F172A] shadow-md shadow-[#41B3A3]/5' : 'border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-[#0B101D]'} rounded-2xl overflow-hidden transition-colors duration-300`}
                             >
                                 <button
                                     className="w-full flex items-center justify-between p-6 md:p-8 text-left focus:outline-none"
@@ -54,8 +54,8 @@ export default function FaqAccordion() {
                                     <span className="text-lg md:text-xl font-bold text-slate-900 dark:text-zinc-100 tracking-tight pr-8">
                                         {faq.question}
                                     </span>
-                                    <div className={`shrink-0 w-8 h-8 flex items-center justify-center rounded-full transition-colors ${isOpen ? 'bg-[#41B3A3]/10 text-[#41B3A3]' : 'bg-slate-200 dark:bg-slate-800 text-slate-500'}`}>
-                                        {isOpen ? <Minus className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
+                                        <div className={`shrink-0 w-8 h-8 flex items-center justify-center rounded-full transition-colors ${isOpen ? 'bg-sh-primary/10 text-sh-primary' : 'bg-slate-200 dark:bg-slate-800 text-slate-500'}`} aria-hidden="true">
+                                        {isOpen ? <Minus aria-hidden="true" className="w-4 h-4" /> : <Plus aria-hidden="true" className="w-4 h-4" />}
                                     </div>
                                 </button>
 

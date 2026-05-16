@@ -19,7 +19,7 @@ export async function POST(req: Request) {
         const plan = body.plan || 'monthly';
         const amount = plan === '6month' ? 99900 : 19900;
 
-        // 2. Create a Razorpay order — pass userId in notes for the webhook
+        // 2. Create a Razorpay order - pass userId in notes for the webhook
         const order = await razorpay.orders.create({
             amount,          // ₹199 or ₹999 in paise
             currency: 'INR',

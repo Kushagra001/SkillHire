@@ -32,7 +32,7 @@ export default function FeaturesSection() {
                         viewport={{ once: true, margin: "-100px" }}
                     >
                         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sh-primary/10 text-sh-primary font-semibold text-sm">
-                            <Target className="w-4 h-4" /> Discover Opportunities
+                            <Target aria-hidden="true" className="w-4 h-4" /> Discover Opportunities
                         </div>
                         <h2 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white leading-tight">
                             A curated feed of <br /><span className="text-sh-primary">high-growth roles.</span>
@@ -42,10 +42,10 @@ export default function FeaturesSection() {
                         </p>
                         <ul className="space-y-3 pt-4">
                             <li className="flex items-center gap-3 text-slate-700 dark:text-slate-300 font-medium">
-                                <CheckCircle className="w-5 h-5 text-sh-primary" /> Direct-to-founder startup roles.
+                                <CheckCircle aria-hidden="true" className="w-5 h-5 text-sh-primary" /> Direct-to-founder startup roles.
                             </li>
                             <li className="flex items-center gap-3 text-slate-700 dark:text-slate-300 font-medium">
-                                <CheckCircle className="w-5 h-5 text-sh-primary" /> Transparent salary bands.
+                                <CheckCircle aria-hidden="true" className="w-5 h-5 text-sh-primary" /> Transparent salary bands.
                             </li>
                         </ul>
                     </motion.div>

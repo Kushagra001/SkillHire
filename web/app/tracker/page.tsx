@@ -104,14 +104,14 @@ export default function TrackerPage() {
             setJobs(prev => prev.filter(job => job._id !== id));
         } catch (error) {
             console.error(error);
-            alert("Failed to remove this job. Please try again.");
+            toast.error("Failed to remove this job. Please try again.");
         }
     };
 
     if (!isLoaded || isLoading) {
         return (
             <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-[#0B0F19]">
-                <Loader2 className="h-8 w-8 animate-spin text-[#41b4a5]" />
+                <Loader2 className="h-8 w-8 animate-spin text-sh-primary" />
             </div>
         );
     }
@@ -122,7 +122,7 @@ export default function TrackerPage() {
                 <Briefcase className="h-16 w-16 text-slate-300 mb-4" />
                 <h1 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">Application Tracker</h1>
                 <p className="text-slate-500 mb-6 text-center max-w-md">Sign in to track your job applications, monitor your pipeline, and manage interviews.</p>
-                <Button asChild className="bg-[#41b4a5] hover:bg-[#369689] text-white">
+                <Button asChild className="bg-sh-primary hover:bg-sh-primary-dark text-white">
                     <Link href="/jobs?sign-in=true">Sign In</Link>
                 </Button>
             </div>
@@ -139,15 +139,15 @@ export default function TrackerPage() {
     const responseRate = totalApplied > 0 ? Math.round((totalResponses / totalApplied) * 100) : 0;
 
     return (
-        <div className="min-h-screen bg-[#f9fbfb] dark:bg-[#060D18] text-slate-900 dark:text-slate-100 font-sans selection:bg-[#41b4a5]/30 selection:text-[#369689]">
+        <div className="min-h-screen bg-[#f9fbfb] dark:bg-[#060D18] text-slate-900 dark:text-slate-100 font-sans selection:bg-sh-primary/30 selection:text-sh-primary-dark">
             {/* Header section with gradient and blur */}
             <div className="relative pt-24 pb-16 overflow-hidden border-b border-gray-200 dark:border-slate-800/60 bg-white dark:bg-[#0B0F19]">
-                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#41b4a5]/10 rounded-full blur-3xl -mr-64 -mt-64 pointer-events-none" />
+                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-sh-primary/10 rounded-full blur-3xl -mr-64 -mt-64 pointer-events-none" />
                 <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-indigo-500/5 rounded-full blur-3xl -ml-32 -mb-32 pointer-events-none" />
                 
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-                    <Link href="/jobs" className="inline-flex items-center gap-1.5 text-sm font-semibold text-slate-500 dark:text-slate-400 hover:text-[#41b4a5] transition-colors mb-6">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-arrow-right rotate-180"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                    <Link href="/jobs" className="inline-flex items-center gap-1.5 text-sm font-semibold text-slate-500 dark:text-slate-400 hover:text-sh-primary transition-colors mb-6">
+                        <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-arrow-right rotate-180"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
                         Back to Jobs
                     </Link>
                     
@@ -164,7 +164,7 @@ export default function TrackerPage() {
                     <div className="flex gap-4">
                         <div className="bg-white dark:bg-slate-800 p-4 rounded-xl border border-gray-100 dark:border-slate-700 shadow-sm min-w-[120px]">
                             <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Active Apps</p>
-                            <p className="text-2xl font-bold text-[#41b4a5]">{totalApplied}</p>
+                            <p className="text-2xl font-bold text-sh-primary">{totalApplied}</p>
                         </div>
                         <div className="bg-white dark:bg-slate-800 p-4 rounded-xl border border-gray-100 dark:border-slate-700 shadow-sm min-w-[120px]">
                             <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Response Rate</p>
@@ -219,7 +219,7 @@ export default function TrackerPage() {
                                                 </div>
                                                 <div className="flex items-center gap-1 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
                                                     {job.apply_link && (
-                                                        <a href={job.apply_link} target="_blank" rel="noopener noreferrer" aria-label={`Open external application for ${job.title}`} className="p-1.5 text-slate-400 hover:text-[#41b4a5] hover:bg-teal-50 rounded-md transition-colors">
+                                                        <a href={job.apply_link} target="_blank" rel="noopener noreferrer" aria-label={`Open external application for ${job.title}`} className="p-1.5 text-slate-400 hover:text-sh-primary hover:bg-teal-50 rounded-md transition-colors">
                                                             <ExternalLink className="h-3.5 w-3.5" />
                                                         </a>
                                                     )}

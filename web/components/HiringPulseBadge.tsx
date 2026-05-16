@@ -52,20 +52,20 @@ function getVelocityInfo(count: number) {
         return {
             label: 'Hot',
             icon: Flame,
-            color: 'text-orange-600 bg-orange-50 border-orange-200 dark:text-orange-400 dark:bg-orange-950/40 dark:border-orange-800/50'
+            color: 'text-orange-700 bg-orange-50 border-orange-200 dark:text-orange-400 dark:bg-orange-950/40 dark:border-orange-800/50'
         };
     }
     if (count >= 2) {
         return {
             label: 'Active',
             icon: TrendingUp,
-            color: 'text-blue-600 bg-blue-50 border-blue-200 dark:text-blue-400 dark:bg-blue-950/40 dark:border-blue-800/50'
+            color: 'text-blue-700 bg-blue-50 border-blue-200 dark:text-blue-400 dark:bg-blue-950/40 dark:border-blue-800/50'
         };
     }
     return {
         label: 'Slow',
         icon: Pause,
-        color: 'text-slate-500 bg-slate-50 border-slate-200 dark:text-slate-400 dark:bg-slate-800/40 dark:border-slate-700/50'
+        color: 'text-slate-700 bg-slate-100 border-slate-300 dark:text-slate-300 dark:bg-slate-800/60 dark:border-slate-700/50'
     };
 }
 
@@ -92,7 +92,7 @@ export function HiringPulseBadge({ company, className = '' }: Props) {
 
     return (
         <span
-            className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[10px] font-semibold border ${color} ${className}`}
+            className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[10px] font-semibold border ${color} hover:brightness-95 dark:hover:brightness-110 transition-all cursor-default ${className}`}
             title={`${count} new job${count === 1 ? '' : 's'} posted in the last 7 days`}
         >
             <Icon className="w-2.5 h-2.5 shrink-0" />

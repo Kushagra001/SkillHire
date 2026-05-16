@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createHmac } from 'crypto';
 import { clerkClient } from '@clerk/nextjs/server';
 
-// Razorpay sends a raw body — we need it as text for signature verification
+// Razorpay sends a raw body - we need it as text for signature verification
 
 export async function POST(req: NextRequest) {
     try {
@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
 
         const event = JSON.parse(rawBody);
 
-        // 2. Only handle payment.captured — ignore all other events
+        // 2. Only handle payment.captured - ignore all other events
         if (event.event !== 'payment.captured') {
             return NextResponse.json({ received: true }, { status: 200 });
         }

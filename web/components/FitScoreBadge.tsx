@@ -103,7 +103,7 @@ export function FitScoreBadge({ techStack, className }: FitScoreBadgeProps) {
                         getColors(),
                         className
                     )}>
-                        <Sparkles className="h-3 w-3" />
+                        <Sparkles aria-hidden="true" className="h-3 w-3" />
                         <span>Fit: {score}%</span>
                     </div>
                 </TooltipTrigger>
@@ -143,7 +143,7 @@ export function FitScoreBadge({ techStack, className }: FitScoreBadgeProps) {
                         )}
 
                         <p className="text-[9px] text-slate-400 italic pt-1 flex items-center gap-1 border-t border-slate-100 dark:border-slate-800">
-                            <Info className="h-2.5 w-2.5" />
+                            <Info aria-hidden="true" className="h-2.5 w-2.5" />
                             Based on your saved resume
                         </p>
                     </div>

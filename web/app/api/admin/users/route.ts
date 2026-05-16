@@ -21,7 +21,7 @@ export async function GET() {
 
     const users = response.data.map((u) => ({
         id: u.id,
-        email: u.emailAddresses[0]?.emailAddress ?? '—',
+        email: u.emailAddresses[0]?.emailAddress ?? '-',
         firstName: u.firstName ?? '',
         lastName: u.lastName ?? '',
         isPremium: u.publicMetadata?.isPremium === true,

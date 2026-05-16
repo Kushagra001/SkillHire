@@ -138,7 +138,7 @@ export default function ResumePage() {
             localStorage.setItem('skillhire_recent_scans', JSON.stringify(updatedScans));
         } catch (error: any) {
             console.error(error);
-            alert(error.message || 'Failed to analyze resume');
+            toast.error(error.message || 'Failed to analyze resume');
         } finally {
             setIsAnalyzing(false);
         }
@@ -158,7 +158,7 @@ export default function ResumePage() {
             <div className="absolute inset-0 z-0 opacity-[0.4] dark:opacity-[0.15] pointer-events-none" style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E\")", backgroundSize: "180px 180px" }} />
 
             {/* Top-right teal glow */}
-            <div className="absolute top-0 right-0 w-[700px] h-[700px] bg-[#41B3A3]/15 dark:bg-teal-500/8 rounded-full blur-[130px] -translate-y-1/3 translate-x-1/4 pointer-events-none z-0" />
+            <div className="absolute top-0 right-0 w-[700px] h-[700px] bg-sh-primary/15 dark:bg-teal-500/8 rounded-full blur-[130px] -translate-y-1/3 translate-x-1/4 pointer-events-none z-0" />
 
             {/* Left green accent */}
             <div className="absolute top-1/4 left-0 w-[400px] h-[400px] bg-emerald-400/8 dark:bg-emerald-500/4 rounded-full blur-[100px] -translate-x-1/3 pointer-events-none z-0" />
@@ -169,7 +169,7 @@ export default function ResumePage() {
             {/* Top Navigation */}
             <header className="relative z-10 shrink-0 w-full border-b border-gray-200/80 dark:border-slate-800/60 bg-white/80 dark:bg-[#060D18]/80 backdrop-blur supports-[backdrop-filter]:bg-white/70 dark:supports-[backdrop-filter]:bg-[#060D18]/70">
                 <div className="flex h-16 w-full items-center px-4 sm:px-6 lg:px-8 gap-4">
-                    {/* Logo — hard left */}
+                    {/* Logo - hard left */}
                     <Link href="/" className="flex items-center gap-3 decoration-transparent">
                         <div className="h-10 md:h-12 flex items-center justify-start py-1">
                             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -178,12 +178,12 @@ export default function ResumePage() {
                     </Link>
                     <div className="flex-1" />
                     <nav className="hidden md:flex items-center gap-8 mr-4">
-                        <Link className="text-sm font-medium text-slate-700 hover:text-[#41b4a5] transition-colors" href="/jobs">Jobs</Link>
-                        <Link className="text-sm font-medium text-slate-700 hover:text-[#41b4a5] transition-colors" href="/companies">Hiring Pulse</Link>
-                        <Link className="text-sm font-medium text-[#41b4a5] hover:text-[#41b4a5] transition-colors" href="/resume">AI Resume Matcher</Link>
-                        <Link className="text-sm font-medium text-slate-700 hover:text-[#41b4a5] transition-colors" href="/tracker">Tracker</Link>
+                        <Link className="text-sm font-medium text-slate-700 hover:text-sh-primary transition-colors" href="/jobs">Jobs</Link>
+                        <Link className="text-sm font-medium text-slate-700 hover:text-sh-primary transition-colors" href="/companies">Hiring Pulse</Link>
+                        <Link className="text-sm font-medium text-sh-primary hover:text-sh-primary transition-colors" href="/resume">AI Resume Matcher</Link>
+                        <Link className="text-sm font-medium text-slate-700 hover:text-sh-primary transition-colors" href="/tracker">Tracker</Link>
                     </nav>
-                    {/* Auth — hard right */}
+                    {/* Auth - hard right */}
                     <div className="flex items-center gap-3 shrink-0">
                         <ThemeToggle />
                         <SignedOut>
@@ -195,7 +195,7 @@ export default function ResumePage() {
                             </button>
                             <button
                                 onClick={() => openSignUp({ fallbackRedirectUrl: window.location.href })}
-                                className="hidden md:flex h-9 items-center justify-center rounded-lg bg-[#41b4a5] px-4 text-sm font-bold text-white transition-all hover:bg-[#369689] shadow-sm"
+                                className="hidden md:flex h-9 items-center justify-center rounded-lg bg-sh-primary px-4 text-sm font-bold text-white transition-all hover:bg-sh-primary-dark shadow-sm"
                             >
                                 Get Premium
                             </button>
@@ -233,12 +233,12 @@ export default function ResumePage() {
                     >
                         <Link href="/jobs" onClick={() => setIsMobileNavOpen(false)} className="text-lg font-semibold text-slate-900 dark:text-gray-100 border-none bg-transparent m-0 p-0 text-left">Jobs</Link>
                         <Link href="/companies" onClick={() => setIsMobileNavOpen(false)} className="text-lg font-semibold text-slate-900 dark:text-gray-100 border-none bg-transparent m-0 p-0 text-left">Hiring Pulse</Link>
-                        <Link href="/resume" onClick={() => setIsMobileNavOpen(false)} className="text-lg font-semibold text-[#41b4a5] border-none bg-transparent m-0 p-0 text-left">AI Resume Matcher</Link>
+                        <Link href="/resume" onClick={() => setIsMobileNavOpen(false)} className="text-lg font-semibold text-sh-primary border-none bg-transparent m-0 p-0 text-left">AI Resume Matcher</Link>
                         <Link href="/tracker" onClick={() => setIsMobileNavOpen(false)} className="text-lg font-semibold text-slate-900 dark:text-gray-100 border-none bg-transparent m-0 p-0 text-left">Tracker</Link>
                         <div className="h-px bg-gray-200 dark:bg-gray-800 my-1" />
                         <SignedOut>
                             <button onClick={() => { setIsMobileNavOpen(false); openSignIn({ fallbackRedirectUrl: window.location.href }); }} className="text-left text-lg font-semibold text-slate-900 border-none bg-transparent m-0 p-0 cursor-pointer dark:text-white">Sign in</button>
-                            <button onClick={() => { setIsMobileNavOpen(false); openSignUp({ fallbackRedirectUrl: window.location.href }); }} className="text-left text-lg font-bold text-[#41b4a5] border-none bg-transparent m-0 p-0 cursor-pointer">Get Premium</button>
+                            <button onClick={() => { setIsMobileNavOpen(false); openSignUp({ fallbackRedirectUrl: window.location.href }); }} className="text-left text-lg font-bold text-sh-primary border-none bg-transparent m-0 p-0 cursor-pointer">Get Premium</button>
                         </SignedOut>
                         <SignedIn>
                             <span className="text-sm font-medium text-slate-500">Account management available via avatar</span>
@@ -375,7 +375,7 @@ export default function ResumePage() {
                                     <div className="flex flex-col sm:flex-row items-center gap-8 mb-8">
                                         {/* Radial Progress */}
                                         <div className="relative size-32 shrink-0">
-                                            <svg className="size-full -rotate-90 origin-[50%_50%]" viewBox="0 0 100 100">
+                                            <svg aria-hidden="true" className="size-full -rotate-90 origin-[50%_50%]" viewBox="0 0 100 100">
                                                 <circle className="text-slate-200 dark:text-slate-700 stroke-current" cx="50" cy="50" fill="transparent" r="42" strokeWidth="8"></circle>
                                                 <motion.circle
                                                     className={`${getScoreColor(result.match_percentage)} stroke-current`}

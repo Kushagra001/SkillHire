@@ -2,6 +2,7 @@
 
 import { CheckCircle2, Lock, ExternalLink, Share2, FileText, UploadCloud, Loader2, Sparkles, XCircle, BookmarkPlus, BookmarkCheck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { toast } from 'sonner';
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CompanyLogo } from '@/components/CompanyLogo';
@@ -151,7 +152,7 @@ export function JobDetailsPane({ job, onUnlock, isUnlocking, isSignedIn = false 
     const handleToggleTracker = async (statusOverride?: string) => {
         if (!job) return;
         if (!isSignedIn) {
-            alert("Please sign in to save jobs to your tracker.");
+            toast.error("Please sign in to save jobs to your tracker.");
             return;
         }
         setIsTracking(true);
@@ -250,7 +251,7 @@ export function JobDetailsPane({ job, onUnlock, isUnlocking, isSignedIn = false 
         } catch (error: unknown) {
             console.error(error);
             const msg = error instanceof Error ? error.message : 'Failed to perform Quick Match';
-            alert(msg);
+            toast.error(msg);
         } finally {
             setIsAnalyzing(false);
         }
@@ -280,7 +281,7 @@ export function JobDetailsPane({ job, onUnlock, isUnlocking, isSignedIn = false 
         } catch (error: unknown) {
             console.error(error);
             const msg = error instanceof Error ? error.message : 'Failed to upload resume';
-            alert(msg);
+            toast.error(msg);
         } finally {
             setIsUploadingBase(false);
             if (fileInputRef.current) {
@@ -326,7 +327,7 @@ export function JobDetailsPane({ job, onUnlock, isUnlocking, isSignedIn = false 
                                 <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white mb-2 leading-tight">{job.title}</h2>
                                 <div className="flex items-center gap-2 mb-4 flex-wrap">
                                     <span className="text-lg font-medium text-slate-700 dark:text-slate-300">{job.company}</span>
-                                    <CheckCircle2 className="h-5 w-5 text-[#41b4a5] fill-[#EAFBF9]" />
+                                    <CheckCircle2 aria-hidden="true" className="h-5 w-5 text-sh-primary fill-sh-primary/10" />
                                     <HiringPulseBadge company={job.company} className="px-2 py-1 text-xs" />
                                     <FitScoreBadge techStack={job.tech_stack || []} className="px-2 py-1 text-xs" />
                                 </div>
@@ -336,7 +337,7 @@ export function JobDetailsPane({ job, onUnlock, isUnlocking, isSignedIn = false 
                                 <Button
                                     onClick={onUnlock}
                                     disabled={isUnlocking}
-                                    className="bg-[#41b4a5] hover:bg-[#369689] text-white font-bold py-6 px-8 rounded-lg shadow-sm transition-colors text-base shrink-0"
+                                    className="bg-sh-primary hover:bg-sh-primary-dark text-white font-bold py-6 px-8 rounded-lg shadow-sm transition-colors text-base shrink-0"
                                 >
                                     {isUnlocking ? 'Unlocking...' : 'Unlock to Apply'}
                                 </Button>
@@ -349,10 +350,10 @@ export function JobDetailsPane({ job, onUnlock, isUnlocking, isSignedIn = false 
                                         className={`py-6 px-4 rounded-lg shadow-sm transition-colors border-gray-200 ${trackedJobId ? 'bg-indigo-50 text-indigo-700 border-indigo-200 hover:bg-indigo-100' : 'bg-white text-slate-700 hover:bg-gray-50'}`}
                                         title="Save to Tracker"
                                     >
-                                        {isTracking ? <Loader2 className="h-5 w-5 animate-spin" /> : trackedJobId ? <BookmarkCheck className="h-5 w-5" /> : <BookmarkPlus className="h-5 w-5" />}
+                                        {isTracking ? <Loader2 aria-hidden="true" className="h-5 w-5 animate-spin" /> : trackedJobId ? <BookmarkCheck aria-hidden="true" className="h-5 w-5" /> : <BookmarkPlus aria-hidden="true" className="h-5 w-5" />}
                                     </Button>
                                     <Button
-                                        className="bg-[#41b4a5] hover:bg-[#369689] text-white font-bold py-6 px-8 rounded-lg shadow-sm transition-colors text-base"
+                                        className="bg-sh-primary hover:bg-sh-primary-dark text-white font-bold py-6 px-8 rounded-lg shadow-sm transition-colors text-base"
                                         asChild
                                     >
                                         <a
@@ -382,35 +383,35 @@ export function JobDetailsPane({ job, onUnlock, isUnlocking, isSignedIn = false 
                             {job.location && job.location !== "Unknown" && (
                                 <div className="flex-1 min-w-[120px] bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-100 dark:border-slate-700/50">
                                     <span className="text-[10px] font-bold text-slate-400 uppercase">Location</span>
-                                    <p className="text-sm font-bold text-[#0A3D62] dark:text-[#41b4a5] mt-1">{job.location}</p>
+                                    <p className="text-sm font-bold text-foreground dark:text-sh-primary mt-1">{job.location}</p>
                                 </div>
                             )}
 
                             {job.salary_status && job.salary_status !== "Not Disclosed" && job.salary_status !== "Not Mentioned" && (
                                 <div className="flex-1 min-w-[120px] bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-100 dark:border-slate-700/50">
                                     <span className="text-[10px] font-bold text-slate-400 uppercase">Stipend / Salary</span>
-                                    <p className="text-sm font-bold text-[#0A3D62] dark:text-[#41b4a5] mt-1">{job.salary_status}</p>
+                                    <p className="text-sm font-bold text-foreground dark:text-sh-primary mt-1">{job.salary_status}</p>
                                 </div>
                             )}
 
                             {job.experience && job.experience !== "Not Disclosed" && job.experience !== "Unknown" && (
                                 <div className="flex-1 min-w-[120px] bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-100 dark:border-slate-700/50">
                                     <span className="text-[10px] font-bold text-slate-400 uppercase">Experience</span>
-                                    <p className="text-sm font-bold text-[#0A3D62] dark:text-[#41b4a5] mt-1">{job.experience}</p>
+                                    <p className="text-sm font-bold text-foreground dark:text-sh-primary mt-1">{job.experience}</p>
                                 </div>
                             )}
 
                             {batchStr && batchStr !== "Any" && (
                                 <div className="flex-1 min-w-[120px] bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-100 dark:border-slate-700/50">
                                     <span className="text-[10px] font-bold text-slate-400 uppercase">Batch</span>
-                                    <p className="text-sm font-bold text-[#0A3D62] dark:text-[#41b4a5] mt-1">{batchStr}</p>
+                                    <p className="text-sm font-bold text-foreground dark:text-sh-primary mt-1">{batchStr}</p>
                                 </div>
                             )}
 
                             {job.job_type && job.job_type !== "Unknown" && (
                                 <div className="flex-1 min-w-[120px] bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-100 dark:border-slate-700/50">
                                     <span className="text-[10px] font-bold text-slate-400 uppercase">Type</span>
-                                    <p className="text-sm font-bold text-[#0A3D62] dark:text-[#41b4a5] mt-1">{job.job_type}</p>
+                                    <p className="text-sm font-bold text-foreground dark:text-sh-primary mt-1">{job.job_type}</p>
                                 </div>
                             )}
 
@@ -421,7 +422,7 @@ export function JobDetailsPane({ job, onUnlock, isUnlocking, isSignedIn = false 
                                 <h4 className="text-xs font-bold text-slate-400 uppercase mb-3">Tags & Skills</h4>
                                 <div className="flex flex-wrap gap-2">
                                     {job.skills.map((skill: string) => (
-                                        <span key={skill} className="inline-flex items-center rounded-md bg-[#41b4a5]/10 px-2.5 py-1 text-xs font-semibold text-[#369689] ring-1 ring-inset ring-[#41b4a5]/20">
+                                        <span key={skill} className="inline-flex items-center rounded-md bg-sh-primary/10 px-2.5 py-1 text-xs font-semibold text-sh-primary-dark ring-1 ring-inset ring-sh-primary/20">
                                             {skill}
                                         </span>
                                     ))}
@@ -435,7 +436,7 @@ export function JobDetailsPane({ job, onUnlock, isUnlocking, isSignedIn = false 
                                 <div className="flex items-center gap-4 w-full justify-between">
                                     <div className="flex items-center gap-4">
                                         <div className="flex h-12 w-12 items-center justify-center rounded-full bg-red-50 shrink-0">
-                                            <XCircle className="h-6 w-6 text-red-500" />
+                                            <XCircle aria-hidden="true" className="h-6 w-6 text-red-500" />
                                         </div>
                                         <div className="flex flex-col flex-1">
                                             <h4 className="text-sm font-bold text-slate-900">Daily Limit Reached</h4>
@@ -444,14 +445,14 @@ export function JobDetailsPane({ job, onUnlock, isUnlocking, isSignedIn = false 
                                             </p>
                                         </div>
                                     </div>
-                                    <Button onClick={onUnlock} size="sm" className="bg-[#41b4a5] hover:bg-[#369689] text-white shrink-0 shadow-sm">
+                                    <Button onClick={onUnlock} size="sm" className="bg-sh-primary hover:bg-sh-primary-dark text-white shrink-0 shadow-sm">
                                         Upgrade
                                     </Button>
                                 </div>
                             ) : isAnalyzing ? (
                                 <div className="flex items-center gap-4 w-full">
-                                    <div className="flex h-12 w-12 items-center justify-center shrink-0">
-                                        <Loader2 className="h-6 w-6 text-[#41b4a5] animate-spin" />
+                                        <div className="flex h-12 w-12 items-center justify-center shrink-0">
+                                        <Loader2 aria-hidden="true" className="h-6 w-6 text-sh-primary animate-spin" />
                                     </div>
                                     <div className="flex flex-col">
                                         <h4 className="text-sm font-bold text-slate-900">Analyzing Match...</h4>
@@ -465,7 +466,7 @@ export function JobDetailsPane({ job, onUnlock, isUnlocking, isSignedIn = false 
                                     {/* Score row */}
                                     <div className="flex items-center gap-4">
                                         <div className="relative h-14 w-14 shrink-0">
-                                            <svg className="h-full w-full transform -rotate-90" viewBox="0 0 56 56">
+                                            <svg aria-hidden="true" className="h-full w-full transform -rotate-90" viewBox="0 0 56 56">
                                                 <circle cx="28" cy="28" r="24" stroke="currentColor" strokeWidth="4" fill="transparent" className="text-slate-100" />
                                                 <circle
                                                     cx="28" cy="28" r="24" stroke="currentColor" strokeWidth="4" fill="transparent"
@@ -524,7 +525,7 @@ export function JobDetailsPane({ job, onUnlock, isUnlocking, isSignedIn = false 
                                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-3 border-t border-gray-100 mt-1">
                                                     <div className="bg-emerald-50/50 rounded-lg p-3 border border-emerald-100/50">
                                                         <h5 className="text-[11px] font-bold text-emerald-800 uppercase tracking-wider mb-2 flex items-center gap-1.5">
-                                                            <CheckCircle2 className="h-3 w-3" />
+                                                            <CheckCircle2 aria-hidden="true" className="h-3 w-3" />
                                                             Matched Skills
                                                         </h5>
                                                         <div className="flex flex-wrap gap-1.5">
@@ -542,7 +543,7 @@ export function JobDetailsPane({ job, onUnlock, isUnlocking, isSignedIn = false 
 
                                                     <div className="bg-red-50/50 rounded-lg p-3 border border-red-100/50">
                                                         <h5 className="text-[11px] font-bold text-red-800 uppercase tracking-wider mb-2 flex items-center gap-1.5">
-                                                            <XCircle className="h-3 w-3" />
+                                                            <XCircle aria-hidden="true" className="h-3 w-3" />
                                                             Missing Skills
                                                         </h5>
                                                         <div className="flex flex-wrap gap-1.5">
@@ -565,8 +566,8 @@ export function JobDetailsPane({ job, onUnlock, isUnlocking, isSignedIn = false 
                             ) : (
                                 <>
                                     <div className="flex items-center gap-4">
-                                        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#EAFBF9] shrink-0 border border-[#41b4a5]/20">
-                                            <Sparkles className="h-5 w-5 text-[#41b4a5]" />
+                                        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-sh-primary/10 shrink-0 border border-sh-primary/20">
+                                            <Sparkles aria-hidden="true" className="h-5 w-5 text-sh-primary" />
                                         </div>
                                         <div className="flex flex-col">
                                             <h4 className="text-sm font-bold text-slate-900">One-Click Resume Match</h4>
@@ -585,7 +586,7 @@ export function JobDetailsPane({ job, onUnlock, isUnlocking, isSignedIn = false 
                                     <div className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
                                         <button
                                             onClick={() => fileInputRef.current?.click()}
-                                            className="text-[10px] text-slate-400 font-medium hover:text-[#41b4a5] hover:underline underline-offset-2 transition-colors order-2 sm:order-1"
+                                            className="text-[10px] text-slate-400 font-medium hover:text-sh-primary hover:underline underline-offset-2 transition-colors order-2 sm:order-1"
                                         >
                                             Update
                                         </button>
@@ -600,9 +601,9 @@ export function JobDetailsPane({ job, onUnlock, isUnlocking, isSignedIn = false 
                                             onClick={handleQuickMatch}
                                             size="sm"
                                             disabled={isUploadingBase}
-                                            className="bg-[#41b4a5] hover:bg-[#369689] text-white w-full sm:w-auto text-xs font-semibold shadow-sm order-1 sm:order-2 h-8"
+                                            className="bg-sh-primary hover:bg-sh-primary-dark text-white w-full sm:w-auto text-xs font-semibold shadow-sm order-1 sm:order-2 h-8"
                                         >
-                                            {isUploadingBase ? <Loader2 className="h-4 w-4 animate-spin mr-1" /> : <Sparkles className="h-4 w-4 mr-1" />}
+                                            {isUploadingBase ? <Loader2 aria-hidden="true" className="h-4 w-4 animate-spin mr-1" /> : <Sparkles aria-hidden="true" className="h-4 w-4 mr-1" />}
                                             {isUploadingBase ? 'Uploading...' : 'Quick Match'}
                                         </Button>
                                     </div>
@@ -620,9 +621,9 @@ export function JobDetailsPane({ job, onUnlock, isUnlocking, isSignedIn = false 
                                                     variant="outline"
                                                     size="sm"
                                                     disabled={isUploadingBase}
-                                                    className="w-full sm:w-auto text-xs border-gray-300 text-slate-700 hover:text-[#41B3A3] hover:border-[#41B3A3] hover:bg-[#41B3A3]/5"
+                                                    className="w-full sm:w-auto text-xs border-gray-300 text-slate-700 hover:text-sh-primary hover:border-sh-primary hover:bg-sh-primary/5"
                                                 >
-                                                    {isUploadingBase ? <Loader2 className="h-4 w-4 animate-spin mr-1" /> : <UploadCloud className="h-4 w-4 mr-1" />}
+                                                    {isUploadingBase ? <Loader2 aria-hidden="true" className="h-4 w-4 animate-spin mr-1" /> : <UploadCloud aria-hidden="true" className="h-4 w-4 mr-1" />}
                                                     Upload Base Resume
                                                 </Button>
                                             </>
@@ -632,7 +633,7 @@ export function JobDetailsPane({ job, onUnlock, isUnlocking, isSignedIn = false 
                             )}
                         </div>
 
-                        {/* Response Rate Prompt — appears 3s after Apply click */}
+                        {/* Response Rate Prompt - appears 3s after Apply click */}
                         {!job.is_locked && (
                             <ResponseRatePrompt
                                 company={job.company}
@@ -665,7 +666,7 @@ export function JobDetailsPane({ job, onUnlock, isUnlocking, isSignedIn = false 
                                             {!job.is_locked && (
                                                 <Button variant="outline" asChild className="bg-white hover:bg-gray-50 border-gray-200 text-slate-700 shadow-sm">
                                                     <a href={job.apply_link} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2">
-                                                        View Full Description <ExternalLink className="h-4 w-4" />
+                                                        View Full Description <ExternalLink aria-hidden="true" className="h-4 w-4" />
                                                     </a>
                                                 </Button>
                                             )}
@@ -678,7 +679,7 @@ export function JobDetailsPane({ job, onUnlock, isUnlocking, isSignedIn = false 
                                         <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-white dark:from-[#0B0F19] via-white/80 dark:via-[#0B0F19]/80 to-transparent flex items-end justify-center pb-2">
                                             <button
                                                 onClick={() => setShowFullDesc(true)}
-                                                className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700 dark:text-slate-300 bg-white/90 dark:bg-slate-800/80 backdrop-blur-sm border border-slate-200 dark:border-slate-700 shadow-sm rounded-full px-4 py-1.5 hover:bg-teal-50 dark:hover:bg-teal-900/30 hover:text-[#41b4a5] hover:border-[#41b4a5]/40 transition-all"
+                                                className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700 dark:text-slate-300 bg-white/90 dark:bg-slate-800/80 backdrop-blur-sm border border-slate-200 dark:border-slate-700 shadow-sm rounded-full px-4 py-1.5 hover:bg-sh-primary/10 dark:hover:bg-sh-primary/20 hover:text-sh-primary hover:border-sh-primary/40 transition-all"
                                             >
                                                 Read Full Description
                                             </button>
@@ -691,11 +692,11 @@ export function JobDetailsPane({ job, onUnlock, isUnlocking, isSignedIn = false 
                             {job.is_locked && (
                                 <div className="absolute inset-0 z-20 flex flex-col items-center justify-center">
                                     <div className="bg-white/90 backdrop-blur-md p-8 rounded-2xl shadow-xl border border-gray-100/50 max-w-[380px] w-full text-center relative overflow-hidden transform hover:-translate-y-1 transition-transform duration-300">
-                                        <div className="absolute -top-16 -left-16 w-40 h-40 bg-[#41b4a5]/10 rounded-full blur-3xl"></div>
+                                        <div className="absolute -top-16 -left-16 w-40 h-40 bg-sh-primary/10 rounded-full blur-3xl"></div>
                                         <div className="absolute -bottom-16 -right-16 w-40 h-40 bg-amber-500/10 rounded-full blur-3xl"></div>
 
-                                        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-[#EAFBF9] mb-4 relative z-10">
-                                            <Lock className="h-6 w-6 text-[#41B3A3]" />
+                                        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-sh-primary/10 mb-4 relative z-10">
+                                            <Lock aria-hidden="true" className="h-6 w-6 text-sh-primary" />
                                         </div>
 
                                         <h3 className="text-2xl font-bold text-slate-900 mb-2 relative z-10">Beat the crowd.</h3>
@@ -706,7 +707,7 @@ export function JobDetailsPane({ job, onUnlock, isUnlocking, isSignedIn = false 
                                         <Button
                                             onClick={onUnlock}
                                             disabled={isUnlocking}
-                                            className="w-full bg-[#41b4a5] hover:bg-[#369689] text-white font-bold h-12 text-base rounded-xl shadow-lg shadow-[#41b4a5]/20 mb-3 relative z-10"
+                                            className="w-full bg-sh-primary hover:bg-sh-primary-dark text-white font-bold h-12 text-base rounded-xl shadow-lg shadow-sh-primary/20 mb-3 relative z-10"
                                         >
                                             {isUnlocking ? 'Unlocking...' : 'Unlock for ₹199/month'}
                                         </Button>
@@ -729,11 +730,11 @@ export function JobDetailsPane({ job, onUnlock, isUnlocking, isSignedIn = false 
                             >
                                 {isCopied ? (
                                     <>
-                                        <CheckCircle2 className="h-4 w-4 text-[#41B3A3]" />
-                                        <span className="text-xs font-semibold text-[#41B3A3]">Copied</span>
+                                        <CheckCircle2 aria-hidden="true" className="h-4 w-4 text-sh-primary" />
+                                        <span className="text-xs font-semibold text-sh-primary">Copied</span>
                                     </>
-                                ) : (
-                                    <Share2 className="h-4 w-4" />
+                                    ) : (
+                                    <Share2 aria-hidden="true" className="h-4 w-4" />
                                 )}
                             </button>
                         </div>

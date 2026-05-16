@@ -45,7 +45,7 @@ export default function HowItWorksTerminal() {
         <section className="py-24 bg-white dark:bg-[#0B0F19] relative overflow-hidden">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                 <div className="text-center max-w-3xl mx-auto mb-16">
-                    <h2 className="text-3xl md:text-5xl font-black tracking-tight text-[#1E293B] dark:text-white capitalize mb-4">
+                    <h2 className="text-3xl md:text-5xl font-black tracking-tight text-slate-900 dark:text-white capitalize mb-4">
                         Stop Sending Resumes Into the <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#41B3A3] to-blue-500">Void</span>
                     </h2>
                     <p className="text-lg text-slate-500 dark:text-slate-400 leading-relaxed font-medium">
@@ -103,7 +103,7 @@ export default function HowItWorksTerminal() {
                             ))}
 
                             <motion.div variants={lineVariants} className="pt-4 flex items-center gap-2 text-emerald-500 font-bold">
-                                <CheckCircle2 className="w-5 h-5" />
+                                <CheckCircle2 aria-hidden="true" className="w-5 h-5" />
                                 <span>Execution complete. Waiting for recruiter pings...</span>
                                 <span className="animate-pulse">_</span>
                             </motion.div>

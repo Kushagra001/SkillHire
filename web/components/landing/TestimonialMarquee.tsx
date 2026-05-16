@@ -51,7 +51,7 @@ export default function TestimonialMarquee() {
     return (
         <section className="py-24 bg-[#FAFAFA] dark:bg-[#060A11] border-y border-slate-200 dark:border-slate-900/50 overflow-hidden">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12 text-center">
-                <h2 className="text-3xl md:text-5xl font-black tracking-tight text-[#1E293B] dark:text-white capitalize mb-4">
+                <h2 className="text-3xl md:text-5xl font-black tracking-tight text-slate-900 dark:text-white capitalize mb-4">
                     Engineers Who Escaped The <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-500 to-[#41B3A3]">Grind</span>
                 </h2>
                 <p className="text-lg text-slate-500 dark:text-slate-400 font-medium">

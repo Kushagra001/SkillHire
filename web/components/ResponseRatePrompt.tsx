@@ -7,17 +7,17 @@
  * Asks: "Did [Company] respond to your application?"
  *
  * Flow:
- *  1. User clicks the apply link — the parent passes onApplyClick which calls
+ *  1. User clicks the apply link - the parent passes onApplyClick which calls
  *     this component's reveal logic.
  *  2. After a configurable delay (default 3s) the prompt slides in.
  *  3. User votes 👍 / 👎 → POST /api/response-rate → optimistic UI update.
  *  4. Result is shown: updated rate or a "thanks, first vote" message.
  *
  * Props:
- *   company     — company name (used for API key)
- *   jobId       — MongoDB _id (used as dedup key)
- *   isSignedIn  — if false, prompt is replaced with a sign-in nudge
- *   show        — controlled by parent; set true when user clicks apply
+ *   company     - company name (used for API key)
+ *   jobId       - MongoDB _id (used as dedup key)
+ *   isSignedIn  - if false, prompt is replaced with a sign-in nudge
+ *   show        - controlled by parent; set true when user clicks apply
  */
 
 import { useState, useEffect } from 'react';
@@ -84,7 +84,7 @@ export function ResponseRatePrompt({ company, jobId, isSignedIn, show, onDismiss
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 8, scale: 0.97 }}
                     transition={{ duration: 0.25, ease: 'easeOut' }}
-                    className="relative mt-4 rounded-xl border border-[#41b4a5]/30 bg-gradient-to-br from-teal-50/60 to-cyan-50/40 dark:from-teal-950/30 dark:to-cyan-950/20 dark:border-teal-800/40 p-4 shadow-sm"
+                    className="relative mt-4 rounded-xl border border-sh-primary/30 bg-gradient-to-br from-teal-50/60 to-cyan-50/40 dark:from-teal-950/30 dark:to-cyan-950/20 dark:border-teal-800/40 p-4 shadow-sm"
                 >
                     {/* Dismiss */}
                     <button
@@ -92,12 +92,12 @@ export function ResponseRatePrompt({ company, jobId, isSignedIn, show, onDismiss
                         className="absolute top-2 right-2 p-1 rounded-md text-slate-400 hover:text-slate-600 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
                         aria-label="Dismiss"
                     >
-                        <X className="w-3.5 h-3.5" />
+                        <X aria-hidden="true" className="w-3.5 h-3.5" />
                     </button>
 
                     <div className="flex items-center gap-2 mb-3">
-                        <div className="flex h-7 w-7 items-center justify-center rounded-full bg-[#41b4a5]/15">
-                            <MessageCircle className="w-4 h-4 text-[#41b4a5]" />
+                        <div className="flex h-7 w-7 items-center justify-center rounded-full bg-sh-primary/15" aria-hidden="true">
+                            <MessageCircle aria-hidden="true" className="w-4 h-4 text-sh-primary" />
                         </div>
                         <p className="text-[13px] font-semibold text-slate-800 dark:text-slate-100">
                             Help other job-seekers!
@@ -112,9 +112,9 @@ export function ResponseRatePrompt({ company, jobId, isSignedIn, show, onDismiss
                             </p>
                             <a
                                 href="/login"
-                                className="inline-flex items-center gap-1.5 text-xs font-semibold text-white bg-[#41b4a5] hover:bg-[#369689] px-3 py-1.5 rounded-lg transition-colors"
+                                className="inline-flex items-center gap-1.5 text-xs font-semibold text-white bg-sh-primary hover:bg-sh-primary-dark px-3 py-1.5 rounded-lg transition-colors"
                             >
-                                <LogIn className="w-3 h-3" />
+                                <LogIn aria-hidden="true" className="w-3 h-3" />
                                 Sign in to vote
                             </a>
                         </div>
@@ -150,7 +150,7 @@ export function ResponseRatePrompt({ company, jobId, isSignedIn, show, onDismiss
                             </p>
                             <button
                                 onClick={() => { setVoteState('idle'); setVote(null); }}
-                                className="text-xs font-semibold text-[#41b4a5] hover:underline"
+                                className="text-xs font-semibold text-sh-primary hover:underline"
                             >
                                 Try again
                             </button>
@@ -167,7 +167,7 @@ export function ResponseRatePrompt({ company, jobId, isSignedIn, show, onDismiss
                                     disabled={voteState === 'submitting'}
                                     className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-bold border border-emerald-200 bg-white dark:bg-slate-800 dark:border-emerald-800 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-950/40 transition-colors disabled:opacity-50"
                                 >
-                                    <ThumbsUp className="w-3.5 h-3.5" />
+                                    <ThumbsUp aria-hidden="true" className="w-3.5 h-3.5" />
                                     Yes, they replied
                                 </button>
                                 <button
@@ -175,7 +175,7 @@ export function ResponseRatePrompt({ company, jobId, isSignedIn, show, onDismiss
                                     disabled={voteState === 'submitting'}
                                     className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-bold border border-red-200 bg-white dark:bg-slate-800 dark:border-red-800 text-red-500 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40 transition-colors disabled:opacity-50"
                                 >
-                                    <ThumbsDown className="w-3.5 h-3.5" />
+                                    <ThumbsDown aria-hidden="true" className="w-3.5 h-3.5" />
                                     Ghosted me
                                 </button>
                             </div>
